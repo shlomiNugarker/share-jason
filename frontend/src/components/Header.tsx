@@ -26,12 +26,12 @@ const Header = () => {
       roles: [""],
       icon: <Home className="w-4 h-4" />
     },
-    {
-      label: "Items",
-      path: "/items",
-      roles: ["user", "admin"],
-      icon: <Layers className="w-4 h-4" />
-    },
+    // {
+    //   label: "Items",
+    //   path: "/items",
+    //   roles: ["user", "admin"],
+    //   icon: <Layers className="w-4 h-4" />
+    // },
     {
       label: "Schemas",
       path: "/schemas",
@@ -46,7 +46,7 @@ const Header = () => {
     },
     {
       label: t("admin_dashboard"),
-      path: "/admin/users",
+      path: "/dashboard",
       roles: ["admin"],
       icon: <User className="w-4 h-4" />
     },

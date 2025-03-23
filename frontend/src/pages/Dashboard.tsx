@@ -54,12 +54,12 @@ const Dashboard: React.FC = () => {
       icon: <Database size={24} />,
       link: "/butterfly-hosts",
     },
-    // {
-    //   title: t("items"),
-    //   description: t("items_desc"),
-    //   icon: <FileText size={24} />,
-    //   link: "/items",
-    // },
+    {
+      title: t("items"),
+      description: t("items_desc"),
+      icon: <FileText size={24} />,
+      link: "/items",
+    },
     {
       title: t("user_management"),
       description: t("user_management_desc"),
