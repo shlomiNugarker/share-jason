@@ -1,94 +1,166 @@
-import { authService } from "@/services/auth.service";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { httpService } from "@/services/http.service";
 
 interface User {
-  _id: string;
+  id: string;
   name: string;
   email: string;
-  role: "admin" | "user";
+  role: string;
 }
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  error: string | null;
+  login: (email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
-  register: (name: string, email: string, password: string) => Promise<void>;
+  isAuthenticated: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ 
+  children 
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem("token")
-  );
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const { t } = useTranslation();
+  
+  const navigate = useNavigate();
 
+  // Load user from token on startup
   useEffect(() => {
-    const verifyUser = async () => {
+    const loadUser = async () => {
       if (!token) {
         setLoading(false);
         return;
       }
+
       try {
-        const data = await authService.getUser();
-        setUser(data.user);
-      } catch (error) {
-        console.error("Authentication error:", error);
-        setToken(null);
+        const response = await httpService.get("/api/auth/user", true);
+        setUser(response.user);
+        setIsAuthenticated(true);
+      } catch (err) {
         localStorage.removeItem("token");
+        setToken(null);
+        setError(t("session_expired"));
       } finally {
         setLoading(false);
       }
     };
 
-    verifyUser();
-  }, [token]);
+    loadUser();
+  }, [token, t]);
 
-  const login = async (email: string, password: string): Promise<void> => {
+  // Login user
+  const login = async (email: string, password: string): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
+    
     try {
-      const data = await authService.login(email, password);
-      if (!data.token) {
-        throw new Error("Login failed: No token received");
-      }
-      console.log("Login successful:", data);
-
-      setToken(data.token);
-      setUser(data.user);
-      localStorage.setItem("token", data.token);
-    } catch (error) {
-      console.error("Login error:", error);
-      throw error;
+      const data = await httpService.post("/api/auth/login", {
+        email,
+        password
+      }, false);
+      
+      const { token, user } = data;
+      
+      localStorage.setItem("token", token);
+      
+      setToken(token);
+      setUser(user);
+      setIsAuthenticated(true);
+      
+      toast.success(t("login_success"));
+      return true;
+    } catch (err: any) {
+      const errorMessage = err.message || t("login_failed");
+      setError(errorMessage);
+      toast.error(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
     }
   };
 
-  const logout = () => {
-    authService.logout();
-    setToken(null);
-    setUser(null);
+  // Register user
+  const register = async (
+    name: string,
+    email: string,
+    password: string
+  ): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const data = await httpService.post("/api/auth/register", {
+        name,
+        email,
+        password
+      }, false);
+      
+      const { token, user } = data;
+      
+      localStorage.setItem("token", token);
+      
+      setToken(token);
+      setUser(user);
+      setIsAuthenticated(true);
+      
+      toast.success(t("register_success"));
+      return true;
+    } catch (err: any) {
+      const errorMessage = err.message || t("registration_failed");
+      setError(errorMessage);
+      toast.error(errorMessage);
+      return false;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const register = async (name: string, email: string, password: string) => {
-    await authService.register(name, email, password);
+  // Logout user
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+    setUser(null);
+    setIsAuthenticated(false);
+    toast.success(t("logout"));
+    navigate("/login");
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, token, loading, login, logout, register }}
+      value={{
+        user,
+        token,
+        loading,
+        error,
+        login,
+        register,
+        logout,
+        isAuthenticated
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
-  if (!context) {
+  
+  if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+  
   return context;
 };

@@ -1,121 +1,103 @@
-import { useAuth } from "@/context/AuthContext";
+import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { Layers, Globe2, Database, ArrowRight, BarChart3 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useTranslation } from "react-i18next";
+import {
+  FileText,
+  Database,
+  Users,
+  BarChart2,
+  ArrowRight,
+} from "lucide-react";
 
-const FeatureCard = ({ 
-  icon, 
-  title, 
-  description, 
-  to, 
-  delay = 0 
-}: { 
-  icon: React.ReactNode; 
-  title: string; 
-  description: string; 
-  to: string; 
-  delay?: number; 
+const Card = ({
+  title,
+  description,
+  icon,
+  link,
+}: {
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  link: string;
 }) => {
   return (
-    <motion.div
-      className="relative overflow-hidden rounded-xl bg-white p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ 
-        duration: 0.5, 
-        ease: "easeOut", 
-        delay 
-      }}
-      whileHover={{ y: -5 }}
+    <Link
+      to={link}
+      className="bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border border-gray-100"
     >
-      <div className="mb-4 inline-flex rounded-lg bg-purple-100/50 p-3 text-purple-600">
-        {icon}
+      <div className="p-6">
+        <div className="flex items-center mb-4">
+          <div className="p-2 rounded-lg bg-indigo-100 text-indigo-600 mr-4">
+            {icon}
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+        </div>
+        <p className="text-gray-600 mb-4">{description}</p>
+        <div className="flex items-center text-indigo-600 font-medium">
+          <span className="mr-2">More</span>
+          <ArrowRight size={16} />
+        </div>
       </div>
-      <h3 className="mb-2 text-xl font-bold">{title}</h3>
-      <p className="mb-4 text-gray-500">{description}</p>
-      <Link to={to}>
-        <Button variant="light" className="group mt-2 flex items-center gap-1">
-          המשך
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </Button>
-      </Link>
-      <div className="absolute -bottom-1 -right-1 h-16 w-16 rounded-full bg-gradient-to-r from-purple-50 to-teal-50 opacity-20"></div>
-    </motion.div>
+    </Link>
   );
 };
 
-export default function Dashboard() {
+const Dashboard: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   const features = [
     {
-      icon: <Globe2 className="h-6 w-6" />,
-      title: "אתרים מארחים",
-      description: "צפייה וניהול אתרים מארחים לשיתוף המידע",
-      to: "/butterfly-hosts",
+      title: t("butterfly_hosts"),
+      description: t("butterfly_hosts_desc"),
+      icon: <Database size={24} />,
+      link: "/butterfly-hosts",
     },
     {
-      icon: <Layers className="h-6 w-6" />,
-      title: "שאלות ותשובות",
-      description: "גישה ועדכון של שאלות ותשובות לאפליקציית המשתמש",
-      to: "/qa",
+      title: t("items"),
+      description: t("items_desc"),
+      icon: <FileText size={24} />,
+      link: "/items",
     },
     {
-      icon: <Database className="h-6 w-6" />,
-      title: "ניהול מסמכים",
-      description: "ניהול מסמכים ותוכן למערכת המידע",
-      to: "/documents",
+      title: t("user_management"),
+      description: t("user_management_desc"),
+      icon: <Users size={24} />,
+      link: "/users",
     },
     {
-      icon: <BarChart3 className="h-6 w-6" />,
-      title: "סטטיסטיקות",
-      description: "צפייה בנתונים וסטטיסטיקות על פעילות המערכת",
-      to: "/stats",
+      title: t("statistics"),
+      description: t("statistics_desc"),
+      icon: <BarChart2 size={24} />,
+      link: "/statistics",
     },
   ];
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mb-10 text-center"
-      >
-        <h1 className="text-3xl font-bold mb-4 text-gradient">ברוך הבא, {user?.name}</h1>
-        <p className="text-gray-500 max-w-2xl mx-auto">
-          מערכת ניהול התוכן מספקת גישה קלה ונוחה לכל הכלים הדרושים לניהול ושיתוף המידע
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-gradient-to-r from-purple-700 to-indigo-600 text-white rounded-xl p-8 mb-8">
+        <h1 className="text-3xl font-bold mb-2">
+          {t("welcome")}, {user?.name}
+        </h1>
+        <p className="text-purple-100 mb-0">
+          {t("dashboard_description")}
         </p>
-      </motion.div>
+      </div>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {features.map((feature, index) => (
-          <FeatureCard
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {features.map((feature) => (
+          <Card
             key={feature.title}
-            icon={feature.icon}
             title={feature.title}
             description={feature.description}
-            to={feature.to}
-            delay={index * 0.1}
+            icon={feature.icon}
+            link={feature.link}
           />
         ))}
       </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.6, duration: 0.5 }}
-        className="mt-12 rounded-xl border border-purple-100 bg-purple-50/50 p-6 text-center shadow-sm"
-      >
-        <h2 className="mb-2 text-xl font-semibold text-purple-700">צריך עזרה?</h2>
-        <p className="text-purple-600">
-          אם אתה נתקל בבעיות או צריך עזרה, אל תהסס ליצור קשר עם צוות התמיכה
-        </p>
-        <Button variant="gradient" className="mt-4">
-          פנייה לתמיכה
-        </Button>
-      </motion.div>
     </div>
   );
-}
+};
+
+export default Dashboard;
