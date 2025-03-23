@@ -22,79 +22,88 @@ html[dir="ltr"] {
 /* Define CSS variables for light and dark themes */
 @layer base {
   :root {
-    /* Light theme variables */
-    --background: 0 0% 97%; /* Light cream background */
-    --foreground: 230 15% 20%; /* Dark gray-blue text color */
-    --card: 0 0% 100%; /* White for cards */
-    --card-foreground: 230 20% 25%; /* Slightly darker gray-blue for card text */
-    --popover: 0 0% 99%; /* Very soft white for popovers */
-    --popover-foreground: 230 20% 25%; /* Muted gray-blue text for popovers */
-    --primary: 200 85% 45%; /* Bright blue for primary elements */
-    --primary-foreground: 0 0% 100%; /* White text on primary elements */
-    --secondary: 200 65% 85%; /* Soft pastel blue for secondary elements */
-    --secondary-foreground: 200 25% 30%; /* Muted gray-blue text for secondary elements */
-    --muted: 0 0% 95%; /* Light gray for muted background */
-    --muted-foreground: 0 0% 50%; /* Medium gray for muted text */
-    --accent: 200 85% 45%;
-    --accent-foreground: 0 0% 100%; /* White text on accent elements */
-    --destructive: 0 70% 55%; /* Warm red for destructive actions */
-    --destructive-foreground: 0 0% 100%; /* White text on destructive elements */
-    --border: 0 0% 85%; /* Light gray border */
-    --input: 0 0% 97%; /* Soft white for inputs */
-    --ring: 200 85% 45%; /* Bright blue focus ring */
-    --chart-1: 200 80% 50%; /* Vibrant blue for chart series 1 */
-    --chart-2: 200 70% 45%; /* Slightly darker blue for chart series 2 */
-    --chart-3: 340 70% 50%; /* Pink for chart series 3 */
-    --chart-4: 50 70% 50%; /* Green for chart series 4 */
-    --chart-5: 30 70% 50%; /* Orange for chart series 5 */
-    --radius: 0.75rem; /* Border radius for softer rounded corners */
+    --background: 250 100% 99%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+ 
+    --primary: 271 91% 65%;
+    --primary-foreground: 0 0% 100%;
+ 
+    --secondary: 172 76% 32%;
+    --secondary-foreground: 0 0% 100%;
+ 
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+ 
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 271 91% 65%;
+ 
+    --radius: 1rem;
   }
 
   .dark {
-    --background: 0 0% 97%; /* Light cream background */
-    --foreground: 230 15% 20%; /* Dark gray-blue text color */
-    --card: 0 0% 100%; /* White for cards */
-    --card-foreground: 230 20% 25%; /* Slightly darker gray-blue for card text */
-    --popover: 0 0% 99%; /* Very soft white for popovers */
-    --popover-foreground: 230 20% 25%; /* Muted gray-blue text for popovers */
-    --primary: 200 85% 45%; /* Bright blue for primary elements */
-    --primary-foreground: 0 0% 100%; /* White text on primary elements */
-    --secondary: 200 65% 85%; /* Soft pastel blue for secondary elements */
-    --secondary-foreground: 200 25% 30%; /* Muted gray-blue text for secondary elements */
-    --muted: 0 0% 95%; /* Light gray for muted background */
-    --muted-foreground: 0 0% 50%; /* Medium gray for muted text */
-    --accent: 340 85% 65%; /* Vibrant pink accent */
-    --accent-foreground: 0 0% 100%; /* White text on accent elements */
-    --destructive: 0 70% 55%; /* Warm red for destructive actions */
-    --destructive-foreground: 0 0% 100%; /* White text on destructive elements */
-    --border: 0 0% 85%; /* Light gray border */
-    --input: 0 0% 97%; /* Soft white for inputs */
-    --ring: 200 85% 45%; /* Bright blue focus ring */
-    --chart-1: 200 80% 50%; /* Vibrant blue for chart series 1 */
-    --chart-2: 200 70% 45%; /* Slightly darker blue for chart series 2 */
-    --chart-3: 340 70% 50%; /* Pink for chart series 3 */
-    --chart-4: 50 70% 50%; /* Green for chart series 4 */
-    --chart-5: 30 70% 50%; /* Orange for chart series 5 */
-    --radius: 0.75rem; /* Border radius for softer rounded corners */
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+ 
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+ 
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+ 
+    --primary: 271 91% 65%;
+    --primary-foreground: 240 5.9% 10%;
+ 
+    --secondary: 172 76% 32%;
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+ 
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 271 91% 65%;
   }
 
   /* Scrollbar styling */
   ::-webkit-scrollbar {
-    width: 12px;
+    width: 14px;
+    height: 14px;
   }
 
   ::-webkit-scrollbar-track {
-    background: hsl(var(--muted)); /* Soft muted background for track */
+    @apply bg-gray-100;
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary)); /* Bright blue for thumb */
-    border-radius: var(--radius); /* Rounded corners for thumb */
-    border: 3px solid hsl(var(--muted)); /* Padding around thumb */
+    @apply bg-gradient-to-b from-purple-400 to-teal-400 rounded-full border-4 border-solid border-gray-100;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(var(--primary)); /* Slightly lighter on hover */
+    @apply from-purple-500 to-teal-500;
+  }
+
+  /* Improved Focus Styles */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-purple-400 ring-offset-2 ring-offset-white transition-all duration-200;
   }
 }
 
@@ -105,5 +114,32 @@ html[dir="ltr"] {
   }
   body {
     @apply bg-background text-foreground; /* Background and text color based on theme */
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-teal-500;
+  }
+
+  .gradient-bg {
+    @apply bg-gradient-to-r from-purple-600 to-teal-500;
+  }
+
+  .gradient-border {
+    @apply border-transparent bg-gradient-to-r from-purple-400 to-teal-400 border-2 bg-clip-border;
+  }
+
+  .input-enhanced {
+    @apply px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50;
+  }
+
+  .card-enhanced {
+    @apply overflow-hidden border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-purple-200 bg-white;
+  }
+
+  .button-icon {
+    @apply inline-flex items-center justify-center h-10 w-10 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-all duration-200;
   }
 }

@@ -3,42 +3,74 @@ import tailwindcssAnimate from "tailwindcss-animate";
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: "class", // Enables toggling dark mode based on a 'class' added to the root element
-  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"], // Specifies the files Tailwind should scan for class usage
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+  ],
   theme: {
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))", // Primary color dynamically set via CSS variables
-          foreground: "hsl(var(--primary-foreground))", // Text color for elements with primary background
+          DEFAULT: "#8B5CF6", // Purple-500
+          foreground: "#ffffff",
+          50: "#F5F3FF",
+          100: "#EDE9FE",
+          200: "#DDD6FE",
+          300: "#C4B5FD",
+          400: "#A78BFA",
+          500: "#8B5CF6",
+          600: "#7C3AED",
+          700: "#6D28D9",
+          800: "#5B21B6",
+          900: "#4C1D95",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))", // Secondary color for less prominent elements
-          foreground: "hsl(var(--secondary-foreground))", // Text color for secondary background
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))", // Accent color for highlights or special emphasis
-          foreground: "hsl(var(--accent-foreground))", // Text color for accent elements
-        },
-        background: "hsl(var(--background))", // Main background color
-        foreground: "hsl(var(--foreground))", // Main text color
-        muted: {
-          DEFAULT: "hsl(var(--muted))", // Muted background for subtle areas
-          foreground: "hsl(var(--muted-foreground))", // Muted text color
+          DEFAULT: "#0D9488", // Teal-600
+          foreground: "#ffffff",
+          50: "#F0FDFA",
+          100: "#CCFBF1",
+          200: "#99F6E4",
+          300: "#5EEAD4",
+          400: "#2DD4BF",
+          500: "#14B8A6",
+          600: "#0D9488",
+          700: "#0F766E",
+          800: "#115E59",
+          900: "#134E4A",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))", // Color for destructive actions (e.g., delete buttons)
-          foreground: "hsl(var(--destructive-foreground))", // Text color for destructive elements
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "hsl(var(--border))", // Border color for inputs and containers
-        input: "hsl(var(--input))", // Background color for input fields
-        ring: "hsl(var(--ring))", // Focus ring color for interactive elements
-        card: {
-          DEFAULT: "hsl(var(--card))", // Card background color
-          foreground: "hsl(var(--card-foreground))", // Text color on cards
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))", // Popover background color
-          foreground: "hsl(var(--popover-foreground))", // Text color on popovers
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
         },
         chart: {
           1: "hsl(var(--chart-1))", // Color for the first chart series
@@ -102,6 +134,14 @@ export default {
         500: "500ms", // Long transition
       },
       keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
         fadeIn: {
           "0%": {
             opacity: "0", // Fully transparent
@@ -112,6 +152,8 @@ export default {
         },
       },
       animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
         fadeIn: "fadeIn 1s ease-in-out", // Smooth fade-in effect
       },
       borderRadius: {
@@ -128,7 +170,18 @@ export default {
         80: "0.8",
         100: "1", // Fully opaque
       },
+      boxShadow: {
+        'soft': '0 4px 20px rgba(0, 0, 0, 0.08)',
+        'card': '0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1)',
+        'button': '0 2px 5px rgba(0, 0, 0, 0.1)',
+        'hover': '0 8px 25px rgba(0, 0, 0, 0.12)',
+      },
     },
   },
-  plugins: [tailwindcssAnimate], // Adds animation utilities and keyframes
+  plugins: [
+    tailwindcssAnimate,
+    require('@tailwindcss/forms')({
+      strategy: 'class',
+    }),
+  ],
 };

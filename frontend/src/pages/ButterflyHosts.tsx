@@ -4,7 +4,8 @@ import { butterflyHostService, ButterflyHost } from "@/services/butterflyHost.se
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, ExternalLink, Filter, Search } from "lucide-react";
+import { Pencil, Trash2, Plus, ExternalLink, Filter, Search, ArrowUpRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+const MotionCard = motion(Card);
 
 const ButterflyHosts = () => {
   const [hosts, setHosts] = useState<ButterflyHost[]>([]);
@@ -215,153 +218,329 @@ const ButterflyHosts = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center p-8">טוען...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[70vh]">
+        <div className="relative w-24 h-24">
+          <motion.div 
+            className="absolute w-24 h-24 border-4 border-purple-300 rounded-full"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute w-24 h-24 border-4 border-teal-400 rounded-full"
+            animate={{
+              scale: [1, 1.3, 1],
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 0.3
+            }}
+          />
+          <motion.div 
+            className="absolute w-24 h-24 border-4 border-purple-500 border-t-transparent rounded-full"
+            animate={{ rotate: 360 }}
+            transition={{
+              duration: 1.2,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+        </div>
+        <motion.p 
+          className="mt-6 text-lg text-gray-600"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3 }}
+        >
+          טוען אתרים...
+        </motion.p>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">אתרים מארחים ({hosts.length})</h1>
-        
-        {user && (
-          <Button onClick={handleNew}>
-            <Plus className="mr-2 h-4 w-4" /> הוסף אתר חדש
-          </Button>
-        )}
-      </div>
-      
-      {/* Search input */}
-      <div className="relative mb-6">
-        <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-          <Search className="h-5 w-5 text-gray-400" />
+    <div className="container mx-auto p-6 max-w-7xl bg-gray-50 min-h-screen">
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-gradient-to-r from-purple-600 to-teal-500 text-white p-8 rounded-2xl shadow-lg mb-10"
+      >
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <div>
+            <motion.h1 
+              className="text-4xl font-bold mb-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              אתרים מארחים
+            </motion.h1>
+            <motion.p 
+              className="text-teal-100 text-lg"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+            >
+              סך הכל {hosts.length} אתרים במערכת
+            </motion.p>
+          </div>
+          
+          {user && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              whileHover={{ scale: 1.05 }}
+            >
+              <Button 
+                onClick={handleNew}
+                className="mt-4 md:mt-0 bg-white text-purple-600 hover:bg-purple-50 transition-all duration-300 text-base px-6 py-6 rounded-xl shadow-md"
+              >
+                <Plus className="mr-2 h-5 w-5" /> הוסף אתר חדש
+              </Button>
+            </motion.div>
+          )}
         </div>
-        <input
-          type="text"
-          placeholder="חיפוש לפי כותרת, כתובת URL או מיקום..."
-          value={searchText}
-          onChange={handleSearchChange}
-          className="w-full py-2 pr-10 pl-4 border border-gray-300 rounded-md"
-        />
-      </div>
+      </motion.div>
       
-      <div className="flex flex-wrap gap-2 mb-6">
-        <Button
-          variant={selectedPosition === null ? "default" : "outline"}
-          onClick={() => setSelectedPosition(null)}
-          className="mb-2"
-        >
-          <Filter className="mr-2 h-4 w-4" /> כל האתרים
-        </Button>
-        {positions.map(position => (
-          <Button
-            key={position}
-            variant={selectedPosition === position ? "default" : "outline"}
-            onClick={() => setSelectedPosition(position)}
-            className="mb-2"
-          >
-            {position.replace(/_/g, " ")}
-          </Button>
-        ))}
-      </div>
+      {/* Search & Filters Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        className="bg-white p-8 rounded-2xl shadow-md mb-8 border border-gray-100"
+      >
+        {/* Search input */}
+        <div className="relative mb-6">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-5">
+            <Search className="h-5 w-5 text-purple-400" />
+          </div>
+          <motion.input
+            whileFocus={{ boxShadow: "0 0 0 2px rgba(147, 51, 234, 0.3)" }}
+            type="text"
+            placeholder="חיפוש לפי כותרת, כתובת URL או מיקום..."
+            value={searchText}
+            onChange={handleSearchChange}
+            className="w-full py-4 pr-12 pl-5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
+          />
+        </div>
+        
+        <div className="flex flex-wrap gap-2 mb-2">
+          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Button
+              variant={selectedPosition === null ? "default" : "outline"}
+              onClick={() => setSelectedPosition(null)}
+              className={`mb-2 transition-all duration-200 rounded-xl px-5 py-2 ${
+                selectedPosition === null 
+                  ? "bg-gradient-to-r from-purple-500 to-teal-500 text-white shadow-md" 
+                  : "border-gray-300 hover:border-purple-400 hover:text-purple-600"
+              }`}
+            >
+              <Filter className="mr-2 h-4 w-4" /> כל האתרים
+            </Button>
+          </motion.div>
+          {positions.map(position => (
+            <motion.div key={position} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+              <Button
+                variant={selectedPosition === position ? "default" : "outline"}
+                onClick={() => setSelectedPosition(position)}
+                className={`mb-2 transition-all duration-200 rounded-xl px-5 py-2 ${
+                  selectedPosition === position 
+                    ? "bg-gradient-to-r from-purple-500 to-teal-500 text-white shadow-md" 
+                    : "border-gray-300 hover:border-purple-400 hover:text-purple-600"
+                }`}
+              >
+                {position.replace(/_/g, " ")}
+              </Button>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredHosts.map((host) => (
-          <Card key={host._id} className="overflow-hidden">
-            <CardHeader className="p-4">
-              <CardTitle className="text-lg truncate">{host.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="p-4 pt-0 space-y-4">
-              <div className="aspect-video flex justify-center items-center bg-gray-100 rounded-md overflow-hidden">
-                {host.imageUrl ? (
-                  <img
-                    src={host.imageUrl}
-                    alt={host.title}
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/placeholder-image.png";
-                    }}
-                  />
-                ) : (
-                  <div className="text-gray-400">אין תמונה</div>
-                )}
-              </div>
-              
-              <div className="text-sm">
-                <p className="truncate">
-                  <span className="font-medium">כתובת: </span>
-                  <a 
-                    href={host.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    {host.url}
-                  </a>
-                </p>
-                {host.position && (
-                  <p>
-                    <span className="font-medium">מיקום: </span>
-                    {host.position}
-                  </p>
-                )}
-              </div>
-              
-              <div className="flex space-x-2 justify-between">
-                <Button 
-                  className="flex-1"
-                  variant="outline"
-                  onClick={() => window.open(host.url, "_blank")}
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" /> פתח אתר
-                </Button>
-                
-                {user && (
-                  <div className="flex space-x-2">
-                    <Button 
-                      variant="outline" 
-                      size="icon"
-                      onClick={() => handleEdit(host)}
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
-                    <Button 
-                      variant="destructive" 
-                      size="icon"
-                      onClick={() => handleDelete(host._id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+      {/* Hosts Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <AnimatePresence>
+          {filteredHosts.map((host, index) => (
+            <motion.div
+              key={host._id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ delay: index * 0.05, duration: 0.4 }}
+              layout
+            >
+              <MotionCard 
+                className="overflow-hidden border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:border-purple-200 h-full flex flex-col"
+                whileHover={{ y: -5 }}
+              >
+                <CardHeader className="p-6 border-b border-gray-100 bg-gray-50">
+                  <CardTitle className="text-xl font-bold truncate text-gray-800">{host.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="p-6 pt-6 space-y-5 flex-grow flex flex-col">
+                  <div className="aspect-video flex justify-center items-center bg-gradient-to-br from-purple-50 to-teal-50 rounded-xl overflow-hidden border border-gray-100 flex-grow">
+                    {host.imageUrl ? (
+                      <motion.img
+                        src={host.imageUrl}
+                        alt={host.title}
+                        className="w-full h-full object-contain"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                        whileHover={{ scale: 1.1 }}
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = "/placeholder-image.png";
+                        }}
+                      />
+                    ) : (
+                      <div className="text-gray-400 flex items-center justify-center h-full">
+                        <span className="text-center">אין תמונה</span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  
+                  <div className="text-sm space-y-3">
+                    <p className="truncate flex items-center bg-gray-50 p-3 rounded-lg">
+                      <span className="font-semibold ml-2 text-purple-700">כתובת:</span>
+                      <a 
+                        href={host.url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-teal-600 hover:underline truncate ml-1 flex-1"
+                      >
+                        {host.url}
+                      </a>
+                    </p>
+                    {host.position && (
+                      <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-teal-100 text-purple-800 rounded-lg text-sm">
+                        <span className="font-medium">מיקום: </span>
+                        {host.position}
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex space-x-3 justify-between pt-4 border-t border-gray-100 mt-5">
+                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="flex-1">
+                      <Button 
+                        className="flex-1 bg-gradient-to-r from-purple-50 to-teal-50 text-purple-700 hover:from-purple-100 hover:to-teal-100 transition-all duration-300 rounded-xl w-full"
+                        variant="outline"
+                        onClick={() => window.open(host.url, "_blank")}
+                      >
+                        <ArrowUpRight className="h-4 w-4 ml-2" /> פתח אתר
+                      </Button>
+                    </motion.div>
+                    
+                    {user && (
+                      <div className="flex space-x-3">
+                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                          <Button 
+                            variant="outline" 
+                            size="icon"
+                            onClick={() => handleEdit(host)}
+                            className="bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-100 rounded-xl h-10 w-10"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Button>
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                          <Button 
+                            variant="destructive" 
+                            size="icon"
+                            onClick={() => handleDelete(host._id)}
+                            className="bg-red-50 text-red-500 hover:bg-red-100 border-red-100 rounded-xl h-10 w-10"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </motion.div>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </MotionCard>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
       
       {filteredHosts.length === 0 && (
-        <div className="text-center p-8 bg-gray-100 rounded-md">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col items-center justify-center bg-white rounded-2xl p-16 text-center shadow-md border border-gray-100"
+        >
+          <motion.div 
+            className="bg-gradient-to-r from-purple-100 to-teal-100 p-8 rounded-full mb-6"
+            animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <Search className="h-12 w-12 text-purple-500" />
+          </motion.div>
           {searchText ? (
-            <p>לא נמצאו אתרים התואמים את החיפוש "{searchText}"</p>
+            <>
+              <motion.h3 
+                className="text-2xl font-bold mb-3 text-gray-800"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                לא נמצאו תוצאות
+              </motion.h3>
+              <motion.p 
+                className="text-gray-600 text-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                לא נמצאו אתרים התואמים את החיפוש "{searchText}"
+              </motion.p>
+            </>
           ) : (
-            <p>אין אתרים להצגה בקטגוריה זו</p>
+            <>
+              <motion.h3 
+                className="text-2xl font-bold mb-3 text-gray-800"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                אין אתרים להצגה
+              </motion.h3>
+              <motion.p 
+                className="text-gray-600 text-lg"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                לא נמצאו אתרים בקטגוריה זו
+              </motion.p>
+            </>
           )}
-        </div>
+        </motion.div>
       )}
 
       {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>עריכת אתר</DialogTitle>
-            <DialogDescription>
-              עדכן את פרטי האתר המהיר
+        <DialogContent className="sm:max-w-[550px] rounded-2xl border-0 shadow-xl bg-white">
+          <DialogHeader className="border-b pb-4">
+            <DialogTitle className="text-2xl font-bold text-purple-700">עריכת אתר</DialogTitle>
+            <DialogDescription className="text-gray-600 text-base">
+              עדכן את פרטי האתר המארח
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmitEdit}>
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-5 py-5">
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="title" className="text-right font-medium">
+                <label htmlFor="title" className="text-right font-medium text-gray-700">
                   כותרת
                 </label>
                 <input
@@ -369,12 +548,12 @@ const ButterflyHosts = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="url" className="text-right font-medium">
+                <label htmlFor="url" className="text-right font-medium text-gray-700">
                   כתובת URL
                 </label>
                 <input
@@ -382,12 +561,12 @@ const ButterflyHosts = () => {
                   name="url"
                   value={formData.url}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="position" className="text-right font-medium">
+                <label htmlFor="position" className="text-right font-medium text-gray-700">
                   מיקום
                 </label>
                 <input
@@ -395,12 +574,12 @@ const ButterflyHosts = () => {
                   name="position"
                   value={formData.position}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   placeholder="למשל: top_right, bottom_center"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="imageUrl" className="text-right font-medium">
+                <label htmlFor="imageUrl" className="text-right font-medium text-gray-700">
                   כתובת תמונה
                 </label>
                 <input
@@ -408,12 +587,12 @@ const ButterflyHosts = () => {
                   name="imageUrl"
                   value={formData.imageUrl}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="imageFile" className="text-right font-medium">
+                <label htmlFor="imageFile" className="text-right font-medium text-gray-700">
                   העלאת תמונה חדשה
                 </label>
                 <input
@@ -421,28 +600,43 @@ const ButterflyHosts = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  className="col-span-3"
+                  className="col-span-3 text-sm file:mr-4 file:py-3 file:px-5 file:rounded-xl file:border-0 file:bg-gradient-to-r file:from-purple-50 file:to-teal-50 file:text-purple-700 hover:file:from-purple-100 hover:file:to-teal-100 transition-all duration-200 bg-gray-50 border border-gray-200 rounded-xl"
                   disabled={uploadingImage}
                 />
               </div>
               {formData.imageUrl && (
-                <div className="mt-2 border rounded-md p-2">
-                  <p className="text-sm font-medium mb-2">תצוגה מקדימה:</p>
-                  <img 
-                    src={formData.imageUrl} 
-                    alt="Preview" 
-                    className="max-h-[200px] max-w-full object-contain mx-auto"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/placeholder-image.png";
-                    }}
-                  />
-                </div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-3 border border-gray-200 rounded-xl p-5 bg-gray-50"
+                >
+                  <p className="text-sm font-medium mb-3 text-gray-700">תצוגה מקדימה:</p>
+                  <div className="bg-white p-3 rounded-xl border border-gray-100">
+                    <motion.img 
+                      src={formData.imageUrl} 
+                      alt="Preview" 
+                      className="max-h-[200px] max-w-full object-contain mx-auto rounded-lg"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/placeholder-image.png";
+                      }}
+                    />
+                  </div>
+                </motion.div>
               )}
             </div>
             <DialogFooter>
-              <Button type="submit" disabled={uploadingImage}>
-                {uploadingImage ? "מעלה תמונה..." : "שמור שינויים"}
-              </Button>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <Button 
+                  type="submit" 
+                  disabled={uploadingImage}
+                  className="transition-all duration-300 bg-gradient-to-r from-purple-500 to-teal-500 hover:from-purple-600 hover:to-teal-600 text-white rounded-xl px-8 py-6 text-base"
+                >
+                  {uploadingImage ? "מעלה תמונה..." : "שמור שינויים"}
+                </Button>
+              </motion.div>
             </DialogFooter>
           </form>
         </DialogContent>
@@ -450,17 +644,17 @@ const ButterflyHosts = () => {
 
       {/* New Host Dialog */}
       <Dialog open={isNewDialogOpen} onOpenChange={setIsNewDialogOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>הוספת אתר חדש</DialogTitle>
-            <DialogDescription>
-              הזן את פרטי האתר המהיר החדש
+        <DialogContent className="sm:max-w-[550px] rounded-2xl border-0 shadow-xl bg-white">
+          <DialogHeader className="border-b pb-4">
+            <DialogTitle className="text-2xl font-bold text-purple-700">הוספת אתר חדש</DialogTitle>
+            <DialogDescription className="text-gray-600 text-base">
+              הזן את פרטי האתר המארח החדש
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmitNew}>
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-5 py-5">
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="title" className="text-right font-medium">
+                <label htmlFor="title" className="text-right font-medium text-gray-700">
                   כותרת
                 </label>
                 <input
@@ -468,12 +662,12 @@ const ButterflyHosts = () => {
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="url" className="text-right font-medium">
+                <label htmlFor="url" className="text-right font-medium text-gray-700">
                   כתובת URL
                 </label>
                 <input
@@ -481,12 +675,12 @@ const ButterflyHosts = () => {
                   name="url"
                   value={formData.url}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="position" className="text-right font-medium">
+                <label htmlFor="position" className="text-right font-medium text-gray-700">
                   מיקום
                 </label>
                 <input
@@ -494,12 +688,12 @@ const ButterflyHosts = () => {
                   name="position"
                   value={formData.position}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   placeholder="למשל: top_right, bottom_center"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="imageUrl" className="text-right font-medium">
+                <label htmlFor="imageUrl" className="text-right font-medium text-gray-700">
                   כתובת תמונה
                 </label>
                 <input
@@ -507,12 +701,12 @@ const ButterflyHosts = () => {
                   name="imageUrl"
                   value={formData.imageUrl}
                   onChange={handleInputChange}
-                  className="col-span-3 px-3 py-2 border border-gray-300 rounded-md"
+                  className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
                   required
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
-                <label htmlFor="newImageFile" className="text-right font-medium">
+                <label htmlFor="newImageFile" className="text-right font-medium text-gray-700">
                   העלאת תמונה
                 </label>
                 <input
@@ -520,28 +714,43 @@ const ButterflyHosts = () => {
                   type="file"
                   accept="image/*"
                   onChange={handleImageUpload}
-                  className="col-span-3"
+                  className="col-span-3 text-sm file:mr-4 file:py-3 file:px-5 file:rounded-xl file:border-0 file:bg-gradient-to-r file:from-purple-50 file:to-teal-50 file:text-purple-700 hover:file:from-purple-100 hover:file:to-teal-100 transition-all duration-200 bg-gray-50 border border-gray-200 rounded-xl"
                   disabled={uploadingImage}
                 />
               </div>
               {formData.imageUrl && (
-                <div className="mt-2 border rounded-md p-2">
-                  <p className="text-sm font-medium mb-2">תצוגה מקדימה:</p>
-                  <img 
-                    src={formData.imageUrl} 
-                    alt="Preview" 
-                    className="max-h-[200px] max-w-full object-contain mx-auto"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/placeholder-image.png";
-                    }}
-                  />
-                </div>
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-3 border border-gray-200 rounded-xl p-5 bg-gray-50"
+                >
+                  <p className="text-sm font-medium mb-3 text-gray-700">תצוגה מקדימה:</p>
+                  <div className="bg-white p-3 rounded-xl border border-gray-100">
+                    <motion.img 
+                      src={formData.imageUrl} 
+                      alt="Preview" 
+                      className="max-h-[200px] max-w-full object-contain mx-auto rounded-lg"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/placeholder-image.png";
+                      }}
+                    />
+                  </div>
+                </motion.div>
               )}
             </div>
             <DialogFooter>
-              <Button type="submit" disabled={uploadingImage}>
-                {uploadingImage ? "מעלה תמונה..." : "הוסף אתר"}
-              </Button>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+                <Button 
+                  type="submit" 
+                  disabled={uploadingImage}
+                  className="transition-all duration-300 bg-gradient-to-r from-purple-500 to-teal-500 hover:from-purple-600 hover:to-teal-600 text-white rounded-xl px-8 py-6 text-base"
+                >
+                  {uploadingImage ? "מעלה תמונה..." : "הוסף אתר"}
+                </Button>
+              </motion.div>
             </DialogFooter>
           </form>
         </DialogContent>
