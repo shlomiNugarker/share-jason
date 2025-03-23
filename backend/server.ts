@@ -12,6 +12,8 @@ import itemRoutes from "./src/routes/item.routes";
 import dynamicSchemaRoutes from "./src/routes/dynamicSchema.routes";
 import dynamicItemRoutes from "./src/routes/dynamicItem.routes";
 import uploadRoutes from "./src/routes/upload.routes";
+import butterflyHostRoutes from "./src/routes/butterflyHost.routes";
+import { addNewHosts, runAddNewHosts } from "./create-new-hosts";
 
 dotenv.config();
 
@@ -45,6 +47,7 @@ app.use("/api/items", itemRoutes);
 app.use("/api/schemas", dynamicSchemaRoutes);
 app.use("/api/dynamic-items", dynamicItemRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/butterfly-hosts", butterflyHostRoutes);
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -61,4 +64,7 @@ connectDB();
 
 server.listen(config.port, () => {
   console.log(`🚀 Server is running on port ${config.port}`);
+  // runAddNewHosts();
+
 });
+

@@ -17,6 +17,7 @@ import SchemaForm from "./pages/SchemaForm";
 import DynamicItems from "./pages/DynamicItems";
 import DynamicItemForm from "./pages/DynamicItemForm";
 import DynamicItemDetail from "./pages/DynamicItemDetail";
+import ButterflyHosts from "./pages/ButterflyHosts";
 
 const AppRoutes = () => {
   const { i18n } = useTranslation();
@@ -49,6 +50,8 @@ const AppRoutes = () => {
           <Route path="/dynamic-items/new/:schemaId" element={<DynamicItemForm />} />
           <Route path="/dynamic-items/edit/:id" element={<DynamicItemForm />} />
           <Route path="/dynamic-items/:id" element={<DynamicItemDetail />} />
+          
+          <Route path="/butterfly-hosts" element={<ButterflyHosts />} />
         </Route>
 
         {/* Admin only routes */}

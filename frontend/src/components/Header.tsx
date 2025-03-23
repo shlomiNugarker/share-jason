@@ -43,6 +43,11 @@ const Header = () => {
       roles: ["user", "admin"],
     },
     {
+      label: "butterfly-hosts",
+      path: "/butterfly-hosts",
+      roles: ["user", "admin"],
+    },
+    {
       label: t("admin_dashboard"),
       path: "/admin/users",
       roles: ["admin"],

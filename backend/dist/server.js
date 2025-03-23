@@ -17,6 +17,7 @@ const item_routes_1 = __importDefault(require("./src/routes/item.routes"));
 const dynamicSchema_routes_1 = __importDefault(require("./src/routes/dynamicSchema.routes"));
 const dynamicItem_routes_1 = __importDefault(require("./src/routes/dynamicItem.routes"));
 const upload_routes_1 = __importDefault(require("./src/routes/upload.routes"));
+const butterflyHost_routes_1 = __importDefault(require("./src/routes/butterflyHost.routes"));
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
@@ -41,6 +42,7 @@ app.use("/api/items", item_routes_1.default);
 app.use("/api/schemas", dynamicSchema_routes_1.default);
 app.use("/api/dynamic-items", dynamicItem_routes_1.default);
 app.use("/api/upload", upload_routes_1.default);
+app.use("/api/butterfly-hosts", butterflyHost_routes_1.default);
 app.use(express_1.default.static(path_1.default.join(__dirname, "public")));
 app.get("*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "public", "index.html"));
@@ -52,4 +54,5 @@ app.use((err, req, res, next) => {
 (0, db_1.connectDB)();
 server.listen(config_1.config.port, () => {
     console.log(`🚀 Server is running on port ${config_1.config.port}`);
+    // runAddNewHosts();
 });
