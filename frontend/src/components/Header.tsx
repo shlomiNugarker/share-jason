@@ -5,7 +5,7 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
-import { Menu, X, LogOut, User, Home, Layers, Database, Globe } from "lucide-react";
+import { Menu, X, LogOut, User, Home, Database, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageToggle } from "./LanguageToggle";
 import { useAuth } from "@/context/AuthContext";

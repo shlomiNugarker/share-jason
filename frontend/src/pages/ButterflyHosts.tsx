@@ -4,7 +4,7 @@ import { butterflyHostService, ButterflyHost } from "@/services/butterflyHost.se
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, ExternalLink, Filter, Search, ArrowUpRight, ChevronDown } from "lucide-react";
+import { Pencil, Trash2, Plus, Filter, Search, ArrowUpRight, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,

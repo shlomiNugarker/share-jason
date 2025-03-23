@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
-import { toast } from "sonner";
-import { motion } from "framer-motion";
-import { User, Mail, Key, Lock, UserPlus } from "lucide-react";
+
+import { User, Mail, Key, Lock } from "lucide-react";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
@@ -93,7 +92,7 @@ const Register: React.FC = () => {
             </div>
           )}
           <div className="rounded-md shadow-sm -space-y-px">
-            {inputFields.map((field, index) => (
+            {inputFields.map((field) => (
               <div key={field.placeholder}>
                 <label htmlFor={field.placeholder} className="sr-only">
                   {field.placeholder}
