@@ -11,6 +11,7 @@ import AdminUsers from "./pages/AdminUsers";
 import Home from "./pages/Home";
 import Items from "./pages/Items";
 import ItemForm from "./pages/ItemForm";
+import ItemDetails from "./pages/ItemDetails";
 import Schemas from "./pages/Schemas";
 import SchemaForm from "./pages/SchemaForm";
 import DynamicItems from "./pages/DynamicItems";
@@ -39,6 +40,8 @@ const AppRoutes = () => {
           <Route path="/items" element={<Items />} />
           <Route path="/items/new" element={<ItemForm />} />
           <Route path="/items/edit/:id" element={<ItemForm />} />
+          <Route path="/items/view/:id" element={<ItemDetails />} />
+          <Route path="/items/:id" element={<ItemDetails />} />
           
           <Route path="/schemas" element={<Schemas />} />
           <Route path="/dynamic-items/schema/:schemaId" element={<DynamicItems />} />
