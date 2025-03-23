@@ -4,7 +4,7 @@ import { butterflyHostService, ButterflyHost } from "@/services/butterflyHost.se
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, ExternalLink, Filter, Search, ArrowUpRight } from "lucide-react";
+import { Pencil, Trash2, Plus, ExternalLink, Filter, Search, ArrowUpRight, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
@@ -26,6 +26,7 @@ const ButterflyHosts = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
+  const [visibleCount, setVisibleCount] = useState(10);
   const [formData, setFormData] = useState({
     url: "",
     title: "",
@@ -213,9 +214,26 @@ const ButterflyHosts = () => {
       );
     });
 
+  // Get visible hosts (limited by visibleCount)
+  const visibleHosts = filteredHosts.slice(0, visibleCount);
+  
+  // Check if there are more hosts to load
+  const hasMoreHosts = visibleHosts.length < filteredHosts.length;
+
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 10);
+  };
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchText(e.target.value);
+    // Reset visibleCount when search changes
+    setVisibleCount(10);
   };
+
+  // Reset visibleCount when filters change
+  useEffect(() => {
+    setVisibleCount(10);
+  }, [selectedPosition]);
 
   if (loading) {
     return (
@@ -371,7 +389,7 @@ const ButterflyHosts = () => {
       {/* Hosts Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <AnimatePresence>
-          {filteredHosts.map((host, index) => (
+          {visibleHosts.map((host, index) => (
             <motion.div
               key={host._id}
               initial={{ opacity: 0, y: 20 }}
@@ -471,6 +489,26 @@ const ButterflyHosts = () => {
           ))}
         </AnimatePresence>
       </div>
+      
+      {/* "Load More" button */}
+      {hasMoreHosts && (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex justify-center mt-10 mb-6"
+        >
+          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+            <Button 
+              onClick={handleLoadMore}
+              className="bg-gradient-to-r from-purple-500 to-teal-500 text-white px-8 py-6 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center"
+            >
+              <ChevronDown className="mr-2 h-5 w-5" />
+              טען עוד אתרים ({filteredHosts.length - visibleHosts.length} נוספים)
+            </Button>
+          </motion.div>
+        </motion.div>
+      )}
       
       {filteredHosts.length === 0 && (
         <motion.div 
