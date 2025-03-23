@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -14,6 +14,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
+  const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -21,11 +22,25 @@ const Header = () => {
     i18n.changeLanguage(lng);
   };
 
+  const isCurrentPage = (path: string) => {
+    return location.pathname === path;
+  };
+
   const menuItems = [
     {
       label: t("home_page"),
       path: "/",
       roles: [""],
+    },
+    {
+      label: "Items",
+      path: "/items",
+      roles: ["user", "admin"],
+    },
+    {
+      label: "Schemas",
+      path: "/schemas",
+      roles: ["user", "admin"],
     },
     {
       label: t("admin_dashboard"),
@@ -68,7 +83,7 @@ const Header = () => {
         ))}
 
       {user ? (
-        <NavigationMenuItem>
+        <NavigationMenuItem asChild>
           <button
             onClick={logout}
             className="text-lg transition-all duration-300 px-4 py-2 rounded-lg hover:bg-red-600 hover:text-white"

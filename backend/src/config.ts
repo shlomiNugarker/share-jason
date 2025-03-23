@@ -10,6 +10,14 @@ export const config = {
     // "http://127.0.0.1:3000",
     // "http://localhost:3000",
     "http://localhost:5173",
+    "http://127.0.0.1:5173"
   ],
   mongoUri: process.env.MONGO_URI,
+  
+  // Cloudinary configuration
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
+    apiSecret: process.env.CLOUDINARY_API_SECRET,
+  },
 };

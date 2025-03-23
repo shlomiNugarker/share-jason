@@ -8,6 +8,10 @@ import { connectDB } from "./src/database/db";
 import { config } from "./src/config";
 import userRoutes from "./src/routes/user.routes";
 import authRoutes from "./src/routes/auth.routes";
+import itemRoutes from "./src/routes/item.routes";
+import dynamicSchemaRoutes from "./src/routes/dynamicSchema.routes";
+import dynamicItemRoutes from "./src/routes/dynamicItem.routes";
+import uploadRoutes from "./src/routes/upload.routes";
 
 dotenv.config();
 
@@ -29,12 +33,18 @@ app.use(express.urlencoded({ extended: true }));
 const corsOptions = {
   origin: config.allowedOrigins,
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/items", itemRoutes);
+app.use("/api/schemas", dynamicSchemaRoutes);
+app.use("/api/dynamic-items", dynamicItemRoutes);
+app.use("/api/upload", uploadRoutes);
 
 app.use(express.static(path.join(__dirname, "public")));
 

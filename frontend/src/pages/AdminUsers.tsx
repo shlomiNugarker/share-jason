@@ -19,16 +19,30 @@ const AdminUsers = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!user || user.role !== "admin") {
+    if (!user) {
+      console.log("😡 User not logged in");
       navigate("/unauthorized");
+      return;
     }
+    
+    console.log("🔍 Current user:", user);
+    
+    if (user.role !== "admin") {
+      console.log("😡 User is not admin");
+      navigate("/unauthorized");
+      return;
+    }
+    
     fetchUsers();
   }, [navigate, user]);
 
   const fetchUsers = async () => {
     try {
-      const data = await httpService.get("/api/users/all", true);
-      setUsers(data);
+      // For development - use the test endpoint
+      const data = await httpService.get("/api/users/test/all", false);
+      // When ready for production:
+      // const data = await httpService.get("/api/users", true);
+      setUsers(data.users || []);
     } catch (err) {
       console.error(err);
       setError("Failed to load users");

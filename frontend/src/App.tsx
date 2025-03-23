@@ -7,8 +7,14 @@ import Unauthorized from "./pages/Unauthorized";
 import Layout from "./components/Layout";
 import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
-import AdminUsers from "./pages/AdminUsers.tsx";
-import Home from "./pages/Home.tsx";
+import AdminUsers from "./pages/AdminUsers";
+import Home from "./pages/Home";
+import Items from "./pages/Items";
+import ItemForm from "./pages/ItemForm";
+import Schemas from "./pages/Schemas";
+import SchemaForm from "./pages/SchemaForm";
+import DynamicItems from "./pages/DynamicItems";
+import DynamicItemForm from "./pages/DynamicItemForm";
 
 const AppRoutes = () => {
   const { i18n } = useTranslation();
@@ -28,9 +34,24 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
+        {/* Protected routes for all authenticated users */}
+        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
+          <Route path="/items" element={<Items />} />
+          <Route path="/items/new" element={<ItemForm />} />
+          <Route path="/items/edit/:id" element={<ItemForm />} />
+          
+          <Route path="/schemas" element={<Schemas />} />
+          <Route path="/dynamic-items/schema/:schemaId" element={<DynamicItems />} />
+          <Route path="/dynamic-items/new/:schemaId" element={<DynamicItemForm />} />
+          <Route path="/dynamic-items/edit/:id" element={<DynamicItemForm />} />
+        </Route>
+
+        {/* Admin only routes */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />
+          <Route path="/schemas/new" element={<SchemaForm />} />
+          <Route path="/schemas/edit/:id" element={<SchemaForm />} />
         </Route>
       </Route>
     </Routes>

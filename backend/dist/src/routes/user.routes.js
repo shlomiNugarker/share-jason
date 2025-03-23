@@ -1,13 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const auth_middleware_1 = require("../middlewares/auth.middleware");
-const role_middleware_1 = require("../middlewares/role.middleware");
 const user_controller_1 = require("../controllers/user.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const admin_middleware_1 = require("../middlewares/admin.middleware");
 const router = (0, express_1.Router)();
+// User profile (for the authenticated user)
 router.get("/profile", auth_middleware_1.authMiddleware, user_controller_1.getProfile);
-router.patch("/profile", auth_middleware_1.authMiddleware, user_controller_1.updateProfile);
-router.delete("/:id", auth_middleware_1.authMiddleware, user_controller_1.deleteUser);
-router.get("/all", auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(["admin"]), user_controller_1.getAllUsers);
-router.put("/:id/role", auth_middleware_1.authMiddleware, (0, role_middleware_1.roleMiddleware)(["admin"]), user_controller_1.updateUserRole);
+// Admin routes
+router.get("/", auth_middleware_1.authMiddleware, admin_middleware_1.adminMiddleware, user_controller_1.getAllUsers);
+router.get("/all", auth_middleware_1.authMiddleware, admin_middleware_1.adminMiddleware, user_controller_1.getAllUsers);
+router.get("/:id", auth_middleware_1.authMiddleware, admin_middleware_1.adminMiddleware, user_controller_1.getUserById);
+router.patch("/:id/role", auth_middleware_1.authMiddleware, admin_middleware_1.adminMiddleware, user_controller_1.updateUserRole);
+router.patch("/:id/status", auth_middleware_1.authMiddleware, admin_middleware_1.adminMiddleware, user_controller_1.updateUserActiveStatus);
+// DEV ONLY - remove for production
+router.get("/test/all", user_controller_1.getAllUsers); // For development testing only - NO AUTH REQUIRED
 exports.default = router;
