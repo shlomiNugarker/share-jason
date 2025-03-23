@@ -23,7 +23,7 @@ const API_ENDPOINT = "/api/items";
 
 export const itemService = {
   async getAll() {
-    return httpService.get(API_ENDPOINT, true);
+    return httpService.get(API_ENDPOINT, false);
   },
 
   async getById(id: string) {

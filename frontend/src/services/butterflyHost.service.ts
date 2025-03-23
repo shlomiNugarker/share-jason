@@ -40,7 +40,7 @@ const API_ENDPOINT = "/api/butterfly-hosts";
 export const butterflyHostService = {
   // Get all butterfly hosts
   getAll: async (): Promise<ButterflyHostsResponse> => {
-    return httpService.get(API_ENDPOINT, true);
+    return httpService.get(API_ENDPOINT, false);
   },
 
   // Get butterfly hosts by position

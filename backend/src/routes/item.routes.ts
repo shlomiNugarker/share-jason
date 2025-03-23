@@ -12,10 +12,10 @@ import { adminMiddleware } from "../middlewares/admin.middleware";
 const router = Router();
 
 // Get all items
-router.get("/", authMiddleware, getAllItems);
+router.get("/", getAllItems);
 
 // Get item by ID
-router.get("/:id", authMiddleware, getItemById);
+router.get("/:id", getItemById);
 
 // Create new item
 router.post("/", authMiddleware, createItem);
