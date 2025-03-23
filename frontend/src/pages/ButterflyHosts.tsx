@@ -4,7 +4,7 @@ import { butterflyHostService, ButterflyHost } from "@/services/butterflyHost.se
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, ExternalLink, Filter } from "lucide-react";
+import { Pencil, Trash2, Plus, ExternalLink, Filter, Search } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +22,7 @@ const ButterflyHosts = () => {
   const [editingHost, setEditingHost] = useState<ButterflyHost | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [formData, setFormData] = useState({
     url: "",
     title: "",
@@ -195,9 +196,23 @@ const ButterflyHosts = () => {
     }
   };
 
-  const filteredHosts = selectedPosition
-    ? hosts.filter(host => host.position === selectedPosition)
-    : hosts;
+  // Filter hosts by position and search text
+  const filteredHosts = hosts
+    .filter(host => !selectedPosition || host.position === selectedPosition)
+    .filter(host => {
+      if (!searchText) return true;
+      
+      const search = searchText.toLowerCase();
+      return (
+        host.title.toLowerCase().includes(search) || 
+        host.url.toLowerCase().includes(search) ||
+        (host.position && host.position.toLowerCase().includes(search))
+      );
+    });
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
 
   if (loading) {
     return <div className="flex justify-center p-8">טוען...</div>;
@@ -206,13 +221,27 @@ const ButterflyHosts = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">butterfly-hosts({hosts.length})</h1>
+        <h1 className="text-2xl font-bold">אתרים מארחים ({hosts.length})</h1>
         
         {user && (
           <Button onClick={handleNew}>
             <Plus className="mr-2 h-4 w-4" /> הוסף אתר חדש
           </Button>
         )}
+      </div>
+      
+      {/* Search input */}
+      <div className="relative mb-6">
+        <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+          <Search className="h-5 w-5 text-gray-400" />
+        </div>
+        <input
+          type="text"
+          placeholder="חיפוש לפי כותרת, כתובת URL או מיקום..."
+          value={searchText}
+          onChange={handleSearchChange}
+          className="w-full py-2 pr-10 pl-4 border border-gray-300 rounded-md"
+        />
       </div>
       
       <div className="flex flex-wrap gap-2 mb-6">
@@ -312,7 +341,11 @@ const ButterflyHosts = () => {
       
       {filteredHosts.length === 0 && (
         <div className="text-center p-8 bg-gray-100 rounded-md">
-          אין אתרים להצגה בקטגוריה זו
+          {searchText ? (
+            <p>לא נמצאו אתרים התואמים את החיפוש "{searchText}"</p>
+          ) : (
+            <p>אין אתרים להצגה בקטגוריה זו</p>
+          )}
         </div>
       )}
 

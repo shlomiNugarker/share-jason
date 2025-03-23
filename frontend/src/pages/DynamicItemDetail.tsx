@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { dynamicItemService, DynamicItem } from "@/services/dynamicItem.service";
 import { DynamicSchema, Field } from "@/services/dynamicSchema.service";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuList,
@@ -14,7 +14,6 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const { user, logout } = useAuth();
-  const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -22,9 +21,6 @@ const Header = () => {
     i18n.changeLanguage(lng);
   };
 
-  const isCurrentPage = (path: string) => {
-    return location.pathname === path;
-  };
 
   const menuItems = [
     {

@@ -1,16 +1,16 @@
 import { httpService } from "./http.service";
 
-interface Item {
-  _id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  status: "active" | "inactive" | "archived";
-  createdBy: string;
-  updatedBy: string;
-  createdAt: string;
-  updatedAt: string;
-}
+// interface Item {
+//   _id: string;
+//   name: string;
+//   description: string;
+//   imageUrl: string;
+//   status: "active" | "inactive" | "archived";
+//   createdBy: string;
+//   updatedBy: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
 
 interface ItemFormData {
   name: string;

@@ -1,5 +1,4 @@
 import { httpService } from "./http.service";
-import { DynamicSchema } from "./dynamicSchema.service";
 
 export interface DynamicItem {
   _id: string;
