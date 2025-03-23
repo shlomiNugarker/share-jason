@@ -29,7 +29,7 @@ const fieldSchema = new mongoose_1.Schema({
     name: { type: String, required: true },
     type: {
         type: String,
-        enum: ["string", "number", "boolean", "date"],
+        enum: ["string", "number", "boolean", "date", "image"],
         required: true,
     },
     required: { type: Boolean, default: false },

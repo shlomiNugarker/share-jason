@@ -52,9 +52,9 @@ export const createSchema = async (req: AuthRequest, res: Response) => {
       }
       
       // Check if type is valid
-      if (!["string", "number", "boolean", "date"].includes(field.type)) {
+      if (!["string", "number", "boolean", "date", "image"].includes(field.type)) {
         return res.status(400).json({ 
-          message: "Field type must be string, number, boolean, or date" 
+          message: "Field type must be string, number, boolean, date, or image" 
         });
       }
     }
@@ -102,9 +102,9 @@ export const updateSchema = async (req: AuthRequest, res: Response) => {
         }
         
         // Check if type is valid
-        if (!["string", "number", "boolean", "date"].includes(field.type)) {
+        if (!["string", "number", "boolean", "date", "image"].includes(field.type)) {
           return res.status(400).json({ 
-            message: "Field type must be string, number, boolean, or date" 
+            message: "Field type must be string, number, boolean, date, or image" 
           });
         }
       }

@@ -2,7 +2,7 @@ import { httpService } from "./http.service";
 
 export interface Field {
   name: string;
-  type: "string" | "number" | "boolean" | "date";
+  type: "string" | "number" | "boolean" | "date" | "image";
   required: boolean;
 }
 

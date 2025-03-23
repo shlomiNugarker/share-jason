@@ -16,6 +16,7 @@ import Schemas from "./pages/Schemas";
 import SchemaForm from "./pages/SchemaForm";
 import DynamicItems from "./pages/DynamicItems";
 import DynamicItemForm from "./pages/DynamicItemForm";
+import DynamicItemDetail from "./pages/DynamicItemDetail";
 
 const AppRoutes = () => {
   const { i18n } = useTranslation();
@@ -47,6 +48,7 @@ const AppRoutes = () => {
           <Route path="/dynamic-items/schema/:schemaId" element={<DynamicItems />} />
           <Route path="/dynamic-items/new/:schemaId" element={<DynamicItemForm />} />
           <Route path="/dynamic-items/edit/:id" element={<DynamicItemForm />} />
+          <Route path="/dynamic-items/:id" element={<DynamicItemDetail />} />
         </Route>
 
         {/* Admin only routes */}

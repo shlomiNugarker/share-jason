@@ -214,6 +214,7 @@ const SchemaForm = () => {
                         <option value="number">Number</option>
                         <option value="boolean">Boolean</option>
                         <option value="date">Date</option>
+                        <option value="image">Image</option>
                       </select>
                     </div>
                   </div>

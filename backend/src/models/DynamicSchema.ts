@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export type FieldType = "string" | "number" | "boolean" | "date";
+export type FieldType = "string" | "number" | "boolean" | "date" | "image";
 
 export interface IField {
   name: string;
@@ -21,7 +21,7 @@ const fieldSchema = new Schema(
     name: { type: String, required: true },
     type: {
       type: String,
-      enum: ["string", "number", "boolean", "date"],
+      enum: ["string", "number", "boolean", "date", "image"],
       required: true,
     },
     required: { type: Boolean, default: false },

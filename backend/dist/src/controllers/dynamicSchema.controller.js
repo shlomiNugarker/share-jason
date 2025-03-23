@@ -55,9 +55,9 @@ const createSchema = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                 });
             }
             // Check if type is valid
-            if (!["string", "number", "boolean", "date"].includes(field.type)) {
+            if (!["string", "number", "boolean", "date", "image"].includes(field.type)) {
                 return res.status(400).json({
-                    message: "Field type must be string, number, boolean, or date"
+                    message: "Field type must be string, number, boolean, date, or image"
                 });
             }
         }
@@ -100,9 +100,9 @@ const updateSchema = (req, res) => __awaiter(void 0, void 0, void 0, function* (
                     });
                 }
                 // Check if type is valid
-                if (!["string", "number", "boolean", "date"].includes(field.type)) {
+                if (!["string", "number", "boolean", "date", "image"].includes(field.type)) {
                     return res.status(400).json({
-                        message: "Field type must be string, number, boolean, or date"
+                        message: "Field type must be string, number, boolean, date, or image"
                     });
                 }
             }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { FileUploader } from "@/components/FileUploader";
 
 const DynamicItemForm = () => {
   const navigate = useNavigate();
@@ -244,6 +245,48 @@ function renderFieldInput(
           disabled={disabled}
         />
       );
+    case "image":
+      return (
+        <div className="space-y-4">
+          {value && (
+            <div className="mb-2">
+              <img 
+                src={value} 
+                alt={field.name} 
+                className="max-h-40 max-w-full rounded-md border" 
+              />
+            </div>
+          )}
+          
+          <div className="space-y-2">
+            <label htmlFor={`url-${field.name}`} className="block text-sm font-medium">
+              Image URL
+            </label>
+            <Input
+              id={`url-${field.name}`}
+              placeholder="Enter image URL manually"
+              value={value || ""}
+              onChange={(e) => onChange(e.target.value)}
+              disabled={disabled}
+            />
+            <p className="text-xs text-gray-500">
+              Enter a URL directly or use the uploader below
+            </p>
+          </div>
+          
+          <div className="border-t pt-4">
+            <p className="text-sm font-medium mb-2">Or upload an image:</p>
+            <FileUploader 
+              onUploadSuccess={(fileData) => onChange(fileData.url)}
+              onUploadError={(error) => toast.error(`Upload failed: ${error}`)}
+            />
+          </div>
+          
+          {field.required && !value && (
+            <p className="text-xs text-red-500">* This field is required</p>
+          )}
+        </div>
+      );
     default:
       return (
         <Input
@@ -269,19 +312,21 @@ function formatDateForInput(dateString: string): string {
   return `${year}-${month}-${day}`;
 }
 
-// Helper function to get default value based on type
+// Helper function to get default value for field type
 function getDefaultValueForType(type: string): any {
   switch (type) {
     case "string":
       return "";
     case "number":
-      return null;
+      return 0;
     case "boolean":
       return false;
     case "date":
-      return null;
+      return new Date().toISOString().split("T")[0];
+    case "image":
+      return "";
     default:
-      return null;
+      return "";
   }
 }
 

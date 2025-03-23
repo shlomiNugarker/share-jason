@@ -150,6 +150,16 @@ function renderFieldValue(value: any, type: string) {
       return value ? "Yes" : "No";
     case "date":
       return new Date(value).toLocaleDateString();
+    case "image":
+      return value ? (
+        <img 
+          src={value} 
+          alt="Field image" 
+          className="max-h-20 max-w-full object-contain rounded-md" 
+        />
+      ) : (
+        <span className="text-gray-400">No image</span>
+      );
     default:
       return String(value);
   }
