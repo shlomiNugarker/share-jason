@@ -19,10 +19,6 @@ const Header = () => {
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
-  const changeLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
-
   const menuItems = [
     {
       label: t("home_page"),
@@ -70,7 +66,7 @@ const Header = () => {
   const renderMenuItems = (isMobile: boolean = false) => (
     <>
       <li>
-        <LanguageToggle changeLanguage={changeLanguage} />
+        <LanguageToggle />
       </li>
       {menuItems
         .filter((item) => user && item.roles.includes(user.role))
@@ -131,7 +127,7 @@ const Header = () => {
     <motion.div 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className="shadow-lg bg-gradient-to-r from-purple-600 to-teal-500 sticky w-full z-10 top-0 backdrop-blur-lg"
+      className="shadow-lg bg-gradient-to-r from-purple-600 to-teal-500 sticky w-full z-100 top-0 backdrop-blur-lg"
     >
       <header className="container mx-auto z-10 top-0 flex justify-between items-center p-6 text-white">
         {user && (
