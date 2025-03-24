@@ -162,7 +162,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // בדיקה שהטוקן נשמר בהצלחה
       setTimeout(() => {
         const tokenExists = authService.isAuthenticated();
-        const storedToken = localStorage.getItem('auth_token');
+        const storedToken = localStorage.getItem('token');
         console.log("🔐 בדיקת טוקן אחרי הפסקה קצרה:", {
           tokenExists,
           tokenInStorage: !!storedToken,
@@ -177,7 +177,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           
           // בדיקה אחרונה
           setTimeout(() => {
-            const finalCheck = localStorage.getItem('auth_token');
+            const finalCheck = localStorage.getItem('token');
             console.log("🔐 בדיקה סופית של טוקן:", !!finalCheck);
           }, 300);
         }
@@ -258,7 +258,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       hasUser: !!user,
       hasToken: !!token,
       tokenLength: token?.length || 0,
-      storageToken: localStorage.getItem('auth_token')
+      storageToken: localStorage.getItem('token')
     });
     
     if (token && !user) {
