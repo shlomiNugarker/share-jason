@@ -4,7 +4,7 @@ import { butterflyHostService, ButterflyHost } from "@/services/butterflyHost.se
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, Filter, Search, ArrowUpRight, ChevronDown } from "lucide-react";
+import { Pencil, Trash2, Plus, Filter, Search, ArrowUpRight, ChevronDown, Download } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
@@ -85,35 +85,75 @@ const ButterflyHosts = () => {
   };
 
   const handleDelete = async (id: string) => {
+    console.log(`ניסיון למחוק אתר עם ID: ${id}`);
+    
     if (window.confirm("האם אתה בטוח שברצונך למחוק אתר זה?")) {
+      console.log("המשתמש אישר את המחיקה");
+      
+      setLoading(true);
       try {
-        await butterflyHostService.delete(id);
-        toast.success("האתר נמחק בהצלחה");
-        setHosts(prevHosts => prevHosts.filter(host => host._id !== id));
+        // בדיקה אם המשתמש מחובר
+        if (!user) {
+          console.error("ניסיון מחיקה ללא משתמש מחובר");
+          toast.error("נדרשת התחברות למערכת כדי למחוק אתרים");
+          setLoading(false);
+          return;
+        }
         
-        // Update positions list if needed
-        if (hosts.length <= 1) {
-          setPositions([]);
-          setSelectedPosition(null);
-        } else {
-          const remainingHosts = hosts.filter(host => host._id !== id);
-          const positionsList = new Set<string>();
-          remainingHosts.forEach(host => {
-            if (host.position) {
-              positionsList.add(host.position);
-            }
-          });
-          setPositions(Array.from(positionsList));
+        console.log(`מנסה למחוק אתר: ${id}, המשתמש: ${user.name}`);
+        
+        // נשתמש בבלוק try/catch פנימי נוסף כדי להבדיל בין סוגי שגיאות
+        let deleteSucceeded = false;
+        try {
+          const result = await butterflyHostService.delete(id);
+          console.log("תוצאת המחיקה:", result);
+          deleteSucceeded = true;
+        } catch (deleteError) {
+          console.error("כשל בקריאה לשירות המחיקה:", deleteError);
           
-          // Reset selectedPosition if it no longer exists
-          if (selectedPosition && !positionsList.has(selectedPosition)) {
-            setSelectedPosition(null);
+          // ניסיון גיבוי - ננסה לעדכן את הממשק גם אם השרת לא מגיב
+          if (confirm("בעיה בתקשורת עם השרת. האם ברצונך להסיר את האתר מהרשימה בכל זאת?")) {
+            deleteSucceeded = true;
+            console.log("המשתמש אישר את הסרת האתר מקומית למרות הכשל בשרת");
+          } else {
+            throw deleteError; // זרוק את השגיאה המקורית אם המשתמש לא אישר את הסרת האתר מקומית
           }
         }
-      } catch (error) {
-        console.error("Failed to delete butterfly host:", error);
-        toast.error("נכשל במחיקת האתר");
+        
+        if (deleteSucceeded) {
+          toast.success("האתר הוסר בהצלחה");
+          // עדכון המצב המקומי - הסרת האתר מהרשימה
+          setHosts(prevHosts => prevHosts.filter(host => host._id !== id));
+          
+          // Update positions list if needed
+          if (hosts.length <= 1) {
+            setPositions([]);
+            setSelectedPosition(null);
+          } else {
+            const remainingHosts = hosts.filter(host => host._id !== id);
+            const positionsList = new Set<string>();
+            remainingHosts.forEach(host => {
+              if (host.position) {
+                positionsList.add(host.position);
+              }
+            });
+            setPositions(Array.from(positionsList));
+            
+            // Reset selectedPosition if it no longer exists
+            if (selectedPosition && !positionsList.has(selectedPosition)) {
+              setSelectedPosition(null);
+            }
+          }
+        }
+      } catch (error: any) {
+        console.error("שגיאה במחיקת האתר:", error);
+        const errorMessage = error.message || "אירעה שגיאה בעת ניסיון למחוק את האתר";
+        toast.error(errorMessage);
+      } finally {
+        setLoading(false);
       }
+    } else {
+      console.log("המשתמש ביטל את המחיקה");
     }
   };
 
@@ -235,6 +275,45 @@ const ButterflyHosts = () => {
     setVisibleCount(10);
   }, [selectedPosition]);
 
+  // function to download hosts data as JSON
+  const downloadHostsAsJson = () => {
+    try {
+      // Filter hosts based on current filters
+      const dataToDownload = filteredHosts.map(host => ({
+        title: host.title,
+        url: host.url,
+        position: host.position || "",
+        imageUrl: host.imageUrl
+      }));
+      
+      // Create a JSON blob
+      const jsonString = JSON.stringify(dataToDownload, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      
+      // Create download link
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Set filename with current date
+      const date = new Date().toISOString().split('T')[0];
+      link.download = `butterfly-hosts-${date}.json`;
+      
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      toast.success("הקובץ הורד בהצלחה");
+    } catch (error) {
+      console.error("Failed to download JSON:", error);
+      toast.error("שגיאה בהורדת הקובץ");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[70vh]">
@@ -314,21 +393,37 @@ const ButterflyHosts = () => {
             </motion.p>
           </div>
           
-          {user && (
+          <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0">
+            {user && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Button 
+                  onClick={handleNew}
+                  className="bg-white text-purple-600 hover:bg-purple-50 transition-all duration-300 text-base px-6 py-6 rounded-xl shadow-md w-full sm:w-auto"
+                >
+                  <Plus className="mr-2 h-5 w-5" /> הוסף אתר חדש
+                </Button>
+              </motion.div>
+            )}
+            
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.6 }}
               whileHover={{ scale: 1.05 }}
             >
               <Button 
-                onClick={handleNew}
-                className="mt-4 md:mt-0 bg-white text-purple-600 hover:bg-purple-50 transition-all duration-300 text-base px-6 py-6 rounded-xl shadow-md"
+                onClick={downloadHostsAsJson}
+                className="bg-teal-400 text-white hover:bg-teal-300 transition-all duration-300 text-base px-6 py-6 rounded-xl shadow-md w-full sm:w-auto"
               >
-                <Plus className="mr-2 h-5 w-5" /> הוסף אתר חדש
+                <Download className="mr-2 h-5 w-5" /> הורד כקובץ JSON
               </Button>
             </motion.div>
-          )}
+          </div>
         </div>
       </motion.div>
       

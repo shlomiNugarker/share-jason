@@ -2,7 +2,7 @@
 export const httpService = { get, post, put, del };
 
 const BASE_URL =
-  process.env.NODE_ENV === "production" ? "" : "http://localhost:3030";
+  process.env.NODE_ENV === "production" ? "" : "http://localhost:5000";
 
 function getAuthHeaders(secure: boolean) {
   if (!secure) return { "Content-Type": "application/json" };
@@ -36,10 +36,24 @@ async function request(
 
     const res = await fetch(BASE_URL + endpoint, options);
     if (!res.ok) {
-      const errorData = await res.json();
+      let errorData;
+      try {
+        errorData = await res.json();
+      } catch (e) {
+        errorData = { message: "שגיאה לא ידועה" };
+      }
+      
+      if (res.status === 401) {
+        throw new Error("אין הרשאה - נדרשת התחברות למערכת");
+      } else if (res.status === 403) {
+        throw new Error("אין לך הרשאה לבצע פעולה זו");
+      } else if (res.status === 404) {
+        throw new Error("המשאב המבוקש לא נמצא");
+      }
+      
       throw new Error(
-        `Request failed with status ${res.status}: ${
-          errorData.message || "Unknown error"
+        `שגיאה בשרת (${res.status}): ${
+          errorData.message || "שגיאה לא ידועה"
         }`
       );
     }

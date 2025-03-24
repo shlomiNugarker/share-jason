@@ -1,5 +1,10 @@
 import { httpService } from "./http.service";
 
+// Define the BASE_URL - using the API base URL
+const BASE_URL = process.env.NODE_ENV === 'production' 
+  ? '' 
+  : 'http://localhost:5000';
+
 export interface ButterflyHost {
   _id: string;
   url: string;
@@ -65,7 +70,62 @@ export const butterflyHostService = {
 
   // Delete a butterfly host
   delete: async (id: string): Promise<{ success: boolean; message: string }> => {
-    return httpService.del(`${API_ENDPOINT}/${id}`, true);
+    console.log(`מנסה למחוק אתר מארח עם ID: ${id}`);
+    
+    try {
+      console.log(`שולח בקשת מחיקה ל-${API_ENDPOINT}/${id}`);
+      console.log(`כתובת מלאה: ${BASE_URL}${API_ENDPOINT}/${id}`);
+      
+      // Get token from localStorage but don't require it
+      const token = localStorage.getItem("token");
+      console.log(`האם קיים טוקן?: ${!!token}`);
+      
+      // Create headers with or without token
+      const headers: HeadersInit = {
+        'Content-Type': 'application/json'
+      };
+      
+      // Add token to headers if available
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      // Make the delete request 
+      const response = await fetch(`${BASE_URL}${API_ENDPOINT}/${id}`, {
+        method: 'DELETE',
+        headers
+      });
+      
+      console.log(`תגובת שרת: ${response.status} ${response.statusText}`);
+      
+      if (!response.ok) {
+        let errorText;
+        try {
+          errorText = await response.text();
+          console.error(`תוכן שגיאת שרת:`, errorText);
+        } catch (e) {
+          errorText = "לא ניתן לקרוא את פרטי השגיאה";
+        }
+        
+        throw new Error(`שגיאת שרת (${response.status}): ${errorText || "שגיאה לא ידועה"}`);
+      }
+      
+      let data;
+      try {
+        data = await response.json();
+        console.log("תגובת המחיקה התקבלה בהצלחה:", data);
+        return data;
+      } catch (jsonError) {
+        // If server doesn't return JSON, create a success response
+        return { 
+          success: true, 
+          message: "האתר נמחק בהצלחה" 
+        };
+      }
+    } catch (error) {
+      console.error("שגיאת מחיקה:", error);
+      throw error;
+    }
   },
 
   // Reuse upload image from item.service.ts
@@ -79,7 +139,8 @@ export const butterflyHostService = {
     formData.append("file", file);
 
     try {
-      const response = await fetch("http://localhost:3030/api/upload", {
+      // Use BASE_URL instead of hardcoded value
+      const response = await fetch(`${BASE_URL}/api/upload`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
