@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         console.log("Token after login:", !!token, token?.substring(0, 15) + "...");
         navigate("/dashboard");
       } else {
-        setError(t("auth.login_failed") || "Login failed");
+        setError(t("auth.login_failed", "התחברות נכשלה, נסה שוב"));
       }
     } catch (err: any) {
       console.error("Login error:", err);

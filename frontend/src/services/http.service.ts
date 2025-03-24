@@ -49,7 +49,7 @@ async function request(
       let errorData;
       try {
         errorData = await res.json();
-      } catch (e) {
+      } catch (_) {
         errorData = { message: "שגיאה לא ידועה" };
       }
       

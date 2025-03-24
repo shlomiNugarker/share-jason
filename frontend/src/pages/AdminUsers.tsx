@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { httpService } from "@/services/http.service";
 import { useNavigate } from "react-router-dom";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface User {
   _id: string;
@@ -17,6 +17,7 @@ const AdminUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!user) {
@@ -65,15 +66,15 @@ const AdminUsers = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">{t("user_management")}</h1>
+      <h1 className="text-2xl font-bold mb-4">{t("admin.user_management", "ניהול משתמשים")}</h1>
 
       <table className="w-full border-collapse border border-gray-300 mt-4">
         <thead>
           <tr className="bg-gray-200">
-            <th className="border p-2">{t("name")}</th>
-            <th className="border p-2">{t("email")}</th>
-            <th className="border p-2">{t("role")}</th>
-            <th className="border p-2">{t("actions")}</th>
+            <th className="border p-2">{t("common.name", "שם")}</th>
+            <th className="border p-2">{t("common.email", "דוא״ל")}</th>
+            <th className="border p-2">{t("common.role", "תפקיד")}</th>
+            <th className="border p-2">{t("common.actions", "פעולות")}</th>
           </tr>
         </thead>
         <tbody>
@@ -81,14 +82,14 @@ const AdminUsers = () => {
             <tr key={user._id} className="text-center">
               <td className="border p-2">{user.name}</td>
               <td className="border p-2">{user.email}</td>
-              <td className="border p-2">{t(user.role)}</td>
+              <td className="border p-2">{t(`common.roles.${user.role}`, user.role)}</td>
               <td className="border p-2">
                 {user.role !== "admin" && (
                   <button
                     className="bg-red-500 text-white px-3 py-1 rounded"
                     onClick={() => handleDeleteUser(user._id)}
                   >
-                    {t("delete")}
+                    {t("common.delete", "מחק")}
                   </button>
                 )}
               </td>

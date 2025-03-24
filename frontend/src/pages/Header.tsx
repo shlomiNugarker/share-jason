@@ -15,10 +15,10 @@ const Header: React.FC = () => {
   };
 
   const navLinks = [
-    { to: "/", label: t("home_page") },
-    { to: "/items", label: t("items") },
-    { to: "/schemas", label: t("schemas") },
-    { to: "/butterfly-hosts", label: t("butterfly_hosts") },
+    { to: "/", label: t("common.home_page", "דף הבית") },
+    { to: "/items", label: t("common.items", "פריטים") },
+    { to: "/schemas", label: t("common.schemas", "סכמות") },
+    { to: "/butterfly-hosts", label: t("common.butterfly_hosts", "פרפרים מארחים") },
   ];
 
   return (
@@ -53,13 +53,13 @@ const Header: React.FC = () => {
           {user ? (
             <>
               <span className="text-sm text-gray-700">
-                {t("welcome")}, {user.name}
+                {t("common.welcome", "ברוך הבא")}, {user.name}
               </span>
               <button
                 onClick={logout}
                 className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors duration-200"
               >
-                {t("logout")}
+                {t("auth.logout", "התנתקות")}
               </button>
             </>
           ) : (
@@ -68,13 +68,13 @@ const Header: React.FC = () => {
                 to="/login"
                 className="text-sm text-gray-700 hover:text-indigo-500 font-medium"
               >
-                {t("login")}
+                {t("auth.login", "התחברות")}
               </Link>
               <Link
                 to="/register"
                 className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors duration-200"
               >
-                {t("register")}
+                {t("auth.register", "הרשמה")}
               </Link>
             </>
           )}
@@ -117,7 +117,7 @@ const Header: React.FC = () => {
             {user ? (
               <>
                 <span className="text-sm text-gray-700">
-                  {t("welcome")}, {user.name}
+                  {t("common.welcome", "ברוך הבא")}, {user.name}
                 </span>
                 <button
                   onClick={() => {
@@ -126,7 +126,7 @@ const Header: React.FC = () => {
                   }}
                   className="text-sm bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors duration-200 w-full"
                 >
-                  {t("logout")}
+                  {t("auth.logout", "התנתקות")}
                 </button>
               </>
             ) : (
@@ -136,14 +136,14 @@ const Header: React.FC = () => {
                   className="block text-sm text-gray-700 hover:bg-gray-50 hover:text-indigo-500 font-medium py-2 px-4 rounded-lg"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {t("login")}
+                  {t("auth.login", "התחברות")}
                 </Link>
                 <Link
                   to="/register"
                   className="block text-sm bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg transition-colors duration-200"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  {t("register")}
+                  {t("auth.register", "הרשמה")}
                 </Link>
               </>
             )}

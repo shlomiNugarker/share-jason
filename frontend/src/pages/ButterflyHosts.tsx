@@ -147,9 +147,9 @@ const ButterflyHosts = () => {
             }
           }
         }
-      } catch (error: any) {
+      } catch (error: Error | unknown) {
         console.error("שגיאה במחיקת האתר:", error);
-        const errorMessage = error.message || "אירעה שגיאה בעת ניסיון למחוק את האתר";
+        const errorMessage = error instanceof Error ? error.message : "אירעה שגיאה בעת ניסיון למחוק את האתר";
         toast.error(errorMessage);
       } finally {
         setLoading(false);
@@ -174,13 +174,13 @@ const ButterflyHosts = () => {
       
       // Try a simple authenticated GET request to check token validity
       try {
-        const testResponse = await butterflyHostService.getById("test");
+        await butterflyHostService.getById("test");
         console.log("🔍 בדיקת אותנטיקציה הצליחה");
       } catch (error) {
         console.error("🔍 בדיקת אותנטיקציה נכשלה:", error);
       }
-    } catch (e) {
-      console.error("שגיאה בבדיקת מצב אותנטיקציה:", e);
+    } catch (error) {
+      console.error("שגיאה בבדיקת מצב אותנטיקציה:", error);
     }
   };
 

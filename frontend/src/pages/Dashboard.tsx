@@ -49,26 +49,26 @@ const Dashboard: React.FC = () => {
 
   const features = [
     {
-      title: t("butterfly_hosts"),
-      description: t("butterfly_hosts_desc"),
+      title: t("common.butterfly_hosts", "פרפרים מארחים"),
+      description: t("common.butterfly_hosts_desc", "ניהול פרפרים מארחים במערכת"),
       icon: <Database size={24} />,
       link: "/butterfly-hosts",
     },
     {
-      title: t("items"),
-      description: t("items_desc"),
+      title: t("common.items", "פריטים"),
+      description: t("common.items_desc", "ניהול פריטים ותוכן"),
       icon: <FileText size={24} />,
       link: "/items",
     },
     {
-      title: t("user_management"),
-      description: t("user_management_desc"),
+      title: t("admin.user_management", "ניהול משתמשים"),
+      description: t("admin.user_management_desc", "ניהול משתמשים והרשאות"),
       icon: <Users size={24} />,
       link: "/admin/users",
     },
     {
-      title: t("statistics"),
-      description: t("statistics_desc"),
+      title: t("common.statistics", "סטטיסטיקות"),
+      description: t("common.statistics_desc", "צפייה בסטטיסטיקות המערכת"),
       icon: <BarChart2 size={24} />,
       link: "/dashboard",
       // link: "/statistics",
@@ -79,10 +79,10 @@ const Dashboard: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="bg-gradient-to-r from-purple-700 to-indigo-600 text-white rounded-xl p-8 mb-8">
         <h1 className="text-3xl font-bold mb-2">
-          {t("welcome")}, {user?.name}
+          {t("common.welcome", "ברוך הבא")}, {user?.name}
         </h1>
         <p className="text-purple-100 mb-0">
-          {t("dashboard_description")}
+          {t("common.dashboard_description", "ברוך הבא למרכז הבקרה של ShareJSON")}
         </p>
       </div>
 

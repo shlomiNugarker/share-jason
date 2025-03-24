@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 const Layout = () => {
   const location = useLocation();
-  const hideHeaderRoutes = ["/login", "/register"];
+  const hideHeaderRoutes = ["/login", "/register", "/"];
   const isAuthPage = hideHeaderRoutes.includes(location.pathname);
 
   return (

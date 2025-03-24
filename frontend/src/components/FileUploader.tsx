@@ -66,7 +66,7 @@ export function FileUploader({
         try {
           const errorData = await response.json();
           errorMessage = errorData.error || errorData.message || errorMessage;
-        } catch (e) {
+        } catch (_) {
           // If response is not JSON, use status text
           errorMessage = `Upload failed (${response.status}: ${response.statusText})`;
         }

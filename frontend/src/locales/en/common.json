@@ -2,23 +2,23 @@
   "app": {
     "name": "ShareJSON",
     "welcome": "Welcome to ShareJSON",
-    "description": "Content management system provides easy access to all the tools needed to manage and share information"
+    "description": "Platform for managing and sharing JSON files"
   },
   "auth": {
     "login": "Login",
     "register": "Register",
     "logout": "Logout",
-    "email": "Email Address",
+    "email": "Email",
     "password": "Password",
     "confirm_password": "Confirm Password",
     "name": "Full Name",
-    "login_success": "Logged in successfully!",
-    "login_failed": "Login failed. Please try again",
+    "login_success": "Logged in successfully",
+    "login_failed": "Login failed, try again",
     "already_have_account": "Already have an account?",
     "dont_have_account": "Don't have an account? Register here",
-    "register_success": "Registered successfully!",
-    "session_expired": "Session expired. Please login again",
-    "registration_failed": "Registration failed. Please try again",
+    "register_success": "Registered successfully",
+    "session_expired": "Session expired, please login again",
+    "registration_failed": "Registration failed, try again",
     "passwords_not_match": "Passwords do not match!",
     "logging_in": "Logging in...",
     "registering": "Registering...",
@@ -59,5 +59,81 @@
     "title": "Title",
     "url": "URL Address",
     "location": "Location"
+  },
+  "common": {
+    "dashboard": "Dashboard",
+    "menu": "Menu",
+    "search": "Search",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "back": "Back",
+    "next": "Next",
+    "prev": "Previous",
+    "submit": "Submit",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  "home": {
+    "hero": {
+      "subtitle": "Smart platform for managing and sharing JSON files",
+      "description": "Manage, edit, and share JSON files in the easiest and most secure way. With ShareJSON, your data is organized, secure, and accessible from anywhere.",
+      "dashboard_btn": "Go to Dashboard"
+    },
+    "features": {
+      "title": "Our Features",
+      "description": "With ShareJSON, managing and sharing JSON files becomes simple and intuitive. The application offers a variety of groundbreaking features.",
+      "editing": "Advanced JSON Editing",
+      "api": "Remote Access API",
+      "sharing": {
+        "title": "Easy Sharing",
+        "short": "File Sharing",
+        "description": "Share your files easily with the world, simple and effortless"
+      },
+      "schemas": {
+        "title": "Schema Management",
+        "short": "Custom Schemas",
+        "description": "Create and edit structured JSON schemas for your data, maintain consistent structure"
+      },
+      "butterfly": {
+        "title": "Butterfly Hosts",
+        "short": "Host Management",
+        "description": "Support multi-user environments with advanced host management"
+      },
+      "security": {
+        "title": "Security & Privacy",
+        "short": "Advanced Security",
+        "description": "Strong security system protecting your data at all times"
+      }
+    },
+    "info": {
+      "what": {
+        "title": "What is ShareJSON?",
+        "content": "ShareJSON is an innovative platform for sharing and storing JSON files. The application allows developers and system administrators to manage, store, and share data in JSON format in an easy and convenient way."
+      },
+      "who": {
+        "title": "Who is it for?",
+        "content": "The application is designed for developers, system administrators, QA teams, and anyone who works with JSON files. Through the user-friendly interface, even non-technical users can enjoy the benefits of structured data management."
+      },
+      "join_now": "Join Today"
+    },
+    "testimonials": {
+      "title": "Join Hundreds of Users",
+      "quote1": "\"Dramatically improved my workflow\"",
+      "author1": "John D. - Full Stack Developer",
+      "quote2": "\"The schema management saved us so much time\"",
+      "author2": "Sarah M. - Product Manager"
+    },
+    "cta": {
+      "title": "Ready to Get Started?",
+      "description": "Join the JSON revolution and improve your data management today.",
+      "register_now": "Register Now"
+    },
+    "creator": "Your Team"
   }
 } 

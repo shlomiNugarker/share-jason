@@ -5,7 +5,7 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
-import { Menu, X, LogOut, User, Home, Database, Globe } from "lucide-react";
+import { Menu, X, LogOut, User, Home, Database, Globe, Layers } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageToggle } from "./LanguageToggle";
 import { useAuth } from "@/context/AuthContext";
@@ -14,38 +14,38 @@ import { Button } from "@/components/ui/button";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const { user, logout } = useAuth();
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   const menuItems = [
     {
-      label: t("home_page"),
+      label: "בית",
       path: "/",
       roles: [""],
       icon: <Home className="w-4 h-4" />
     },
-    // {
-    //   label: "Items",
-    //   path: "/items",
-    //   roles: ["user", "admin"],
-    //   icon: <Layers className="w-4 h-4" />
-    // },
     {
-      label: "Schemas",
+      label: "פריטים",
+      path: "/items",
+      roles: ["user", "admin"],
+      icon: <Layers className="w-4 h-4" />
+    },
+    {
+      label: "סכמות",
       path: "/schemas",
       roles: ["user", "admin"],
       icon: <Database className="w-4 h-4" />
     },
     {
-      label: "butterfly-hosts",
+      label: "פרפרים מארחים",
       path: "/butterfly-hosts",
       roles: ["user", "admin"],
       icon: <Globe className="w-4 h-4" />
     },
     {
-      label: t("admin_dashboard"),
+      label: "ניהול מערכת",
       path: "/dashboard",
       roles: ["admin"],
       icon: <User className="w-4 h-4" />
@@ -54,12 +54,14 @@ const Header = () => {
 
   const authItems = [
     {
-      label: t("login_page"),
+      label: "התחברות",
       path: "/login",
+      icon: <User className="w-4 h-4" />
     },
     {
-      label: t("register_page"),
+      label: "הרשמה",
       path: "/register",
+      icon: <User className="w-4 h-4" />
     },
   ];
 
@@ -69,7 +71,7 @@ const Header = () => {
         <LanguageToggle />
       </li>
       {menuItems
-        .filter((item) => user && item.roles.includes(user.role))
+        .filter((item) => !user || (user && item.roles.includes(user.role) || item.roles.includes("")))
         .map((item, index) => (
           <NavigationMenuItem key={index} asChild>
             <li>
@@ -81,7 +83,7 @@ const Header = () => {
                   }`}
                 >
                   {item.icon}
-                  {item.label}
+                  {String(item.label)}
                 </Link>
               </motion.div>
             </li>
@@ -97,7 +99,7 @@ const Header = () => {
               className="text-lg px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-red-100 hover:text-red-600"
             >
               <LogOut className="w-4 h-4" />
-              {t("logout")}
+              התנתקות
             </Button>
           </motion.div>
         </NavigationMenuItem>
@@ -112,8 +114,8 @@ const Header = () => {
                     isMobile ? "text-center justify-center w-full block" : ""
                   }`}
                 >
-                  <User className="w-4 h-4" />
-                  {item.label}
+                  {item.icon}
+                  {String(item.label)}
                 </Link>
               </motion.div>
             </li>
@@ -141,7 +143,7 @@ const Header = () => {
               {user.name.charAt(0).toUpperCase()}
             </div>
             <span className="text-white font-semibold text-lg truncate">
-              {t("welcome")}, {user.name}!
+              שלום, {user.name}!
             </span>
           </motion.div>
         )}

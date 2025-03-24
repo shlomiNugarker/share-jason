@@ -21,7 +21,7 @@ const Register: React.FC = () => {
     setError("");
 
     if (password !== confirmPassword) {
-      setError(t("passwords_not_match"));
+      setError(t("auth.passwords_not_match"));
       return;
     }
 
@@ -32,8 +32,8 @@ const Register: React.FC = () => {
       if (success) {
         navigate("/dashboard");
       }
-    } catch (err) {
-      setError(t("registration_failed"));
+    } catch (_) {
+      setError(t("auth.registration_failed"));
     } finally {
       setLoading(false);
     }
@@ -44,7 +44,7 @@ const Register: React.FC = () => {
       type: "text",
       value: name,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
-      placeholder: t("name"),
+      placeholder: t("auth.name"),
       icon: <User className="h-5 w-5 text-gray-400" />,
       required: true
     },
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
       type: "email",
       value: email,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
-      placeholder: t("email"),
+      placeholder: t("auth.email"),
       icon: <Mail className="h-5 w-5 text-gray-400" />,
       required: true
     },
@@ -60,7 +60,7 @@ const Register: React.FC = () => {
       type: "password",
       value: password,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
-      placeholder: t("password"),
+      placeholder: t("auth.password"),
       icon: <Key className="h-5 w-5 text-gray-400" />,
       required: true
     },
@@ -68,7 +68,7 @@ const Register: React.FC = () => {
       type: "password",
       value: confirmPassword,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value),
-      placeholder: t("confirm_password"),
+      placeholder: t("auth.confirm_password"),
       icon: <Lock className="h-5 w-5 text-gray-400" />,
       required: true
     }
@@ -79,10 +79,10 @@ const Register: React.FC = () => {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {t("register_page")}
+            {t("auth.register")}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            {t("create_account")}
+            {t("auth.create_account")}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -92,8 +92,8 @@ const Register: React.FC = () => {
             </div>
           )}
           <div className="rounded-md shadow-sm -space-y-px">
-            {inputFields.map((field) => (
-              <div key={field.placeholder}>
+            {inputFields.map((field, index) => (
+              <div key={index}>
                 <label htmlFor={field.placeholder} className="sr-only">
                   {field.placeholder}
                 </label>
@@ -144,10 +144,10 @@ const Register: React.FC = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  {t("registering")}
+                  {t("auth.registering")}
                 </>
               ) : (
-                t("register")
+                t("auth.register")
               )}
             </button>
           </div>
@@ -158,7 +158,7 @@ const Register: React.FC = () => {
                 to="/login"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                {t("already_have_account")}
+                {t("auth.already_have_account")}
               </Link>
             </div>
           </div>
