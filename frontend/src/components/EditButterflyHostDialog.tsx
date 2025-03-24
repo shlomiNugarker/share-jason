@@ -10,7 +10,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from "../components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -51,7 +51,7 @@ export default function EditButterflyHostDialog({
 }: EditButterflyHostDialogProps) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [_, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const formSchema = z.object({
@@ -99,22 +99,38 @@ export default function EditButterflyHostDialog({
       let savedHost: ButterflyHost;
 
       if (isNewHost) {
-        savedHost = await butterflyHostService.create(
-          values.title,
-          values.url,
-          values.position,
-          imageFile
-        );
+        const response = await butterflyHostService.create({ 
+          title: values.title, 
+          url: values.url, 
+          position: values.position,
+          imageUrl: "",
+        });
+        savedHost = {
+          id: response.host._id,
+          title: response.host.title,
+          url: response.host.url,
+          position: response.host.position || "",
+          image: response.host.imageUrl
+        };
         toast.success(t("butterfly.host_created", "האתר נוצר בהצלחה"));
       } else {
         if (!host) return;
-        savedHost = await butterflyHostService.update(
-          host.id,
-          values.title,
-          values.url,
-          values.position,
-          imageFile
+        const response = await butterflyHostService.update(
+          host.id, 
+          { 
+            title: values.title, 
+            url: values.url, 
+            position: values.position,
+            imageUrl: "",
+          }
         );
+        savedHost = {
+          id: response.host._id,
+          title: response.host.title,
+          url: response.host.url,
+          position: response.host.position || "",
+          image: response.host.imageUrl
+        };
         toast.success(t("butterfly.host_updated", "האתר עודכן בהצלחה"));
       }
 
@@ -232,7 +248,7 @@ export default function EditButterflyHostDialog({
                     {loading ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        {t("common.saving")}
+                        {t("common.save")}
                       </>
                     ) : (
                       <>

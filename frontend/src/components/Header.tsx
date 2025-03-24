@@ -95,7 +95,7 @@ const Header = () => {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Button
               onClick={logout}
-              variant="light"
+              variant="default"
               className="text-lg px-4 py-2 rounded-xl flex items-center gap-2 hover:bg-red-100 hover:text-red-600"
             >
               <LogOut className="w-4 h-4" />

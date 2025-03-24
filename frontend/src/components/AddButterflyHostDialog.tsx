@@ -143,7 +143,7 @@ export default function AddButterflyHostDialog({
               >
                 <Button 
                   type="submit" 
-                  variant="gradient" 
+                  variant="default" 
                   className="flex gap-2 items-center"
                   disabled={loading}
                 >
@@ -158,7 +158,7 @@ export default function AddButterflyHostDialog({
               >
                 <Button 
                   type="button" 
-                  variant="light" 
+                  variant="outline" 
                   onClick={closeDialog}
                   disabled={loading}
                 >
