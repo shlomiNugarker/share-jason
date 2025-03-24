@@ -13,6 +13,10 @@ function getAuthHeaders(secure: boolean) {
   console.log("🔑 Token for request:", token ? 
     `${token.substring(0, 10)}... (${token.length} chars)` : "None");
   
+  if (!token) {
+    console.warn("🔑 No token found in storage");
+  }
+  
   return {
     "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),

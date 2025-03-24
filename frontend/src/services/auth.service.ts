@@ -1,5 +1,5 @@
 // Token management & authentication service
-const TOKEN_KEY = 'auth_token';
+const TOKEN_KEY = 'token';
 
 // Safe way to interact with localStorage that handles exceptions
 const safeLocalStorage = {

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { httpService } from "@/services/http.service";
+import { authService } from "@/services/auth.service";
 
 interface User {
   id: string;
@@ -28,7 +29,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children 
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [token, setToken] = useState<string | null>(authService.getToken());
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -48,20 +49,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       await new Promise(resolve => setTimeout(resolve, 300));
 
       try {
-        console.log("🔍 Attempting to fetch user with token:", token.substring(0, 10) + "...");
-        
-        const response = await fetch(`${httpService.baseUrl}/api/auth/me`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        
-        if (!response.ok) {
-          console.error("🔍 Error response:", response.status, response.statusText);
-          throw new Error(`Error: ${response.status}`);
-        }
-        
-        const data = await response.json();
+        console.log("🔍 Attempting to fetch user with token");
+        const data = await httpService.get("/api/auth/me", true);
         console.log("🔍 User data fetched successfully:", data);
         
         setUser(data.user || data);
@@ -76,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         );
         
         if (confirmLogout) {
-          localStorage.removeItem("token");
+          authService.removeToken();
           setToken(null);
           setError(t("session_expired"));
         } else {
@@ -105,30 +94,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         password
       }, false);
       
-      const { token, user } = data;
+      const { token: newToken, user: userData } = data;
       
-      console.log("🔐 Login successful, received token:", token ? token.substring(0, 10) + "..." : "no token");
+      console.log("🔐 Login successful, received token:", newToken ? newToken.substring(0, 10) + "..." : "no token");
       
-      if (!token) {
+      if (!newToken) {
         console.error("🔐 No token in response!");
         setError("No token received from server");
         return false;
       }
       
-      // שמור את הטוקן בלוקל סטורג'
-      localStorage.setItem("token", token);
+      // שמור את הטוקן באמצעות שירות האימות
+      authService.setToken(newToken);
       
       // וודא שהטוקן נשמר נכון
-      const savedToken = localStorage.getItem("token");
-      console.log("🔐 Token saved to localStorage:", !!savedToken);
+      const savedToken = authService.getToken();
+      console.log("🔐 Token saved:", !!savedToken);
       
       if (!savedToken) {
-        console.error("🔐 Failed to save token to localStorage!");
-        // ננסה לשמור שוב
-        localStorage.setItem("token", token);
+        console.error("🔐 Failed to save token!");
+        // ננסה שוב
+        authService.setToken(newToken);
         
         // בדיקה נוספת
-        const retryToken = localStorage.getItem("token");
+        const retryToken = authService.getToken();
         if (!retryToken) {
           console.error("🔐 Second attempt to save token failed!");
           alert("שגיאה בשמירת הטוקן. ייתכן שתצטרך להתחבר מחדש.");
@@ -136,14 +125,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
       
       // הגדר את הטוקן והמשתמש במצב
-      setToken(token);
-      setUser(user);
+      setToken(newToken);
+      setUser(userData);
       setIsAuthenticated(true);
       
       // בדיקה אחרי השהייה קצרה שהכל עובד
       setTimeout(() => {
-        const checkToken = localStorage.getItem("token");
+        const checkToken = authService.getToken();
         console.log("🔐 Token check after delay:", !!checkToken);
+        
+        // אם הטוקן לא נשמר, ננסה שוב
+        if (!checkToken) {
+          console.warn("🔐 Token not found after delay, trying to save again");
+          authService.setToken(newToken);
+        }
       }, 500);
       
       toast.success(t("login_success"));
@@ -175,12 +170,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         password
       }, false);
       
-      const { token, user } = data;
+      const { token: newToken, user: userData } = data;
       
-      localStorage.setItem("token", token);
+      if (newToken) {
+        authService.setToken(newToken);
+      }
       
-      setToken(token);
-      setUser(user);
+      setToken(newToken);
+      setUser(userData);
       setIsAuthenticated(true);
       
       toast.success(t("register_success"));
@@ -197,7 +194,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Logout user
   const logout = () => {
-    localStorage.removeItem("token");
+    authService.removeToken();
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
