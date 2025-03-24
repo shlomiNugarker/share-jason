@@ -9,6 +9,8 @@ import enButterfly from "./locales/en/butterfly.json";
 import heButterfly from "./locales/he/butterfly.json";
 import enCompatibility from "./locales/en/compatibility.json";
 import heCompatibility from "./locales/he/compatibility.json";
+import enSchema from "./locales/en/schema.json";
+import heSchema from "./locales/he/schema.json";
 
 // Valid languages supported by the application
 const VALID_LANGUAGES = ['en', 'he'];
@@ -22,11 +24,13 @@ export const resources = {
     common: enCommon,
     butterfly: enButterfly,
     compatibility: enCompatibility,
+    schema: enSchema,
   },
   he: {
     common: heCommon,
     butterfly: heButterfly, 
     compatibility: heCompatibility,
+    schema: heSchema,
   },
 } as const;
 
@@ -112,7 +116,7 @@ i18n
     fallbackLng: "he",
     
     // Namespaces to load
-    ns: ['common', 'butterfly', 'compatibility'],
+    ns: ['common', 'butterfly', 'compatibility', 'schema'],
 
     // Cache detection results
     detection: {

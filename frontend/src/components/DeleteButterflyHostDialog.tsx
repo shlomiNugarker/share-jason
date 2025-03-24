@@ -1,113 +1,78 @@
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { motion } from "framer-motion";
-import { AlertTriangle, Trash, X } from "lucide-react";
-import { butterflyHostService } from "@/services/butterflyHost.service";
-
-interface ButterflyHost {
-  id: string;
-  title: string;
-  url: string;
-  position: string;
-}
+import { Trash } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface DeleteButterflyHostDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  host: ButterflyHost | null;
-  onHostDeleted: (id: string) => void;
+  hostName: string;
+  onDelete: () => Promise<void>;
 }
 
-export default function DeleteButterflyHostDialog({
-  open,
-  onOpenChange,
-  host,
-  onHostDeleted,
+export function DeleteButterflyHostDialog({ 
+  hostName, 
+  onDelete 
 }: DeleteButterflyHostDialogProps) {
-  const [loading, setLoading] = useState(false);
-
-  const closeDialog = () => {
-    onOpenChange(false);
-  };
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { t } = useTranslation();
 
   const handleDelete = async () => {
-    if (!host) return;
-
+    setIsDeleting(true);
     try {
-      setLoading(true);
-      await butterflyHostService.delete(host.id);
-      toast.success("האתר נמחק בהצלחה");
-      onHostDeleted(host.id);
-      closeDialog();
-    } catch (error) {
-      toast.error("שגיאה במחיקת האתר");
-      console.error("Error deleting host:", error);
+      await onDelete();
+      setIsOpen(false);
     } finally {
-      setLoading(false);
+      setIsDeleting(false);
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md border border-red-50 shadow-lg bg-white rounded-xl">
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button 
+          variant="outline" 
+          size="icon"
+          className="text-red-500 hover:text-red-600 hover:bg-red-50 border-red-100"
+        >
+          <Trash className="h-4 w-4" />
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-2xl font-bold text-red-600">
-            <AlertTriangle className="w-5 h-5" />
-            מחיקת אתר מארח
-          </DialogTitle>
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={closeDialog}
-            className="absolute top-4 right-4 rounded-full p-1.5 text-gray-500 hover:text-gray-700 focus:outline-none"
-          >
-            <X className="h-5 w-5" />
-          </motion.button>
+          <DialogTitle>{t("common.delete")} {hostName}</DialogTitle>
+          <DialogDescription>
+            {t("butterfly.delete_confirm", "האם אתה בטוח שברצונך למחוק את האתר המארח הזה?")}
+          </DialogDescription>
         </DialogHeader>
-        
-        <div className="py-4">
-          <div className="p-4 mb-4 rounded-lg bg-red-50 border border-red-100">
-            <p className="text-center text-red-700">
-              האם אתה בטוח שברצונך למחוק את האתר <span className="font-bold">{host?.title}</span>?
-            </p>
-            <p className="text-center text-red-500 text-sm mt-2">פעולה זו אינה ניתנת לביטול.</p>
-          </div>
-        </div>
-        
-        <DialogFooter>
-          <div className="flex flex-row-reverse gap-2 w-full">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button 
-                type="button" 
-                variant="destructive" 
-                className="flex gap-2 items-center"
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                <Trash className="h-4 w-4" />
-                {loading ? "מוחק..." : "מחיקה"}
-              </Button>
-            </motion.div>
-            
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Button 
-                type="button" 
-                variant="outline" 
-                onClick={closeDialog}
-                disabled={loading}
-              >
-                ביטול
-              </Button>
-            </motion.div>
-          </div>
+        <p className="text-center text-red-500 text-sm mt-2">{t("butterfly.delete_warning", "פעולה זו אינה ניתנת לביטול.")}</p>
+        <DialogFooter className="gap-2 sm:gap-0">
+          <Button 
+            variant="outline" 
+            onClick={() => setIsOpen(false)}
+            disabled={isDeleting}
+          >
+            {t("common.cancel")}
+          </Button>
+          <Button 
+            variant="destructive" 
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="bg-red-500 hover:bg-red-600"
+          >
+            {isDeleting ? 
+              t("actions.deleting") :
+              t("common.delete")
+            }
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

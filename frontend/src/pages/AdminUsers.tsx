@@ -46,7 +46,7 @@ const AdminUsers = () => {
       setUsers(data.users || []);
     } catch (err) {
       console.error(err);
-      setError("Failed to load users");
+      setError(t("admin.load_users_error", "שגיאה בטעינת משתמשים"));
     } finally {
       setLoading(false);
     }
@@ -57,11 +57,11 @@ const AdminUsers = () => {
       await httpService.del(`/api/users/${userId}`, true);
     } catch (err) {
       console.error(err);
-      setError("Failed to delete user");
+      setError(t("admin.delete_user_error", "שגיאה במחיקת משתמש"));
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>{t("common.loading", "טוען...")}</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
   return (

@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { authService } from "@/services/auth.service";
-
+import { useTranslation } from "react-i18next";
 
 const ButterflyHosts = () => {
   const [hosts, setHosts] = useState<ButterflyHost[]>([]);
@@ -34,6 +34,7 @@ const ButterflyHosts = () => {
   });
   const [uploadingImage, setUploadingImage] = useState(false);
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   useEffect(() => {
     fetchHosts();
@@ -56,7 +57,7 @@ const ButterflyHosts = () => {
       setPositions(Array.from(positionsList));
     } catch (error) {
       console.error("Failed to fetch butterfly hosts:", error);
-      toast.error("נכשל בטעינת הנתונים");
+      toast.error(t("butterfly.failed_load", "נכשל בטעינת הנתונים"));
     } finally {
       setLoading(false);
     }
@@ -89,7 +90,7 @@ const ButterflyHosts = () => {
     // First, test the authentication status
     await testAuthStatus();
     
-    if (window.confirm("האם אתה בטוח שברצונך למחוק אתר זה?")) {
+    if (window.confirm(t("butterfly.confirm_delete", "האם אתה בטוח שברצונך למחוק אתר זה?"))) {
       console.log("המשתמש אישר את המחיקה");
       
       setLoading(true);
@@ -97,7 +98,7 @@ const ButterflyHosts = () => {
         // בדיקה אם המשתמש מחובר
         if (!user) {
           console.error("ניסיון מחיקה ללא משתמש מחובר");
-          toast.error("נדרשת התחברות למערכת כדי למחוק אתרים");
+          toast.error(t("auth.login_required", "נדרשת התחברות למערכת כדי למחוק אתרים"));
           setLoading(false);
           return;
         }
@@ -114,7 +115,7 @@ const ButterflyHosts = () => {
           console.error("כשל בקריאה לשירות המחיקה:", deleteError);
           
           // ניסיון גיבוי - ננסה לעדכן את הממשק גם אם השרת לא מגיב
-          if (confirm("בעיה בתקשורת עם השרת. האם ברצונך להסיר את האתר מהרשימה בכל זאת?")) {
+          if (confirm(t("butterfly.server_error_confirm", "בעיה בתקשורת עם השרת. האם ברצונך להסיר את האתר מהרשימה בכל זאת?"))) {
             deleteSucceeded = true;
             console.log("המשתמש אישר את הסרת האתר מקומית למרות הכשל בשרת");
           } else {
@@ -123,7 +124,7 @@ const ButterflyHosts = () => {
         }
         
         if (deleteSucceeded) {
-          toast.success("האתר הוסר בהצלחה");
+          toast.success(t("butterfly.host_removed", "האתר הוסר בהצלחה"));
           // עדכון המצב המקומי - הסרת האתר מהרשימה
           setHosts(prevHosts => prevHosts.filter(host => host._id !== id));
           
@@ -203,10 +204,10 @@ const ButterflyHosts = () => {
         ...prev,
         imageUrl: result.imageUrl
       }));
-      toast.success("התמונה הועלתה בהצלחה");
+      toast.success(t("butterfly.image_uploaded", "התמונה הועלתה בהצלחה"));
     } catch (error) {
       console.error("Failed to upload image:", error);
-      toast.error(error instanceof Error ? error.message : "שגיאה בהעלאת התמונה");
+      toast.error(error instanceof Error ? error.message : t("butterfly.image_upload_error", "שגיאה בהעלאת התמונה"));
     } finally {
       setUploadingImage(false);
     }
@@ -224,7 +225,7 @@ const ButterflyHosts = () => {
         )
       );
       
-      toast.success("האתר עודכן בהצלחה");
+      toast.success(t("butterfly.host_updated", "האתר עודכן בהצלחה"));
       setIsEditDialogOpen(false);
       
       // Update positions if needed
@@ -252,7 +253,7 @@ const ButterflyHosts = () => {
       const response = await butterflyHostService.create(formData);
       setHosts(prevHosts => [response.host, ...prevHosts]);
       
-      toast.success("האתר נוצר בהצלחה");
+      toast.success(t("butterfly.host_created", "האתר נוצר בהצלחה"));
       setIsNewDialogOpen(false);
       
       // Update positions if needed
@@ -334,10 +335,10 @@ const ButterflyHosts = () => {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       
-      toast.success("הקובץ הורד בהצלחה");
+      toast.success(t("butterfly.file_downloaded", "הקובץ הורד בהצלחה"));
     } catch (error) {
       console.error("Failed to download JSON:", error);
-      toast.error("שגיאה בהורדת הקובץ");
+      toast.error(t("butterfly.download_error", "שגיאה בהורדת הקובץ"));
     }
   };
 
@@ -348,7 +349,7 @@ const ButterflyHosts = () => {
           <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce"></div>
           <div className="w-3 h-3 bg-teal-500 rounded-full animate-bounce animation-delay-200"></div>
           <div className="w-3 h-3 bg-purple-400 rounded-full animate-bounce animation-delay-400"></div>
-          <span className="text-gray-600 text-sm font-medium">טוען אתרים...</span>
+          <span className="text-gray-600 text-sm font-medium">{t("butterfly.loading_hosts", "טוען אתרים...")}</span>
         </div>
       </div>
     );
@@ -359,8 +360,8 @@ const ButterflyHosts = () => {
       <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div>
-            <h1 className="text-2xl font-semibold mb-1 text-purple-800">אתרים מארחים</h1>
-            <p className="text-gray-500 text-sm">סך הכל {hosts.length} אתרים במערכת</p>
+            <h1 className="text-2xl font-semibold mb-1 text-purple-800">{t("butterfly.hosts_title", "אתרים מארחים")}</h1>
+            <p className="text-gray-500 text-sm">{t("butterfly.total_hosts", "סך הכל {{count}} אתרים במערכת", { count: hosts.length })}</p>
           </div>
           
           <div className="flex gap-2 mt-3 md:mt-0">
@@ -369,7 +370,7 @@ const ButterflyHosts = () => {
                 onClick={handleNew}
                 className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-3 py-1.5 rounded transition-colors"
               >
-                <Plus className="mr-1 h-3.5 w-3.5" /> הוסף אתר
+                <Plus className="mr-1 h-3.5 w-3.5" /> {t("butterfly.add_host_button", "הוסף אתר")}
               </Button>
             )}
             
@@ -377,7 +378,7 @@ const ButterflyHosts = () => {
               onClick={downloadHostsAsJson}
               className="bg-teal-600 hover:bg-teal-700 text-white text-sm px-3 py-1.5 rounded transition-colors"
             >
-              <Download className="mr-1 h-3.5 w-3.5" /> הורד JSON
+              <Download className="mr-1 h-3.5 w-3.5" /> {t("butterfly.download_json", "הורד JSON")}
             </Button>
           </div>
         </div>
@@ -392,7 +393,7 @@ const ButterflyHosts = () => {
           </div>
           <input
             type="text"
-            placeholder="חיפוש לפי כותרת או כתובת..."
+            placeholder={t("butterfly.search_placeholder", "חיפוש לפי כותרת או כתובת...")}
             value={searchText}
             onChange={handleSearchChange}
             className="w-full py-1.5 pr-7 pl-2 border border-gray-200 rounded text-sm focus:border-purple-300 focus:ring-1 focus:ring-purple-300 transition-colors"
@@ -410,7 +411,7 @@ const ButterflyHosts = () => {
                 : "border-gray-200 text-gray-700 hover:border-purple-300 hover:bg-purple-50"
             } transition-colors`}
           >
-            הכל
+            {t("butterfly.filter_all", "הכל")}
           </Button>
           {positions.map(position => (
             <Button
@@ -461,18 +462,17 @@ const ButterflyHosts = () => {
                   </a>
                 </div>
                 
-                <div className="h-16 bg-gray-50 rounded-md flex items-center justify-center overflow-hidden mb-1">
+                <div className="flex flex-col md:flex-row gap-2 mt-2">
                   {host.imageUrl ? (
                     <img 
                       src={host.imageUrl} 
                       alt={host.title} 
-                      className="max-h-full max-w-full object-contain p-1"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = "/placeholder-image.png";
-                      }}
+                      className="w-32 h-24 object-cover rounded-lg"
                     />
                   ) : (
-                    <span className="text-gray-400 text-xs">אין תמונה</span>
+                    <div className="w-32 h-24 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <span className="text-gray-400 text-xs">{t("butterfly.no_image", "אין תמונה")}</span>
+                    </div>
                   )}
                 </div>
               </div>
@@ -508,9 +508,9 @@ const ButterflyHosts = () => {
             <Search className="h-6 w-6 text-gray-400 mx-auto mb-2" />
             <p className="text-gray-500">
               {searchText ? (
-                <>לא נמצאו תוצאות עבור "{searchText}"</>
+                <>{t("butterfly.no_results_for", "לא נמצאו תוצאות עבור")} "{searchText}"</>
               ) : (
-                <>לא נמצאו אתרים</>
+                <>{t("butterfly.no_hosts", "לא נמצאו אתרים")}</>
               )}
             </p>
           </div>
@@ -525,7 +525,7 @@ const ButterflyHosts = () => {
             variant="outline"
             className="text-xs border-gray-200 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-colors"
           >
-            טען עוד {filteredHosts.length - visibleHosts.length} אתרים
+            {t("butterfly.load_more", "טען עוד")} {filteredHosts.length - visibleHosts.length} {t("butterfly.hosts", "אתרים")}
           </Button>
         </div>
       )}
@@ -534,16 +534,16 @@ const ButterflyHosts = () => {
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[550px] rounded-2xl border-0 shadow-xl bg-white">
           <DialogHeader className="border-b pb-4">
-            <DialogTitle className="text-2xl font-bold text-purple-700">עריכת אתר</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-purple-700">{t("butterfly.edit_host", "עריכת אתר")}</DialogTitle>
             <DialogDescription className="text-gray-600 text-base">
-              עדכן את פרטי האתר המארח
+              {t("butterfly.update_host_details", "עדכן את פרטי האתר המארח")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmitEdit}>
             <div className="grid gap-5 py-5">
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="title" className="text-right font-medium text-gray-700">
-                  כותרת
+                  {t("butterfly.title", "כותרת")}
                 </label>
                 <input
                   id="title"
@@ -556,7 +556,7 @@ const ButterflyHosts = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="url" className="text-right font-medium text-gray-700">
-                  כתובת URL
+                  {t("butterfly.url", "כתובת URL")}
                 </label>
                 <input
                   id="url"
@@ -569,7 +569,7 @@ const ButterflyHosts = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="position" className="text-right font-medium text-gray-700">
-                  מיקום
+                  {t("butterfly.position", "מיקום")}
                 </label>
                 <input
                   id="position"
@@ -577,12 +577,12 @@ const ButterflyHosts = () => {
                   value={formData.position}
                   onChange={handleInputChange}
                   className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
-                  placeholder="למשל: top_right, bottom_center"
+                  placeholder={t("butterfly.position_hint", "למשל: top_right, bottom_center")}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="imageUrl" className="text-right font-medium text-gray-700">
-                  כתובת תמונה
+                  {t("butterfly.image_url", "כתובת תמונה")}
                 </label>
                 <input
                   id="imageUrl"
@@ -595,7 +595,7 @@ const ButterflyHosts = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="imageFile" className="text-right font-medium text-gray-700">
-                  העלאת תמונה חדשה
+                  {t("butterfly.upload_new_image", "העלאת תמונה חדשה")}
                 </label>
                 <input
                   id="imageFile"
@@ -612,7 +612,7 @@ const ButterflyHosts = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-3 border border-gray-200 rounded-xl p-5 bg-gray-50"
                 >
-                  <p className="text-sm font-medium mb-3 text-gray-700">תצוגה מקדימה:</p>
+                  <p className="text-sm font-medium mb-3 text-gray-700">{t("data.preview", "תצוגה מקדימה:")}</p>
                   <div className="bg-white p-3 rounded-xl border border-gray-100">
                     <motion.img 
                       src={formData.imageUrl} 
@@ -636,7 +636,7 @@ const ButterflyHosts = () => {
                   disabled={uploadingImage}
                   className="transition-all duration-300 bg-gradient-to-r from-purple-500 to-teal-500 hover:from-purple-600 hover:to-teal-600 text-white rounded-xl px-8 py-6 text-base"
                 >
-                  {uploadingImage ? "מעלה תמונה..." : "שמור שינויים"}
+                  {uploadingImage ? t("butterfly.uploading_image", "מעלה תמונה...") : t("common.save_changes", "שמור שינויים")}
                 </Button>
               </motion.div>
             </DialogFooter>
@@ -648,16 +648,16 @@ const ButterflyHosts = () => {
       <Dialog open={isNewDialogOpen} onOpenChange={setIsNewDialogOpen}>
         <DialogContent className="sm:max-w-[550px] rounded-2xl border-0 shadow-xl bg-white">
           <DialogHeader className="border-b pb-4">
-            <DialogTitle className="text-2xl font-bold text-purple-700">הוספת אתר חדש</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-purple-700">{t("butterfly.add_host", "הוספת אתר חדש")}</DialogTitle>
             <DialogDescription className="text-gray-600 text-base">
-              הזן את פרטי האתר המארח החדש
+              {t("butterfly.enter_new_host_details", "הזן את פרטי האתר המארח החדש")}
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmitNew}>
             <div className="grid gap-5 py-5">
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="title" className="text-right font-medium text-gray-700">
-                  כותרת
+                  {t("butterfly.title", "כותרת")}
                 </label>
                 <input
                   id="title"
@@ -670,7 +670,7 @@ const ButterflyHosts = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="url" className="text-right font-medium text-gray-700">
-                  כתובת URL
+                  {t("butterfly.url", "כתובת URL")}
                 </label>
                 <input
                   id="url"
@@ -683,7 +683,7 @@ const ButterflyHosts = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="position" className="text-right font-medium text-gray-700">
-                  מיקום
+                  {t("butterfly.position", "מיקום")}
                 </label>
                 <input
                   id="position"
@@ -691,12 +691,12 @@ const ButterflyHosts = () => {
                   value={formData.position}
                   onChange={handleInputChange}
                   className="col-span-3 px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
-                  placeholder="למשל: top_right, bottom_center"
+                  placeholder={t("butterfly.position_hint", "למשל: top_right, bottom_center")}
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="imageUrl" className="text-right font-medium text-gray-700">
-                  כתובת תמונה
+                  {t("butterfly.image_url", "כתובת תמונה")}
                 </label>
                 <input
                   id="imageUrl"
@@ -709,7 +709,7 @@ const ButterflyHosts = () => {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <label htmlFor="newImageFile" className="text-right font-medium text-gray-700">
-                  העלאת תמונה
+                  {t("butterfly.upload_new_image", "העלאת תמונה חדשה")}
                 </label>
                 <input
                   id="newImageFile"
@@ -726,7 +726,7 @@ const ButterflyHosts = () => {
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-3 border border-gray-200 rounded-xl p-5 bg-gray-50"
                 >
-                  <p className="text-sm font-medium mb-3 text-gray-700">תצוגה מקדימה:</p>
+                  <p className="text-sm font-medium mb-3 text-gray-700">{t("data.preview", "תצוגה מקדימה:")}</p>
                   <div className="bg-white p-3 rounded-xl border border-gray-100">
                     <motion.img 
                       src={formData.imageUrl} 
@@ -750,7 +750,7 @@ const ButterflyHosts = () => {
                   disabled={uploadingImage}
                   className="transition-all duration-300 bg-gradient-to-r from-purple-500 to-teal-500 hover:from-purple-600 hover:to-teal-600 text-white rounded-xl px-8 py-6 text-base"
                 >
-                  {uploadingImage ? "מעלה תמונה..." : "הוסף אתר"}
+                  {uploadingImage ? t("butterfly.uploading_image", "מעלה תמונה...") : t("butterfly.add_host", "הוסף אתר")}
                 </Button>
               </motion.div>
             </DialogFooter>

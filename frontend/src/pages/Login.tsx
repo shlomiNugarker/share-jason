@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { authService } from "@/services/auth.service";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("test@gmail.com");
+  const [password, setPassword] = useState("123456");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
     setLoading(true);
 
     if (!email || !password) {
-      setError("Please fill all fields");
+      setError(t("common.fill_all_fields", "נא למלא את כל השדות"));
       setLoading(false);
       return;
     }
@@ -48,7 +48,7 @@ const Login: React.FC = () => {
       }
     } catch (err: any) {
       console.error("Login error:", err);
-      setError(err.message || "Login failed");
+      setError(err.message || t("auth.login_failed", "התחברות נכשלה"));
     } finally {
       setLoading(false);
     }
@@ -59,10 +59,10 @@ const Login: React.FC = () => {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login
+            {t("auth.login")}
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to your account
+            {t("auth.login_description", "התחבר למערכת וצפה במידע שלך")}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">
-                Email
+                {t("auth.email")}
               </label>
               <input
                 id="email-address"
@@ -83,14 +83,14 @@ const Login: React.FC = () => {
                 autoComplete="email"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email"
+                placeholder={t("auth.email")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                Password
+                {t("auth.password")}
               </label>
               <input
                 id="password"
@@ -99,7 +99,7 @@ const Login: React.FC = () => {
                 autoComplete="current-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
+                placeholder={t("auth.password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -134,10 +134,10 @@ const Login: React.FC = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Loading...
+                  {t("auth.logging_in", "מתחבר...")}
                 </>
               ) : (
-                "Login"
+                t("auth.login", "התחברות")
               )}
             </button>
           </div>
@@ -148,7 +148,7 @@ const Login: React.FC = () => {
                 to="/register"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Need an account?
+                {t("auth.need_account", "צריך חשבון?")}
               </Link>
             </div>
             <div className="text-sm">
@@ -156,7 +156,7 @@ const Login: React.FC = () => {
                 href="#"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                Forgot password?
+                {t("auth.forgot_password", "שכחת סיסמה?")}
               </a>
             </div>
           </div>

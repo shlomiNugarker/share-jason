@@ -66,6 +66,7 @@
     "search": "חיפוש",
     "loading": "טוען...",
     "save": "שמור",
+    "save_changes": "שמור שינויים",
     "cancel": "ביטול",
     "delete": "מחק",
     "edit": "ערוך",
@@ -77,7 +78,33 @@
     "error": "שגיאה",
     "success": "הצלחה",
     "warning": "אזהרה",
-    "info": "מידע"
+    "info": "מידע",
+    "home_page": "דף הבית",
+    "items": "פריטים",
+    "schemas": "סכמות",
+    "butterfly_hosts": "פרפרים מארחים",
+    "welcome": "ברוך הבא",
+    "unauthorized": "אין הרשאה",
+    "fill_all_fields": "נא למלא את כל השדות",
+    "dashboard_description": "ברוך הבא למרכז הבקרה של ShareJSON",
+    "statistics": "סטטיסטיקות",
+    "statistics_desc": "צפייה בסטטיסטיקות המערכת",
+    "more": "עוד",
+    "close": "סגור",
+    "butterfly_hosts_desc": "ניהול פרפרים מארחים במערכת",
+    "items_desc": "ניהול פריטים ותוכן",
+    "roles": {
+      "user": "משתמש",
+      "admin": "מנהל"
+    },
+    "errors": {
+      "login_failed": "התחברות נכשלה",
+      "server_error": "שגיאת שרת",
+      "connection_error": "בעיית תקשורת עם השרת. נסה שוב או בדוק את חיבור האינטרנט שלך.",
+      "no_token": "חסר טוקן בתשובה מהשרת",
+      "no_token_received": "לא התקבל טוקן מהשרת",
+      "please_fill_all": "נא למלא את כל השדות החובה"
+    }
   },
   "home": {
     "hero": {
@@ -135,5 +162,52 @@
       "register_now": "הרשמה עכשיו"
     },
     "creator": "הצוות שלכם"
+  },
+  "item": {
+    "item_image": "תמונת פריט",
+    "details": "פרטי פריט",
+    "items": "פריטים",
+    "no_items": "לא נמצאו פריטים. צור את הפריט הראשון שלך!",
+    "loading": "טוען פריטים...",
+    "not_found": "פריט לא נמצא",
+    "description": "תיאור"
+  },
+  "schema": {
+    "schemas": "סכמות דינמיות",
+    "no_schemas": "לא נמצאו סכמות.",
+    "loading": "טוען סכמות...",
+    "fields": "שדות",
+    "field_num": "שדה מס'",
+    "required_field": "שדה חובה",
+    "not_found": "סכמה לא נמצאה"
+  },
+  "data": {
+    "data_fields": "שדות נתונים",
+    "upload_image": "או העלה תמונה:",
+    "required_mark": "* שדה זה הוא חובה",
+    "not_set": "לא הוגדר",
+    "no_image": "אין תמונה",
+    "data": "נתונים:",
+    "preview": "תצוגה מקדימה:"
+  },
+  "butterfly": {
+    "loading_hosts": "טוען אתרים...",
+    "hosts_title": "אתרים מארחים",
+    "total_hosts": "סך הכל {{count}} אתרים במערכת",
+    "no_image": "אין תמונה",
+    "edit_host": "עריכת אתר",
+    "add_host": "הוספת אתר חדש",
+    "preview": "תצוגה מקדימה:",
+    "delete_warning": "פעולה זו אינה ניתנת לביטול."
+  },
+  "admin": {
+    "user_management": "ניהול משתמשים",
+    "user_management_desc": "ניהול משתמשים והרשאות",
+    "name": "שם",
+    "email": "דוא״ל",
+    "role": "תפקיד",
+    "actions": "פעולות",
+    "delete_user_error": "שגיאה במחיקת משתמש",
+    "load_users_error": "שגיאה בטעינת משתמשים"
   }
 } 
