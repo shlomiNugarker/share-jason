@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 import { Globe, Save, X } from "lucide-react";
-import { butterflyHostService, ButterflyHost as ServiceButterflyHost } from "@/services/butterflyHost.service";
+import { butterflyHostService } from "@/services/butterflyHost.service";
 
 interface ButterflyHost {
   id: string;
