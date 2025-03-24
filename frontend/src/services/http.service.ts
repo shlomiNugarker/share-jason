@@ -1,12 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export const httpService = { get, post, put, del };
+import { authService } from './auth.service';
 
 const BASE_URL =
   process.env.NODE_ENV === "production" ? "" : "http://localhost:3030";
 
 function getAuthHeaders(secure: boolean) {
   if (!secure) return { "Content-Type": "application/json" };
-  const token = localStorage.getItem("token");
+  
+  const token = authService.getToken();
+  
+  // Log token for debugging
+  console.log("🔑 Token for request:", token ? 
+    `${token.substring(0, 10)}... (${token.length} chars)` : "None");
+  
   return {
     "Content-Type": "application/json",
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -80,3 +86,11 @@ async function put(endpoint: string, data: any = null, secure = false) {
 async function del(endpoint: string, secure = false) {
   return request("DELETE", endpoint, null, secure);
 }
+
+export const httpService = { 
+  get, 
+  post, 
+  put, 
+  del,
+  baseUrl: BASE_URL 
+};

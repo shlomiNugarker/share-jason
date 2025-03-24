@@ -13,7 +13,8 @@ export const authMiddleware = async (
 ) => {
   let token = req.header("Authorization")?.replace("Bearer ", "");
 
-  console.log("🔍 Auth check - Headers:", req.headers);
+  console.log("🔍 Auth check - Headers:", JSON.stringify(req.headers));
+  console.log("🔍 Auth check - Authorization header:", req.header("Authorization"));
   
   if (!token && req.cookies) {
     token = req.cookies["token"];
@@ -21,12 +22,14 @@ export const authMiddleware = async (
   }
 
   if (!token) {
+    console.log("🔍 Auth failed: No token provided");
     return res.status(401).json({ message: "Unauthorized, no token provided" });
   }
 
   console.log("🔍 Verifying token");
   const decoded = verifyToken(token);
   if (!decoded) {
+    console.log("🔍 Auth failed: Invalid token");
     return res.status(401).json({ message: "Unauthorized, invalid token" });
   }
 
@@ -36,6 +39,7 @@ export const authMiddleware = async (
   const user = await User.findById(decoded.userId).select("-password");
 
   if (!user) {
+    console.log("🔍 Auth failed: User not found for decoded token");
     return res.status(401).json({ message: "User not found" });
   }
 

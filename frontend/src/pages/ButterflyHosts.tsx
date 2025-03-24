@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { authService } from "@/services/auth.service";
 
 
 const ButterflyHosts = () => {
@@ -85,6 +86,9 @@ const ButterflyHosts = () => {
   const handleDelete = async (id: string) => {
     console.log(`ניסיון למחוק אתר עם ID: ${id}`);
     
+    // First, test the authentication status
+    await testAuthStatus();
+    
     if (window.confirm("האם אתה בטוח שברצונך למחוק אתר זה?")) {
       console.log("המשתמש אישר את המחיקה");
       
@@ -152,6 +156,31 @@ const ButterflyHosts = () => {
       }
     } else {
       console.log("המשתמש ביטל את המחיקה");
+    }
+  };
+
+  // Test authentication status
+  const testAuthStatus = async () => {
+    try {
+      // Check if token exists
+      const token = authService.getToken();
+      console.log("🔍 קיים טוקן אותנטיקציה:", !!token);
+      if (token) {
+        console.log("🔍 ערך הטוקן:", token.substring(0, 10) + "...");
+      }
+      
+      // Check if user is loaded in context
+      console.log("🔍 משתמש מחובר:", user ? user.name : "לא מחובר");
+      
+      // Try a simple authenticated GET request to check token validity
+      try {
+        const testResponse = await butterflyHostService.getById("test");
+        console.log("🔍 בדיקת אותנטיקציה הצליחה");
+      } catch (error) {
+        console.error("🔍 בדיקת אותנטיקציה נכשלה:", error);
+      }
+    } catch (e) {
+      console.error("שגיאה בבדיקת מצב אותנטיקציה:", e);
     }
   };
 

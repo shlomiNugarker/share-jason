@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import axios from "axios";
 import { motion } from "framer-motion";
 import { Globe, Save, X } from "lucide-react";
+import { butterflyHostService, ButterflyHost as ServiceButterflyHost } from "@/services/butterflyHost.service";
 
 interface ButterflyHost {
   id: string;
@@ -50,11 +50,18 @@ export default function AddButterflyHostDialog({
 
     try {
       setLoading(true);
-      const response = await axios.post(
-        "http://localhost:3030/api/butterfly-hosts",
-        { title, url, position }
-      );
-      onHostAdded(response.data);
+      const response = await butterflyHostService.create({ 
+        title, 
+        url, 
+        position,
+        imageUrl: "" // Adding required imageUrl field
+      });
+      onHostAdded({
+        id: response.host._id,
+        title: response.host.title,
+        url: response.host.url,
+        position: response.host.position || ""
+      });
       toast.success("האתר נוסף בהצלחה");
       closeDialog();
     } catch (error) {

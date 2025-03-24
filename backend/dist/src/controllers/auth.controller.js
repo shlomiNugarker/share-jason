@@ -56,9 +56,16 @@ const registerUser = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             return res.status(400).json({ message: "User already exists" });
         }
         const newUser = yield (0, user_service_1.createUser)(name, email, password, "user");
-        res
-            .status(201)
-            .json({ message: "User registered successfully", user: newUser });
+        // Generate token for the new user
+        // @ts-ignore
+        const token = (0, jwt_1.generateToken)(newUser._id.toString());
+        // Remove password from user object
+        const _b = newUser.toObject(), { password: _ } = _b, safeUser = __rest(_b, ["password"]);
+        res.status(201).json({
+            message: "User registered successfully",
+            token,
+            user: safeUser
+        });
     }
     catch (error) {
         console.error("❌ Error in registerUser:", error);

@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import axios from "axios";
 import { motion } from "framer-motion";
 import { AlertTriangle, Trash, X } from "lucide-react";
+import { butterflyHostService } from "@/services/butterflyHost.service";
 
 interface ButterflyHost {
   id: string;
@@ -37,7 +37,7 @@ export default function DeleteButterflyHostDialog({
 
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:3030/api/butterfly-hosts/${host.id}`);
+      await butterflyHostService.delete(host.id);
       toast.success("האתר נמחק בהצלחה");
       onHostDeleted(host.id);
       closeDialog();

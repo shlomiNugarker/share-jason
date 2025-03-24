@@ -1,9 +1,7 @@
 import { httpService } from "./http.service";
+import { authService } from "./auth.service";
 
-// Define the BASE_URL - using the API base URL
-const BASE_URL = process.env.NODE_ENV === 'production' 
-  ? '' 
-  : 'http://localhost:3030';
+
 
 export interface ButterflyHost {
   _id: string;
@@ -74,7 +72,7 @@ export const butterflyHostService = {
     return httpService.del(`${API_ENDPOINT}/${id}`, true);
   },
 
-  // Reuse upload image from item.service.ts
+  // Upload image 
   uploadImage: async (file: File): Promise<{ imageUrl: string }> => {
     const maxSizeInBytes = 10 * 1024 * 1024; // 10MB
     if (file.size > maxSizeInBytes) {
@@ -85,14 +83,13 @@ export const butterflyHostService = {
     formData.append("file", file);
 
     try {
-      // Use BASE_URL instead of hardcoded value
-      const response = await fetch(`${BASE_URL}/api/upload`, {
+      const token = authService.getToken();
+      const response = await fetch(`${httpService.baseUrl}/api/upload`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`,
+          "Authorization": `Bearer ${token}`,
         },
         body: formData,
-        credentials: 'include',
       });
 
       if (!response.ok) {

@@ -40,9 +40,19 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 
     const newUser = await createUser(name, email, password, "user");
-    res
-      .status(201)
-      .json({ message: "User registered successfully", user: newUser });
+    
+    // Generate token for the new user
+    // @ts-ignore
+    const token = generateToken(newUser._id.toString());
+    
+    // Remove password from user object
+    const { password: _, ...safeUser } = newUser.toObject();
+    
+    res.status(201).json({ 
+      message: "User registered successfully", 
+      token,
+      user: safeUser 
+    });
   } catch (error) {
     console.error("❌ Error in registerUser:", error);
     res.status(500).json({ message: "Internal server error" });

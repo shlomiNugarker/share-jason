@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import axios from "axios";
 import { motion } from "framer-motion";
 import { Edit2, Save, X } from "lucide-react";
+import { butterflyHostService } from "@/services/butterflyHost.service";
 
 interface ButterflyHost {
   id: string;
@@ -51,13 +51,28 @@ export default function EditButterflyHostDialog({
       return;
     }
 
+    if (!host) return;
+
     try {
       setLoading(true);
-      const response = await axios.put(
-        `http://localhost:3030/api/butterfly-hosts/${host?.id}`,
-        { title, url, position }
+      const response = await butterflyHostService.update(
+        host.id, 
+        { 
+          title, 
+          url, 
+          position,
+          imageUrl: "" // Adding required imageUrl field
+        }
       );
-      onHostEdited(response.data);
+      
+      // Transform the response to match the expected interface
+      onHostEdited({
+        id: response.host._id,
+        title: response.host.title,
+        url: response.host.url,
+        position: response.host.position || ""
+      });
+      
       toast.success("האתר עודכן בהצלחה");
       closeDialog();
     } catch (error) {
