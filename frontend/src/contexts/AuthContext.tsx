@@ -43,7 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       try {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        const response = await axios.get("http://localhost:5000/api/auth/user");
+        const response = await axios.get("http://localhost:3030/api/auth/user");
         setUser(response.data);
         setIsAuthenticated(true);
       } catch (err) {
@@ -65,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setError(null);
     
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", {
+      const response = await axios.post("http://localhost:3030/api/auth/login", {
         email,
         password
       });
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setError(null);
     
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", {
+      const response = await axios.post("http://localhost:3030/api/auth/register", {
         name,
         email,
         password

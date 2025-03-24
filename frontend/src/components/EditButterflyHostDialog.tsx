@@ -54,7 +54,7 @@ export default function EditButterflyHostDialog({
     try {
       setLoading(true);
       const response = await axios.put(
-        `http://localhost:5000/api/butterfly-hosts/${host?.id}`,
+        `http://localhost:3030/api/butterfly-hosts/${host?.id}`,
         { title, url, position }
       );
       onHostEdited(response.data);

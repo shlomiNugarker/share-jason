@@ -3,7 +3,7 @@ import { httpService } from "./http.service";
 // Define the BASE_URL - using the API base URL
 const BASE_URL = process.env.NODE_ENV === 'production' 
   ? '' 
-  : 'http://localhost:5000';
+  : 'http://localhost:3030';
 
 export interface ButterflyHost {
   _id: string;

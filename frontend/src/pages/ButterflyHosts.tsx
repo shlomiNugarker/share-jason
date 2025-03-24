@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { butterflyHostService, ButterflyHost } from "@/services/butterflyHost.service";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Pencil, Trash2, Plus, Filter, Search, ArrowUpRight, ChevronDown, Download } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Pencil, Trash2, Plus, Search, ArrowUpRight, Download } from "lucide-react";
+import { motion } from "framer-motion";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +14,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-const MotionCard = motion(Card);
 
 const ButterflyHosts = () => {
   const [hosts, setHosts] = useState<ButterflyHost[]>([]);
@@ -316,349 +314,191 @@ const ButterflyHosts = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[70vh]">
-        <div className="relative w-24 h-24">
-          <motion.div 
-            className="absolute w-24 h-24 border-4 border-purple-300 rounded-full"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.5, 0.8, 0.5],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div 
-            className="absolute w-24 h-24 border-4 border-teal-400 rounded-full"
-            animate={{
-              scale: [1, 1.3, 1],
-              opacity: [0.5, 0.8, 0.5],
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 0.3
-            }}
-          />
-          <motion.div 
-            className="absolute w-24 h-24 border-4 border-purple-500 border-t-transparent rounded-full"
-            animate={{ rotate: 360 }}
-            transition={{
-              duration: 1.2,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
+      <div className="flex items-center justify-center min-h-[70vh]">
+        <div className="flex items-center space-x-3 rtl:space-x-reverse">
+          <div className="w-3 h-3 bg-purple-600 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-teal-500 rounded-full animate-bounce animation-delay-200"></div>
+          <div className="w-3 h-3 bg-purple-400 rounded-full animate-bounce animation-delay-400"></div>
+          <span className="text-gray-600 text-sm font-medium">טוען אתרים...</span>
         </div>
-        <motion.p 
-          className="mt-6 text-lg text-gray-600"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          טוען אתרים...
-        </motion.p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-6 max-w-7xl bg-gray-50 min-h-screen">
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-gradient-to-r from-purple-600 to-teal-500 text-white p-8 rounded-2xl shadow-lg mb-10"
-      >
+    <div className="container mx-auto p-4 max-w-7xl">
+      <div className="bg-white p-4 rounded-lg shadow-sm mb-4">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div>
-            <motion.h1 
-              className="text-4xl font-bold mb-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
-            >
-              אתרים מארחים
-            </motion.h1>
-            <motion.p 
-              className="text-teal-100 text-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              סך הכל {hosts.length} אתרים במערכת
-            </motion.p>
+            <h1 className="text-2xl font-semibold mb-1 text-purple-800">אתרים מארחים</h1>
+            <p className="text-gray-500 text-sm">סך הכל {hosts.length} אתרים במערכת</p>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0">
+          <div className="flex gap-2 mt-3 md:mt-0">
             {user && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                whileHover={{ scale: 1.05 }}
+              <Button 
+                onClick={handleNew}
+                className="bg-purple-600 hover:bg-purple-700 text-white text-sm px-3 py-1.5 rounded transition-colors"
               >
-                <Button 
-                  onClick={handleNew}
-                  className="bg-white text-purple-600 hover:bg-purple-50 transition-all duration-300 text-base px-6 py-6 rounded-xl shadow-md w-full sm:w-auto"
-                >
-                  <Plus className="mr-2 h-5 w-5" /> הוסף אתר חדש
-                </Button>
-              </motion.div>
+                <Plus className="mr-1 h-3.5 w-3.5" /> הוסף אתר
+              </Button>
             )}
             
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.6 }}
-              whileHover={{ scale: 1.05 }}
+            <Button 
+              onClick={downloadHostsAsJson}
+              className="bg-teal-600 hover:bg-teal-700 text-white text-sm px-3 py-1.5 rounded transition-colors"
             >
-              <Button 
-                onClick={downloadHostsAsJson}
-                className="bg-teal-400 text-white hover:bg-teal-300 transition-all duration-300 text-base px-6 py-6 rounded-xl shadow-md w-full sm:w-auto"
-              >
-                <Download className="mr-2 h-5 w-5" /> הורד כקובץ JSON
-              </Button>
-            </motion.div>
+              <Download className="mr-1 h-3.5 w-3.5" /> הורד JSON
+            </Button>
           </div>
         </div>
-      </motion.div>
+      </div>
       
       {/* Search & Filters Section */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-        className="bg-white p-8 rounded-2xl shadow-md mb-8 border border-gray-100"
-      >
+      <div className="bg-white p-3 rounded-lg shadow-sm mb-3 flex flex-col sm:flex-row gap-2 items-center">
         {/* Search input */}
-        <div className="relative mb-6">
-          <div className="absolute inset-y-0 right-0 flex items-center pr-5">
-            <Search className="h-5 w-5 text-purple-400" />
+        <div className="relative flex-grow">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <Search className="h-3.5 w-3.5 text-gray-400" />
           </div>
-          <motion.input
-            whileFocus={{ boxShadow: "0 0 0 2px rgba(147, 51, 234, 0.3)" }}
+          <input
             type="text"
-            placeholder="חיפוש לפי כותרת, כתובת URL או מיקום..."
+            placeholder="חיפוש לפי כותרת או כתובת..."
             value={searchText}
             onChange={handleSearchChange}
-            className="w-full py-4 pr-12 pl-5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50"
+            className="w-full py-1.5 pr-7 pl-2 border border-gray-200 rounded text-sm focus:border-purple-300 focus:ring-1 focus:ring-purple-300 transition-colors"
           />
         </div>
         
-        <div className="flex flex-wrap gap-2 mb-2">
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <Button
-              variant={selectedPosition === null ? "default" : "outline"}
-              onClick={() => setSelectedPosition(null)}
-              className={`mb-2 transition-all duration-200 rounded-xl px-5 py-2 ${
-                selectedPosition === null 
-                  ? "bg-gradient-to-r from-purple-500 to-teal-500 text-white shadow-md" 
-                  : "border-gray-300 hover:border-purple-400 hover:text-purple-600"
-              }`}
-            >
-              <Filter className="mr-2 h-4 w-4" /> כל האתרים
-            </Button>
-          </motion.div>
+        <div className="flex flex-wrap gap-1">
+          <Button
+            variant={selectedPosition === null ? "default" : "outline"}
+            onClick={() => setSelectedPosition(null)}
+            size="sm"
+            className={`text-xs py-0.5 px-2 h-7 ${
+              selectedPosition === null 
+                ? "bg-purple-600 hover:bg-purple-700 text-white" 
+                : "border-gray-200 text-gray-700 hover:border-purple-300 hover:bg-purple-50"
+            } transition-colors`}
+          >
+            הכל
+          </Button>
           {positions.map(position => (
-            <motion.div key={position} whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-              <Button
-                variant={selectedPosition === position ? "default" : "outline"}
-                onClick={() => setSelectedPosition(position)}
-                className={`mb-2 transition-all duration-200 rounded-xl px-5 py-2 ${
-                  selectedPosition === position 
-                    ? "bg-gradient-to-r from-purple-500 to-teal-500 text-white shadow-md" 
-                    : "border-gray-300 hover:border-purple-400 hover:text-purple-600"
-                }`}
-              >
-                {position.replace(/_/g, " ")}
-              </Button>
-            </motion.div>
+            <Button
+              key={position}
+              variant={selectedPosition === position ? "default" : "outline"}
+              onClick={() => setSelectedPosition(position)}
+              size="sm"
+              className={`text-xs py-0.5 px-2 h-7 ${
+                selectedPosition === position 
+                  ? "bg-purple-600 hover:bg-purple-700 text-white" 
+                  : "border-gray-200 text-gray-700 hover:border-purple-300 hover:bg-purple-50"
+              } transition-colors`}
+            >
+              {position.replace(/_/g, " ")}
+            </Button>
           ))}
         </div>
-      </motion.div>
-      
-      {/* Hosts Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <AnimatePresence>
-          {visibleHosts.map((host, index) => (
-            <motion.div
-              key={host._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ delay: index * 0.05, duration: 0.4 }}
-              layout
-            >
-              <MotionCard 
-                className="overflow-hidden border border-gray-100 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:border-purple-200 h-full flex flex-col"
-                whileHover={{ y: -5 }}
-              >
-                <CardHeader className="p-6 border-b border-gray-100 bg-gray-50">
-                  <CardTitle className="text-xl font-bold truncate text-gray-800">{host.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="p-6 pt-6 space-y-5 flex-grow flex flex-col">
-                  <div className="aspect-video flex justify-center items-center bg-gradient-to-br from-purple-50 to-teal-50 rounded-xl overflow-hidden border border-gray-100 flex-grow">
-                    {host.imageUrl ? (
-                      <motion.img
-                        src={host.imageUrl}
-                        alt={host.title}
-                        className="w-full h-full object-contain"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.3 }}
-                        whileHover={{ scale: 1.1 }}
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "/placeholder-image.png";
-                        }}
-                      />
-                    ) : (
-                      <div className="text-gray-400 flex items-center justify-center h-full">
-                        <span className="text-center">אין תמונה</span>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="text-sm space-y-3">
-                    <p className="truncate flex items-center bg-gray-50 p-3 rounded-lg">
-                      <span className="font-semibold ml-2 text-purple-700">כתובת:</span>
-                      <a 
-                        href={host.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-teal-600 hover:underline truncate ml-1 flex-1"
-                      >
-                        {host.url}
-                      </a>
-                    </p>
-                    {host.position && (
-                      <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-teal-100 text-purple-800 rounded-lg text-sm">
-                        <span className="font-medium">מיקום: </span>
-                        {host.position}
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex space-x-3 justify-between pt-4 border-t border-gray-100 mt-5">
-                    <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="flex-1">
-                      <Button 
-                        className="flex-1 bg-gradient-to-r from-purple-50 to-teal-50 text-purple-700 hover:from-purple-100 hover:to-teal-100 transition-all duration-300 rounded-xl w-full"
-                        variant="outline"
-                        onClick={() => window.open(host.url, "_blank")}
-                      >
-                        <ArrowUpRight className="h-4 w-4 ml-2" /> פתח אתר
-                      </Button>
-                    </motion.div>
-                    
-                    {user && (
-                      <div className="flex space-x-3">
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                          <Button 
-                            variant="outline" 
-                            size="icon"
-                            onClick={() => handleEdit(host)}
-                            className="bg-purple-50 text-purple-600 hover:bg-purple-100 border-purple-100 rounded-xl h-10 w-10"
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </Button>
-                        </motion.div>
-                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                          <Button 
-                            variant="destructive" 
-                            size="icon"
-                            onClick={() => handleDelete(host._id)}
-                            className="bg-red-50 text-red-500 hover:bg-red-100 border-red-100 rounded-xl h-10 w-10"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </motion.div>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </MotionCard>
-            </motion.div>
-          ))}
-        </AnimatePresence>
       </div>
+      
+      {/* Compact Cards Grid */}
+      {visibleHosts.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+          {visibleHosts.map((host) => (
+            <div key={host._id} className="bg-white rounded-lg border border-gray-100 shadow-sm hover:shadow transition-shadow overflow-hidden flex flex-col">
+              <div className="p-3 border-b border-gray-100 flex justify-between items-center bg-gray-50">
+                <h3 className="font-medium text-sm text-gray-800 truncate flex-1" title={host.title}>
+                  {host.title}
+                </h3>
+                
+                {host.position && (
+                  <span className="ml-2 px-2 py-0.5 bg-purple-50 text-purple-700 text-xs rounded-full whitespace-nowrap">
+                    {host.position}
+                  </span>
+                )}
+              </div>
+              
+              <div className="p-3 flex-grow">
+                <div className="flex items-center text-xs mb-2">
+                  <a 
+                    href={host.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 hover:underline truncate flex items-center"
+                    title={host.url}
+                  >
+                    {host.url.length > 30 ? host.url.substring(0, 30) + '...' : host.url}
+                    <ArrowUpRight className="h-3 w-3 ml-1 flex-shrink-0" />
+                  </a>
+                </div>
+                
+                <div className="h-16 bg-gray-50 rounded-md flex items-center justify-center overflow-hidden mb-1">
+                  {host.imageUrl ? (
+                    <img 
+                      src={host.imageUrl} 
+                      alt={host.title} 
+                      className="max-h-full max-w-full object-contain p-1"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "/placeholder-image.png";
+                      }}
+                    />
+                  ) : (
+                    <span className="text-gray-400 text-xs">אין תמונה</span>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex p-2 bg-gray-50 border-t border-gray-100 justify-end text-right">
+                {user && (
+                  <div className="flex space-x-1 rtl:space-x-reverse">
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleEdit(host)}
+                      className="h-6 w-6 p-0 text-gray-500 hover:text-purple-600 hover:bg-purple-50"
+                    >
+                      <Pencil className="h-3 w-3" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={() => handleDelete(host._id)}
+                      className="h-6 w-6 p-0 text-gray-500 hover:text-red-600 hover:bg-red-50"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center bg-white rounded-lg shadow-sm border border-gray-100 p-8">
+          <div className="text-center">
+            <Search className="h-6 w-6 text-gray-400 mx-auto mb-2" />
+            <p className="text-gray-500">
+              {searchText ? (
+                <>לא נמצאו תוצאות עבור "{searchText}"</>
+              ) : (
+                <>לא נמצאו אתרים</>
+              )}
+            </p>
+          </div>
+        </div>
+      )}
       
       {/* "Load More" button */}
       {hasMoreHosts && (
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex justify-center mt-10 mb-6"
-        >
-          <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-            <Button 
-              onClick={handleLoadMore}
-              className="bg-gradient-to-r from-purple-500 to-teal-500 text-white px-8 py-6 rounded-xl hover:shadow-lg transition-all duration-300 flex items-center"
-            >
-              <ChevronDown className="mr-2 h-5 w-5" />
-              טען עוד אתרים ({filteredHosts.length - visibleHosts.length} נוספים)
-            </Button>
-          </motion.div>
-        </motion.div>
-      )}
-      
-      {filteredHosts.length === 0 && (
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex flex-col items-center justify-center bg-white rounded-2xl p-16 text-center shadow-md border border-gray-100"
-        >
-          <motion.div 
-            className="bg-gradient-to-r from-purple-100 to-teal-100 p-8 rounded-full mb-6"
-            animate={{ scale: [1, 1.05, 1], opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 3, repeat: Infinity }}
+        <div className="flex justify-center mt-4">
+          <Button 
+            onClick={handleLoadMore}
+            variant="outline"
+            className="text-xs border-gray-200 hover:bg-purple-50 hover:text-purple-700 hover:border-purple-300 transition-colors"
           >
-            <Search className="h-12 w-12 text-purple-500" />
-          </motion.div>
-          {searchText ? (
-            <>
-              <motion.h3 
-                className="text-2xl font-bold mb-3 text-gray-800"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                לא נמצאו תוצאות
-              </motion.h3>
-              <motion.p 
-                className="text-gray-600 text-lg"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                לא נמצאו אתרים התואמים את החיפוש "{searchText}"
-              </motion.p>
-            </>
-          ) : (
-            <>
-              <motion.h3 
-                className="text-2xl font-bold mb-3 text-gray-800"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                אין אתרים להצגה
-              </motion.h3>
-              <motion.p 
-                className="text-gray-600 text-lg"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-              >
-                לא נמצאו אתרים בקטגוריה זו
-              </motion.p>
-            </>
-          )}
-        </motion.div>
+            טען עוד {filteredHosts.length - visibleHosts.length} אתרים
+          </Button>
+        </div>
       )}
 
       {/* Edit Dialog */}
