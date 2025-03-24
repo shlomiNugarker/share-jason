@@ -1,0 +1,35 @@
+{
+  "title": "Butterfly Hosts",
+  "description": "View and manage butterfly host websites for data sharing",
+  "no_hosts": "No butterfly hosts found",
+  "add_host": "Add Host",
+  "edit_host": "Edit Host",
+  "delete_host": "Delete Host",
+  "host_added": "Host added successfully",
+  "host_updated": "Host updated successfully",
+  "host_deleted": "Host deleted successfully",
+  "confirm_delete": "Are you sure you want to delete this host?",
+  "delete_warning": "This action cannot be undone.",
+  "fields": {
+    "title": "Host Title",
+    "url": "Host URL",
+    "image_url": "Image URL",
+    "position": "Position"
+  },
+  "errors": {
+    "title_required": "Title is required",
+    "url_required": "URL is required",
+    "invalid_url": "Please enter a valid URL",
+    "delete_failed": "Error deleting host"
+  },
+  "filters": {
+    "all": "All Hosts",
+    "filter_by_position": "Filter by Position"
+  },
+  "actions": {
+    "visit": "Visit Website",
+    "add_image": "Add Image",
+    "upload_image": "Upload Image",
+    "load_more": "Load More"
+  }
+} 

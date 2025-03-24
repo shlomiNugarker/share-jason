@@ -1,0 +1,63 @@
+{
+  "app": {
+    "name": "ShareJSON",
+    "welcome": "ברוכים הבאים ל-ShareJSON",
+    "description": "מערכת ניהול התוכן מספקת גישה קלה ונוחה לכל הכלים הדרושים לניהול ושיתוף המידע"
+  },
+  "auth": {
+    "login": "התחברות",
+    "register": "הרשמה",
+    "logout": "התנתקות",
+    "email": "דואר אלקטרוני",
+    "password": "סיסמה",
+    "confirm_password": "אימות סיסמה",
+    "name": "שם מלא",
+    "login_success": "התחברת בהצלחה!",
+    "login_failed": "שגיאה בהתחברות. אנא נסה שנית",
+    "already_have_account": "כבר יש לך חשבון? התחבר כאן",
+    "dont_have_account": "אין לך חשבון? הירשם כאן",
+    "register_success": "נרשמת בהצלחה!",
+    "session_expired": "פג תוקף החיבור. אנא התחבר מחדש",
+    "registration_failed": "שגיאה בהרשמה. אנא נסה שנית",
+    "passwords_not_match": "הסיסמאות אינן תואמות!",
+    "logging_in": "מתחבר...",
+    "registering": "נרשם...",
+    "need_account": "צריך חשבון?",
+    "forgot_password": "שכחת סיסמה?",
+    "login_description": "התחבר למערכת וצפה במידע שלך",
+    "create_account": "צור חשבון חדש למערכת"
+  },
+  "nav": {
+    "home": "בית",
+    "dashboard": "לוח בקרה",
+    "users": "משתמשים", 
+    "items": "פריטים",
+    "schemas": "סכמות",
+    "butterfly_hosts": "אתרים מארחים"
+  },
+  "roles": {
+    "admin": "מנהל",
+    "user": "משתמש"
+  },
+  "actions": {
+    "save": "שמירה",
+    "cancel": "ביטול",
+    "delete": "מחיקה",
+    "edit": "עריכה",
+    "add_new": "הוסף חדש",
+    "search": "חיפוש",
+    "continues": "המשך",
+    "saving": "שומר...",
+    "deleting": "מוחק...",
+    "loading": "טוען..."
+  },
+  "messages": {
+    "no_results": "לא נמצאו תוצאות",
+    "unauthorized": "אינך מורשה לצפות בדף זה"
+  },
+  "fields": {
+    "title": "כותרת",
+    "url": "כתובת URL",
+    "location": "מיקום"
+  }
+} 

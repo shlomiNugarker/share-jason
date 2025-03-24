@@ -1,10 +1,34 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import enTranslation from "./locales/en.json";
-import heTranslation from "./locales/he.json";
+import LanguageDetector from "i18next-browser-languagedetector";
+
+// Import translations
+import enCommon from "./locales/en/common.json";
+import heCommon from "./locales/he/common.json";
+import enButterfly from "./locales/en/butterfly.json";
+import heButterfly from "./locales/he/butterfly.json";
+import enCompatibility from "./locales/en/compatibility.json";
+import heCompatibility from "./locales/he/compatibility.json";
 
 // Valid languages supported by the application
 const VALID_LANGUAGES = ['en', 'he'];
+
+// Define default namespace
+export const defaultNS = 'common';
+
+// Define resources structure for better type support
+export const resources = {
+  en: {
+    common: enCommon,
+    butterfly: enButterfly,
+    compatibility: enCompatibility,
+  },
+  he: {
+    common: heCommon,
+    butterfly: heButterfly, 
+    compatibility: heCompatibility,
+  },
+} as const;
 
 // Clear any potentially corrupted language state
 try {
@@ -18,6 +42,7 @@ try {
   console.error("Error checking localStorage:", e);
 }
 
+// Get user's preferred language based on browser and stored preferences
 const getUserLanguage = () => {
   try {
     // First check localStorage for saved preference
@@ -28,12 +53,12 @@ const getUserLanguage = () => {
     }
     
     // Otherwise use browser language
-    const userLang = navigator.language || navigator.languages[0];
-    const browserLang = userLang.split("-")[0];
+    const userLang = navigator.language || navigator?.languages?.[0];
+    const browserLang = userLang?.split("-")[0];
     
     // If browser language isn't supported, default to Hebrew
-    if (!VALID_LANGUAGES.includes(browserLang)) {
-      console.log("Browser language not supported, using default:", browserLang);
+    if (!browserLang || !VALID_LANGUAGES.includes(browserLang)) {
+      console.log("Browser language not supported, using default Hebrew");
       return 'he';
     }
     
@@ -45,14 +70,14 @@ const getUserLanguage = () => {
   }
 };
 
-// Save language preference to localStorage whenever it changes
+// Save language preference to localStorage and update document properties
 const saveLanguagePreference = (language: string) => {
   try {
     if (VALID_LANGUAGES.includes(language)) {
       console.log("Saving language preference:", language);
       localStorage.setItem("language", language);
       
-      // Also update document properties
+      // Update document properties for RTL/LTR
       document.documentElement.dir = language === 'he' ? 'rtl' : 'ltr';
       document.documentElement.lang = language;
     } else {
@@ -63,79 +88,64 @@ const saveLanguagePreference = (language: string) => {
   }
 };
 
-// Create and initialize i18n instance
-const initializeI18n = () => {
-  try {
-    i18n.use(initReactI18next).init({
-      resources: {
-        en: {
-          translation: enTranslation,
-        },
-        he: {
-          translation: heTranslation,
-        },
-      },
-      lng: getUserLanguage(),
-      fallbackLng: "he",
-      interpolation: {
-        escapeValue: false,
-      },
-      react: {
-        useSuspense: false,
-      },
-      debug: true, // Enable debug mode
-    });
-
-    // Add a listener to save language preferences
-    i18n.on('languageChanged', saveLanguagePreference);
+// Initialize i18n instance
+i18n
+  // Load translations from backend if needed - uncomment these lines for dynamic loading
+  // .use(Backend)
+  // Auto-detect user language
+  .use(LanguageDetector)
+  // React integration
+  .use(initReactI18next)
+  // Initialize
+  .init({
+    // Resources (translations) - preloaded for small applications
+    // For large apps, use HTTP backend instead and comment this out
+    resources,
     
-    // Set initial document properties
-    const currentLang = i18n.language;
-    document.documentElement.dir = currentLang === 'he' ? 'rtl' : 'ltr';
-    document.documentElement.lang = currentLang;
+    // Default namespace
+    defaultNS,
     
-    console.log("i18n initialized successfully with language:", i18n.language);
+    // Current language
+    lng: getUserLanguage(),
     
-    return i18n;
-  } catch (error) {
-    console.error("Failed to initialize i18n:", error);
-    // Try with minimal config as fallback
-    try {
-      i18n.use(initReactI18next).init({
-        resources: {
-          he: { translation: heTranslation }
-        },
-        lng: 'he',
-        fallbackLng: 'he',
-      });
-      return i18n;
-    } catch (e) {
-      console.error("Critical error initializing i18n:", e);
-      return i18n; // Return even if initialization failed
-    }
-  }
-};
+    // Fallback language
+    fallbackLng: "he",
+    
+    // Namespaces to load
+    ns: ['common', 'butterfly', 'compatibility'],
 
-// Initialize i18n
-const i18nInstance = initializeI18n();
+    // Cache detection results
+    detection: {
+      order: ['localStorage', 'navigator'],
+      lookupLocalStorage: 'language',
+      caches: ['localStorage'],
+    },
+    
+    // Don't escape special characters since React handles this
+    interpolation: {
+      escapeValue: false,
+    },
+    
+    // Recommended for React
+    react: {
+      useSuspense: true,
+    },
+    
+    // Return empty string instead of null/undefined for missing keys
+    returnNull: false,
+    returnEmptyString: false,
+    
+    // Enable in development, disable in production
+    debug: process.env.NODE_ENV === 'development',
+  });
 
-// Add a global method to check if i18n is ready
-(window as any).checkI18n = () => {
-  console.log("Current language:", i18nInstance.language);
-  console.log("Available languages:", i18nInstance.options.supportedLngs);
-  console.log("Translations loaded:", i18nInstance.store.data);
-  
-  // Force language change for testing
-  (window as any).forceLanguage = (lang: string) => {
-    if (VALID_LANGUAGES.includes(lang)) {
-      console.log("Forcing language change to:", lang);
-      i18nInstance.changeLanguage(lang);
-      localStorage.setItem("language", lang);
-      setTimeout(() => window.location.reload(), 100);
-      return true;
-    }
-    return false;
-  };
-};
+// Add listener to save language when changed
+i18n.on('languageChanged', saveLanguagePreference);
 
-export default i18nInstance;
+// Set initial document properties
+const currentLang = i18n.language;
+document.documentElement.dir = currentLang === 'he' ? 'rtl' : 'ltr';
+document.documentElement.lang = currentLang;
+
+// Export instance
+export default i18n;

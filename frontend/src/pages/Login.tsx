@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
+import { authService } from "@/services/auth.service";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -9,21 +10,45 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const { t } = useTranslation();
+
+  useEffect(() => {
+    console.log("Login page loaded, checking auth status");
+    console.log("Auth status on login page:", { isAuthenticated, user });
+    
+    if (isAuthenticated && user) {
+      console.log("User already authenticated, redirecting to dashboard");
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
+    if (!email || !password) {
+      setError("Please fill all fields");
+      setLoading(false);
+      return;
+    }
+
     try {
+      console.log("Login submit with:", { email });
       const success = await login(email, password);
+      console.log("Login result:", success);
+      
       if (success) {
+        const token = authService.getToken();
+        console.log("Token after login:", !!token, token?.substring(0, 15) + "...");
         navigate("/dashboard");
+      } else {
+        setError(t("auth.login_failed") || "Login failed");
       }
-    } catch (err) {
-      setError(t("login_failed"));
+    } catch (err: any) {
+      console.error("Login error:", err);
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -34,10 +59,10 @@ const Login: React.FC = () => {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
         <div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            {t("login_page")}
+            Login
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            {t("login_description")}
+            Sign in to your account
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
@@ -49,7 +74,7 @@ const Login: React.FC = () => {
           <div className="rounded-md shadow-sm -space-y-px">
             <div>
               <label htmlFor="email-address" className="sr-only">
-                {t("email")}
+                Email
               </label>
               <input
                 id="email-address"
@@ -58,14 +83,14 @@ const Login: React.FC = () => {
                 autoComplete="email"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder={t("email")}
+                placeholder="Email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div>
               <label htmlFor="password" className="sr-only">
-                {t("password")}
+                Password
               </label>
               <input
                 id="password"
@@ -74,7 +99,7 @@ const Login: React.FC = () => {
                 autoComplete="current-password"
                 required
                 className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder={t("password")}
+                placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -109,10 +134,10 @@ const Login: React.FC = () => {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  {t("logging_in")}
+                  Loading...
                 </>
               ) : (
-                t("login")
+                "Login"
               )}
             </button>
           </div>
@@ -123,7 +148,7 @@ const Login: React.FC = () => {
                 to="/register"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                {t("need_account")}
+                Need an account?
               </Link>
             </div>
             <div className="text-sm">
@@ -131,7 +156,7 @@ const Login: React.FC = () => {
                 href="#"
                 className="font-medium text-indigo-600 hover:text-indigo-500"
               >
-                {t("forgot_password")}
+                Forgot password?
               </a>
             </div>
           </div>

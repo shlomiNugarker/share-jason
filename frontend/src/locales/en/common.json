@@ -1,0 +1,63 @@
+{
+  "app": {
+    "name": "ShareJSON",
+    "welcome": "Welcome to ShareJSON",
+    "description": "Content management system provides easy access to all the tools needed to manage and share information"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email Address",
+    "password": "Password",
+    "confirm_password": "Confirm Password",
+    "name": "Full Name",
+    "login_success": "Logged in successfully!",
+    "login_failed": "Login failed. Please try again",
+    "already_have_account": "Already have an account?",
+    "dont_have_account": "Don't have an account? Register here",
+    "register_success": "Registered successfully!",
+    "session_expired": "Session expired. Please login again",
+    "registration_failed": "Registration failed. Please try again",
+    "passwords_not_match": "Passwords do not match!",
+    "logging_in": "Logging in...",
+    "registering": "Registering...",
+    "need_account": "Need an account?",
+    "forgot_password": "Forgot password?",
+    "login_description": "Sign in to your account and access your data",
+    "create_account": "Create a new account"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "users": "Users", 
+    "items": "Items",
+    "schemas": "Schemas",
+    "butterfly_hosts": "Butterfly Hosts"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "user": "User"
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add_new": "Add New",
+    "search": "Search",
+    "continues": "Continue",
+    "saving": "Saving...",
+    "deleting": "Deleting...",
+    "loading": "Loading..."
+  },
+  "messages": {
+    "no_results": "No results found",
+    "unauthorized": "You are not authorized to view this page"
+  },
+  "fields": {
+    "title": "Title",
+    "url": "URL Address",
+    "location": "Location"
+  }
+} 

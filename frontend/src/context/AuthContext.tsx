@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         if (confirmLogout) {
           authService.removeToken();
           setToken(null);
-          setError(t("session_expired"));
+          setError(t("auth.session_expired"));
         } else {
           console.log("🔍 User canceled logout, keeping token");
           // אם המשתמש ביטל, ננסה לטעון מחדש את העמוד
@@ -141,11 +141,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         }
       }, 500);
       
-      toast.success(t("login_success"));
+      toast.success(t("auth.login_success"));
       return true;
     } catch (err: any) {
       console.error("🔐 Login failed:", err);
-      const errorMessage = err.message || t("login_failed");
+      const errorMessage = err.message || t("auth.login_failed");
       setError(errorMessage);
       toast.error(errorMessage);
       return false;
@@ -180,10 +180,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUser(userData);
       setIsAuthenticated(true);
       
-      toast.success(t("register_success"));
+      toast.success(t("auth.register_success"));
       return true;
     } catch (err: any) {
-      const errorMessage = err.message || t("registration_failed");
+      const errorMessage = err.message || t("auth.registration_failed");
       setError(errorMessage);
       toast.error(errorMessage);
       return false;
@@ -198,7 +198,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
-    toast.success(t("logout"));
+    toast.success(t("auth.logout"));
     navigate("/login");
   };
 

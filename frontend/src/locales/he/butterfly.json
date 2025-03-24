@@ -1,0 +1,35 @@
+{
+  "title": "אתרים מארחים",
+  "description": "צפייה וניהול אתרים מארחים לשיתוף המידע",
+  "no_hosts": "לא נמצאו אתרים מארחים",
+  "add_host": "הוסף אתר",
+  "edit_host": "ערוך אתר",
+  "delete_host": "מחק אתר",
+  "host_added": "האתר נוסף בהצלחה",
+  "host_updated": "האתר עודכן בהצלחה",
+  "host_deleted": "האתר נמחק בהצלחה",
+  "confirm_delete": "האם אתה בטוח שברצונך למחוק אתר זה?",
+  "delete_warning": "פעולה זו אינה ניתנת לביטול.",
+  "fields": {
+    "title": "כותרת אתר",
+    "url": "כתובת URL",
+    "image_url": "כתובת תמונה",
+    "position": "מיקום"
+  },
+  "errors": {
+    "title_required": "יש להזין כותרת",
+    "url_required": "יש להזין כתובת URL",
+    "invalid_url": "אנא הזן כתובת URL תקינה",
+    "delete_failed": "שגיאה במחיקת האתר"
+  },
+  "filters": {
+    "all": "כל האתרים",
+    "filter_by_position": "סנן לפי מיקום"
+  },
+  "actions": {
+    "visit": "בקר באתר",
+    "add_image": "הוסף תמונה",
+    "upload_image": "העלה תמונה",
+    "load_more": "טען עוד"
+  }
+} 

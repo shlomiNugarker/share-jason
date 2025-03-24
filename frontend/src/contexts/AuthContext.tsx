@@ -12,7 +12,7 @@ interface AuthContextType {
   register: (name: string, email: string, password: string) => Promise<boolean>;
   logout: () => void;
   isAuthenticated: boolean;
-  checkAuthStatus: () => void;
+  checkAuthStatus: () => { token: string | null; isAuth: boolean; user: User | null };
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -249,7 +249,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // Add this function after the logout function in the AuthProvider component
-  const checkAuthStatus = () => {
+  const checkAuthStatus = (): { token: string | null; isAuth: boolean; user: User | null } => {
     const token = authService.getToken();
     const isAuth = authService.isAuthenticated();
     
