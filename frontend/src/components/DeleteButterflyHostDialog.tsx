@@ -37,7 +37,7 @@ export default function DeleteButterflyHostDialog({
 
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:5000/api/butterfly-hosts/${host.id}`);
+      await axios.delete(`http://localhost:3030/api/butterfly-hosts/${host.id}`);
       toast.success("האתר נמחק בהצלחה");
       onHostDeleted(host.id);
       closeDialog();
