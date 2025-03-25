@@ -6,7 +6,7 @@ import { DynamicSchema } from "@/services/dynamicSchema.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Download } from "lucide-react";
+import { Download, Copy, Check } from "lucide-react";
 
 const DynamicItems = () => {
   const { schemaId } = useParams<{ schemaId: string }>();
@@ -15,6 +15,7 @@ const DynamicItems = () => {
   const [schema, setSchema] = useState<DynamicSchema | null>(null);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
+  const [copiedStates, setCopiedStates] = useState<{[key: string]: boolean}>({});
 
   useEffect(() => {
     if (!schemaId) {
@@ -84,6 +85,21 @@ const DynamicItems = () => {
     }
   };
 
+  const copyToClipboard = (text: string, key: string) => {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        setCopiedStates(prev => ({ ...prev, [key]: true }));
+        setTimeout(() => {
+          setCopiedStates(prev => ({ ...prev, [key]: false }));
+        }, 2000);
+        toast.success("Copied to clipboard");
+      })
+      .catch(err => {
+        console.error('Failed to copy text: ', err);
+        toast.error("Failed to copy to clipboard");
+      });
+  };
+
   if (loading) {
     return <div className="flex justify-center p-8">Loading...</div>;
   }
@@ -127,6 +143,25 @@ const DynamicItems = () => {
         </div>
       </div>
 
+      <div className="mb-6 p-2 bg-gray-50 rounded border text-sm">
+        <div className="flex items-center justify-between mb-1">
+          <h3 className="font-medium text-gray-700">API Endpoint for all {schema.name} items:</h3>
+        </div>
+        <div className="flex items-center justify-between">
+          <code className="block overflow-x-auto text-xs p-2 bg-gray-100 rounded flex-grow">
+            GET /api/dynamic-items/schema/{schemaId}
+          </code>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => copyToClipboard(`GET /api/dynamic-items/schema/${schemaId}`, `schema-all-${schemaId}`)}
+            className="ml-2"
+          >
+            {copiedStates[`schema-all-${schemaId}`] ? <Check size={16} /> : <Copy size={16} />}
+          </Button>
+        </div>
+      </div>
+
       {items.length === 0 ? (
         <div className="text-center p-8 bg-gray-50 rounded-lg">
           <p className="text-gray-500">No items found for this schema.</p>
@@ -156,6 +191,24 @@ const DynamicItems = () => {
                       </div>
                     ))}
                   </dl>
+                </div>
+                <div className="mb-4 p-2 bg-gray-50 rounded border text-sm">
+                  <div className="flex items-center justify-between mb-1">
+                    <h3 className="font-medium text-gray-700">API Endpoint:</h3>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <code className="block overflow-x-auto text-xs p-2 bg-gray-100 rounded flex-grow">
+                      GET /api/dynamic-items/{item._id}
+                    </code>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => copyToClipboard(`GET /api/dynamic-items/${item._id}`, `item-${item._id}`)}
+                      className="ml-2"
+                    >
+                      {copiedStates[`item-${item._id}`] ? <Check size={16} /> : <Copy size={16} />}
+                    </Button>
+                  </div>
                 </div>
                 <div className="flex justify-end space-x-2">
                   <Link to={`/dynamic-items/edit/${item._id}`}>

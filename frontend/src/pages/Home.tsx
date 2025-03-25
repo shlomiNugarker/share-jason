@@ -540,7 +540,7 @@ const Home: React.FC = () => {
                 </Link>
               </div>
             ) : (
-              <Link to="/items" className="px-8 py-3 bg-white text-purple-900 rounded-lg font-semibold hover:bg-purple-100 transition duration-300 inline-flex items-center gap-2">
+              <Link to="/dashboard" className="px-8 py-3 bg-white text-purple-900 rounded-lg font-semibold hover:bg-purple-100 transition duration-300 inline-flex items-center gap-2">
                 {t("home.hero.dashboard_btn", "לאזור האישי")} <ArrowRight className="h-5 w-5" />
               </Link>
             )}
