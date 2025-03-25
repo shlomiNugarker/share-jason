@@ -12,7 +12,6 @@ const Home: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const { t } = useTranslation();
 
-  // אנימציה לאלמנטים בדף
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -34,7 +33,6 @@ const Home: React.FC = () => {
     }
   };
 
-  // פיצ'רים של האפליקציה
   const features = [
     {
       title: t("home.features.sharing.title", "שיתוף קל ונוח"),
@@ -58,7 +56,6 @@ const Home: React.FC = () => {
     }
   ];
 
-  // מקטע עם מידע על האפליקציה
   const infoSection = [
     {
       title: t("home.info.what.title", "מה זה ShareJSON?"),
@@ -77,14 +74,12 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      {/* תפריט עליון מותאם לדף הבית */}
       <header className="absolute top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <LanguageToggle />
           </div>
           
-          {/* תפריט למובייל */}
           <div className="md:hidden relative">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
@@ -103,7 +98,7 @@ const Home: React.FC = () => {
                 {isAuthenticated ? (
                   <>
                     <Link
-                      to="/items"
+                      to="/dashboard"
                       className="block px-4 py-2 hover:bg-gray-100 transition-colors"
                       onClick={() => setMenuOpen(false)}
                     >
@@ -138,12 +133,11 @@ const Home: React.FC = () => {
             )}
           </div>
           
-          {/* תפריט למסכים גדולים */}
           <div className="hidden md:flex items-center gap-4">
             {isAuthenticated ? (
               <>
                 <Link
-                  to="/items"
+                  to="/dashboard"
                   className="px-4 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
                 >
                   {t("common.dashboard", "אזור אישי")}
@@ -176,7 +170,6 @@ const Home: React.FC = () => {
         </nav>
       </header>
 
-      {/* הרו סקשן - אזור כותרת ראשית ותמונה */}
       <section className="relative overflow-hidden bg-gradient-to-br from-purple-900 via-indigo-800 to-teal-700 text-white">
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
         <div className="absolute h-48 w-48 top-10 left-10 bg-purple-500 rounded-full filter blur-3xl opacity-20"></div>
@@ -218,7 +211,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
                 {isAuthenticated ? (
-                  <Link to="/items" className="px-8 py-3 bg-gradient-to-r from-purple-600 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:from-purple-700 hover:to-teal-600 transition duration-300 flex items-center gap-2">
+                  <Link to="/dashboard" className="px-8 py-3 bg-gradient-to-r from-purple-600 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:from-purple-700 hover:to-teal-600 transition duration-300 flex items-center gap-2">
                     {t("home.hero.dashboard_btn", "לאזור האישי")} <ArrowRight className="h-5 w-5" />
                   </Link>
                 ) : (
@@ -266,7 +259,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* סקשן של פיצ'רים */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6">
           <motion.div 
@@ -305,7 +297,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* סקשן מידע */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-12">
@@ -378,7 +369,6 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      {/* Call to Action */}
       <section className="py-16 bg-gradient-to-r from-purple-900 to-teal-800 text-white">
         <div className="container mx-auto px-6 text-center">
           <motion.div

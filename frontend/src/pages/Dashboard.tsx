@@ -3,11 +3,9 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
 import {
-  FileText,
-  Database,
   Users,
-  BarChart2,
   ArrowRight,
+  FileText,
 } from "lucide-react";
 
 const Card = ({
@@ -49,30 +47,18 @@ const Dashboard: React.FC = () => {
 
   const features = [
     {
-      title: t("common.butterfly_hosts", "פרפרים מארחים"),
-      description: t("common.butterfly_hosts_desc", "ניהול פרפרים מארחים במערכת"),
-      icon: <Database size={24} />,
-      link: "/butterfly-hosts",
-    },
-    {
-      title: t("common.items", "פריטים"),
-      description: t("common.items_desc", "ניהול פריטים ותוכן"),
-      icon: <FileText size={24} />,
-      link: "/items",
-    },
-    {
       title: t("admin.user_management", "ניהול משתמשים"),
       description: t("admin.user_management_desc", "ניהול משתמשים והרשאות"),
       icon: <Users size={24} />,
       link: "/admin/users",
     },
     {
-      title: t("common.statistics", "סטטיסטיקות"),
-      description: t("common.statistics_desc", "צפייה בסטטיסטיקות המערכת"),
-      icon: <BarChart2 size={24} />,
-      link: "/dashboard",
-      // link: "/statistics",
+      title: t("admin.schema_management", "ניהול סכמות"),
+      description: t("admin.schema_management_desc", "ניהול סכמות ושדות"),
+      icon: <FileText size={24} />,
+      link: "/schemas",
     },
+    
   ];
 
   return (

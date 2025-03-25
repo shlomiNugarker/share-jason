@@ -27,12 +27,6 @@ const Header = () => {
       icon: <Home className="w-4 h-4" />
     },
     {
-      label: "פריטים",
-      path: "/items",
-      roles: ["user", "admin"],
-      icon: <Layers className="w-4 h-4" />
-    },
-    {
       label: "סכמות",
       path: "/schemas",
       roles: ["user", "admin"],
