@@ -45,11 +45,6 @@ const Home: React.FC = () => {
       icon: <Database className="h-12 w-12 text-teal-600" />
     },
     {
-      title: t("home.features.butterfly.title", "פרפרים מארחים"),
-      description: t("home.features.butterfly.description", "תמוך בסביבת עבודה רב-משתמשית עם ניהול מארחים מתקדם"),
-      icon: <Globe className="h-12 w-12 text-blue-600" />
-    },
-    {
       title: t("home.features.security.title", "אבטחה ופרטיות"),
       description: t("home.features.security.description", "מערכת אבטחה חזקה המגינה על הנתונים שלך בכל עת"),
       icon: <Shield className="h-12 w-12 text-green-600" />
