@@ -6,7 +6,7 @@ import { DynamicSchema } from "@/services/dynamicSchema.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { Download, Copy, Check } from "lucide-react";
+import { Download, Copy, Check, ChevronLeft } from "lucide-react";
 
 const DynamicItems = () => {
   const { schemaId } = useParams<{ schemaId: string }>();
@@ -101,15 +101,17 @@ const DynamicItems = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center p-8">Loading...</div>;
+    return <div className="flex justify-center items-center min-h-[50vh]">
+      <div className="animate-pulse text-gray-500">Loading...</div>
+    </div>;
   }
 
   if (!schema) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="text-center p-8 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">Schema not found</p>
-          <Link to="/schemas" className="text-blue-500 hover:underline">
+      <div className="container mx-auto py-8 px-4">
+        <div className="text-center p-10 bg-gray-50 rounded-xl shadow-sm">
+          <p className="text-gray-500 mb-3">Schema not found</p>
+          <Link to="/schemas" className="text-blue-600 hover:text-blue-800 transition-colors">
             Back to schemas
           </Link>
         </div>
@@ -118,101 +120,100 @@ const DynamicItems = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
+    <div className="container mx-auto py-8 px-4 max-w-7xl">
+      <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-8 gap-4">
         <div>
-          <Link to="/schemas" className="text-blue-500 hover:underline mb-1 block">
-            ← Back to schemas
+          <Link to="/schemas" className="text-blue-600 hover:text-blue-800 transition-colors mb-2 inline-flex items-center gap-1 text-sm">
+            <ChevronLeft size={14} />
+            Back to schemas
           </Link>
-          <h1 className="text-2xl font-bold">{schema.name} Items</h1>
-          <p className="text-gray-600">{schema.description}</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">{schema.name} Items</h1>
+          <p className="text-gray-600 max-w-2xl">{schema.description}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-3 mt-4 md:mt-0">
           <Button 
             variant="outline" 
             onClick={handleDownloadJson}
             disabled={items.length === 0}
-            className="flex items-center gap-1"
+            className="flex items-center gap-1 h-10"
           >
             <Download size={16} />
             Download JSON
           </Button>
           <Link to={`/dynamic-items/new/${schemaId}`}>
-            <Button>Add New Item</Button>
+            <Button className="h-10">Add New Item</Button>
           </Link>
         </div>
       </div>
 
-      <div className="mb-6 p-2 bg-gray-50 rounded border text-sm">
-        <div className="flex items-center justify-between mb-1">
-          <h3 className="font-medium text-gray-700">API Endpoint for all {schema.name} items:</h3>
+      <div className="mb-8 p-4 bg-white rounded-lg shadow-sm border border-gray-200 text-sm">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-semibold text-gray-800">API Endpoint for all {schema.name} items</h3>
         </div>
         <div className="flex items-center justify-between">
-          <code className="block overflow-x-auto text-xs p-2 bg-gray-100 rounded flex-grow">
+          <code className="block overflow-x-auto text-xs p-3 bg-gray-50 rounded-md border-gray-100 border flex-grow font-mono text-gray-800">
             GET /api/dynamic-items/schema/{schemaId}
           </code>
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => copyToClipboard(`GET /api/dynamic-items/schema/${schemaId}`, `schema-all-${schemaId}`)}
-            className="ml-2"
+            className="ml-2 text-gray-600 hover:text-gray-900"
           >
-            {copiedStates[`schema-all-${schemaId}`] ? <Check size={16} /> : <Copy size={16} />}
+            {copiedStates[`schema-all-${schemaId}`] ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
           </Button>
         </div>
       </div>
 
       {items.length === 0 ? (
-        <div className="text-center p-8 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">No items found for this schema.</p>
-          <p className="mt-2">
-            <Link to={`/dynamic-items/new/${schemaId}`} className="text-blue-500 hover:underline">
-              Create your first item
-            </Link>
-          </p>
+        <div className="text-center p-10 bg-white rounded-xl shadow-sm border border-gray-100">
+          <p className="text-gray-500 mb-3">No items found for this schema.</p>
+          <Link to={`/dynamic-items/new/${schemaId}`} className="text-blue-600 hover:text-blue-800 transition-colors">
+            Create your first item
+          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item) => (
-            <Card key={item._id}>
-              <CardHeader>
-                <CardTitle>{item.name}</CardTitle>
+            <Card key={item._id} className="border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader className="pb-3 border-b border-gray-100">
+                <CardTitle className="text-xl text-gray-900">{item.name}</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="mb-4">
-                  <h3 className="font-medium mb-2">Data:</h3>
-                  <dl className="grid grid-cols-2 gap-x-4 gap-y-2">
+              <CardContent className="pt-4">
+                <div className="mb-5">
+                  <h3 className="font-semibold mb-3 text-gray-800 text-sm">Data:</h3>
+                  <dl className="grid grid-cols-1 gap-y-3">
                     {schema.fields.map((field) => (
-                      <div key={field.name} className="col-span-2 sm:grid sm:grid-cols-3">
-                        <dt className="font-medium text-gray-700">{field.name}:</dt>
-                        <dd className="text-gray-900 sm:col-span-2">
+                      <div key={field.name} className="grid grid-cols-3 gap-2">
+                        <dt className="font-medium text-gray-600 text-sm col-span-1">{field.name}:</dt>
+                        <dd className="text-gray-900 col-span-2">
                           {renderFieldValue(item.data[field.name], field.type)}
                         </dd>
                       </div>
                     ))}
                   </dl>
                 </div>
-                <div className="mb-4 p-2 bg-gray-50 rounded border text-sm">
-                  <div className="flex items-center justify-between mb-1">
-                    <h3 className="font-medium text-gray-700">API Endpoint:</h3>
+                <div className="mb-5 p-3 bg-gray-50 rounded-md border border-gray-100">
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-gray-700 text-xs">API Endpoint</h3>
                   </div>
                   <div className="flex items-center justify-between">
-                    <code className="block overflow-x-auto text-xs p-2 bg-gray-100 rounded flex-grow">
+                    <code className="block overflow-x-auto text-xs py-2 px-3 bg-white rounded-md border border-gray-100 flex-grow font-mono text-gray-800">
                       GET /api/dynamic-items/{item._id}
                     </code>
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       onClick={() => copyToClipboard(`GET /api/dynamic-items/${item._id}`, `item-${item._id}`)}
-                      className="ml-2"
+                      className="ml-2 text-gray-600 hover:text-gray-900"
                     >
-                      {copiedStates[`item-${item._id}`] ? <Check size={16} /> : <Copy size={16} />}
+                      {copiedStates[`item-${item._id}`] ? <Check size={16} className="text-green-600" /> : <Copy size={16} />}
                     </Button>
                   </div>
                 </div>
-                <div className="flex justify-end space-x-2">
+                <div className="flex justify-end gap-3 pt-1">
                   <Link to={`/dynamic-items/edit/${item._id}`}>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" className="text-gray-700 hover:text-gray-900">
                       Edit
                     </Button>
                   </Link>
@@ -221,6 +222,7 @@ const DynamicItems = () => {
                       variant="destructive"
                       size="sm"
                       onClick={() => handleDelete(item._id)}
+                      className="bg-red-50 text-red-700 hover:bg-red-100 border border-red-200"
                     >
                       Delete
                     </Button>
