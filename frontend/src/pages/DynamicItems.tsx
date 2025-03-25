@@ -6,6 +6,7 @@ import { DynamicSchema } from "@/services/dynamicSchema.service";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Download } from "lucide-react";
 
 const DynamicItems = () => {
   const { schemaId } = useParams<{ schemaId: string }>();
@@ -52,6 +53,37 @@ const DynamicItems = () => {
     }
   };
 
+  const handleDownloadJson = () => {
+    try {
+      // Create a JSON string from the items
+      const jsonData = JSON.stringify(items, null, 2);
+      
+      // Create a blob with the JSON data
+      const blob = new Blob([jsonData], { type: "application/json" });
+      
+      // Create a URL for the blob
+      const url = URL.createObjectURL(blob);
+      
+      // Create a temporary download link
+      const downloadLink = document.createElement("a");
+      downloadLink.href = url;
+      downloadLink.download = `${schema?.name || "items"}-${new Date().toISOString().split("T")[0]}.json`;
+      
+      // Append to the document, click it, and remove it
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      
+      // Release the object URL
+      URL.revokeObjectURL(url);
+      
+      toast.success("JSON file downloaded successfully");
+    } catch (error) {
+      console.error("Failed to download JSON:", error);
+      toast.error("Failed to download JSON");
+    }
+  };
+
   if (loading) {
     return <div className="flex justify-center p-8">Loading...</div>;
   }
@@ -79,9 +111,20 @@ const DynamicItems = () => {
           <h1 className="text-2xl font-bold">{schema.name} Items</h1>
           <p className="text-gray-600">{schema.description}</p>
         </div>
-        <Link to={`/dynamic-items/new/${schemaId}`}>
-          <Button>Add New Item</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={handleDownloadJson}
+            disabled={items.length === 0}
+            className="flex items-center gap-1"
+          >
+            <Download size={16} />
+            Download JSON
+          </Button>
+          <Link to={`/dynamic-items/new/${schemaId}`}>
+            <Button>Add New Item</Button>
+          </Link>
+        </div>
       </div>
 
       {items.length === 0 ? (
