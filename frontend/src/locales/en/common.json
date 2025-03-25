@@ -114,18 +114,18 @@
     },
     "features": {
       "title": "Our Features",
-      "description": "With ShareJSON, managing and sharing JSON files becomes simple and intuitive. The application offers a variety of groundbreaking features.",
+      "description": "With ShareJSON, managing and sharing JSON files becomes simple and intuitive. The application offers a variety of groundbreaking features for efficient and secure data management.",
       "editing": "Advanced JSON Editing",
       "api": "Remote Access API",
       "sharing": {
         "title": "Easy Sharing",
         "short": "File Sharing",
-        "description": "Share your files easily with the world, simple and effortless"
+        "description": "Share your files easily with the world, simple and effortless. Link sharing, advanced permissions and various access levels"
       },
       "schemas": {
         "title": "Schema Management",
         "short": "Custom Schemas",
-        "description": "Create and edit structured JSON schemas for your data, maintain consistent structure"
+        "description": "Create and edit structured JSON schemas for your data, maintain consistent structure, automatically validate data integrity"
       },
       "butterfly": {
         "title": "Butterfly Hosts",
@@ -135,17 +135,22 @@
       "security": {
         "title": "Security & Privacy",
         "short": "Advanced Security",
-        "description": "Strong security system protecting your data at all times"
+        "description": "Strong security system protecting your data at all times, advanced encryption and detailed access control"
+      },
+      "api": {
+        "title": "Advanced API",
+        "short": "API Access",
+        "description": "Full access to your data through an advanced API interface, simple integration with existing systems and remote management"
       }
     },
     "info": {
       "what": {
         "title": "What is ShareJSON?",
-        "content": "ShareJSON is an innovative platform for sharing and storing JSON files. The application allows developers and system administrators to manage, store, and share data in JSON format in an easy and convenient way."
+        "content": "ShareJSON is an innovative platform for sharing and storing JSON files. The application allows developers and system administrators to manage, store, and share data in JSON format in an easy and convenient way. With advanced tools for editing, validating, and visualizing data, ShareJSON makes working with JSON simpler than ever."
       },
       "who": {
         "title": "Who is it for?",
-        "content": "The application is designed for developers, system administrators, QA teams, and anyone who works with JSON files. Through the user-friendly interface, even non-technical users can enjoy the benefits of structured data management."
+        "content": "The application is designed for developers, system administrators, QA teams, and anyone who works with JSON files. Through the user-friendly interface, even non-technical users can enjoy the benefits of structured data management. Development teams can share test data, API schemas, and data structures in a simple and clear way."
       },
       "join_now": "Join Today"
     },
@@ -154,11 +159,39 @@
       "quote1": "\"Dramatically improved my workflow\"",
       "author1": "John D. - Full Stack Developer",
       "quote2": "\"The schema management saved us so much time\"",
-      "author2": "Sarah M. - Product Manager"
+      "author2": "Sarah M. - Product Manager",
+      "quote3": "\"The API is simple to use and gives us great flexibility\"",
+      "author3": "Daniel K. - Software Architect"
+    },
+    "useCases": {
+      "title": "Common Use Cases",
+      "description": "Discover how ShareJSON can improve workflows in your organization and make data management easier",
+      "api": {
+        "title": "API Development",
+        "content": "Store and share API schemas, response examples, and configuration adjustments between development teams"
+      },
+      "config": {
+        "title": "Configuration Management",
+        "content": "Save, version, and share configuration files between different development environments"
+      },
+      "data": {
+        "title": "Test Data Management",
+        "content": "Store and share test data in JSON format for use in QA and development processes"
+      }
+    },
+    "api": {
+      "title": "Powerful and Simple API",
+      "description": "Full access to your data through a well-documented API interface. Enable simple integration with other services and tools.",
+      "documentation": "View API Documentation",
+      "feature1": "Simple integration with RESTful API",
+      "feature2": "SDK support for leading programming languages",
+      "feature3": "Advanced access permissions",
+      "feature4": "Comprehensive and automatic API documentation",
+      "feature5": "Version and change management"
     },
     "cta": {
       "title": "Ready to Get Started?",
-      "description": "Join the JSON revolution and improve your data management today.",
+      "description": "Join the JSON revolution and improve your data management today. Start for free and upgrade according to your needs.",
       "register_now": "Register Now"
     },
     "creator": "Your Team"

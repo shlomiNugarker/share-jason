@@ -36,30 +36,58 @@ const Home: React.FC = () => {
   const features = [
     {
       title: t("home.features.sharing.title", "שיתוף קל ונוח"),
-      description: t("home.features.sharing.description", "שתף את הקבצים שלך בקלות עם כל העולם, פשוט וללא מאמץ"),
+      description: t("home.features.sharing.description", "שתף את הקבצים שלך בקלות עם כל העולם, פשוט וללא מאמץ. שיתוף באמצעות לינק, הרשאות מתקדמות וגישות שונות"),
       icon: <Share2 className="h-12 w-12 text-purple-600" />
     },
     {
       title: t("home.features.schemas.title", "ניהול סכמות"),
-      description: t("home.features.schemas.description", "צור וערוך סכמות JSON מובנות לנתונים שלך, שמור על מבנה אחיד"),
+      description: t("home.features.schemas.description", "צור וערוך סכמות JSON מובנות לנתונים שלך, שמור על מבנה אחיד, וודא תקינות הנתונים באופן אוטומטי"),
       icon: <Database className="h-12 w-12 text-teal-600" />
     },
     {
       title: t("home.features.security.title", "אבטחה ופרטיות"),
-      description: t("home.features.security.description", "מערכת אבטחה חזקה המגינה על הנתונים שלך בכל עת"),
+      description: t("home.features.security.description", "מערכת אבטחה חזקה המגינה על הנתונים שלך בכל עת, הצפנה מתקדמת ובקרת גישה מפורטת"),
       icon: <Shield className="h-12 w-12 text-green-600" />
+    },
+    {
+      title: t("home.features.api.title", "API מתקדם"),
+      description: t("home.features.api.description", "גישה מלאה לנתונים דרך ממשק API מתקדם, אינטגרציה פשוטה למערכות קיימות וניהול מרחוק"),
+      icon: <Globe className="h-12 w-12 text-blue-600" />
     }
   ];
 
   const infoSection = [
     {
       title: t("home.info.what.title", "מה זה ShareJSON?"),
-      content: t("home.info.what.content", "ShareJSON הוא פלטפורמה חדשנית לשיתוף ואחסון קבצי JSON. האפליקציה מאפשרת למפתחים ומנהלי מערכות לנהל, לאחסן ולשתף נתונים בפורמט JSON בצורה קלה ונוחה.")
+      content: t("home.info.what.content", "ShareJSON הוא פלטפורמה חדשנית לשיתוף ואחסון קבצי JSON. האפליקציה מאפשרת למפתחים ומנהלי מערכות לנהל, לאחסן ולשתף נתונים בפורמט JSON בצורה קלה ונוחה. עם כלים מתקדמים לעריכה, תיקוף ותצוגה של הנתונים, ShareJSON הופך את העבודה עם JSON לפשוטה מתמיד.")
     },
     {
       title: t("home.info.who.title", "למי זה מתאים?"),
-      content: t("home.info.who.content", "האפליקציה מיועדת למפתחים, מנהלי מערכות, צוותי QA ולכל מי שעובד עם קבצי JSON. באמצעות הממשק הידידותי, גם משתמשים שאינם טכניים יכולים ליהנות מהיתרונות של ניהול נתונים מובנה.")
+      content: t("home.info.who.content", "האפליקציה מיועדת למפתחים, מנהלי מערכות, צוותי QA ולכל מי שעובד עם קבצי JSON. באמצעות הממשק הידידותי, גם משתמשים שאינם טכניים יכולים ליהנות מהיתרונות של ניהול נתונים מובנה. צוותי פיתוח יוכלו לשתף נתוני בדיקה, סכמות API ומבני נתונים בצורה פשוטה וברורה.")
     }
+  ];
+
+  const useCases = [
+    {
+      title: t("home.useCases.api.title", "פיתוח API"),
+      content: t("home.useCases.api.content", "שמירה ושיתוף של סכמות API, דוגמאות תגובה והתאמות קונפיגורציה בין צוותי פיתוח")
+    },
+    {
+      title: t("home.useCases.config.title", "ניהול קונפיגורציה"),
+      content: t("home.useCases.config.content", "שמירה, גרסאות ושיתוף של קבצי קונפיגורציה בין סביבות פיתוח שונות")
+    },
+    {
+      title: t("home.useCases.data.title", "ניהול נתוני בדיקות"),
+      content: t("home.useCases.data.content", "אחסון ושיתוף של נתוני בדיקה בפורמט JSON לשימוש בתהליכי QA ופיתוח")
+    }
+  ];
+
+  const apiFeatures = [
+    t("home.api.feature1", "אינטגרציה פשוטה עם RESTful API"),
+    t("home.api.feature2", "תמיכה ב-SDK לשפות תכנות מובילות"),
+    t("home.api.feature3", "הרשאות גישה מתקדמות"),
+    t("home.api.feature4", "תיעוד API אוטומטי ומקיף"),
+    t("home.api.feature5", "ניהול גרסאות ושינויים"),
   ];
 
   const handleLogout = () => {
@@ -266,7 +294,7 @@ const Home: React.FC = () => {
               {t("home.features.title", "הפיצ'רים שלנו")}
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              {t("home.features.description", "עם ShareJSON, ניהול ושיתוף קבצי JSON הופך לפשוט ואינטואיטיבי. האפליקציה מציעה מגוון תכונות פורצות דרך.")}
+              {t("home.features.description", "עם ShareJSON, ניהול ושיתוף קבצי JSON הופך לפשוט ואינטואיטיבי. האפליקציה מציעה מגוון תכונות פורצות דרך לניהול נתונים יעיל ובטוח.")}
             </p>
           </motion.div>
           
@@ -356,8 +384,133 @@ const Home: React.FC = () => {
                         <p className="text-sm text-gray-500">{t("home.testimonials.author2", "רונית ל. - מנהלת מוצר")}</p>
                       </div>
                     </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center">
+                        <span className="font-bold text-blue-700">ד</span>
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900">{t("home.testimonials.quote3", "״ה-API פשוט לשימוש ומאפשר לנו גמישות רבה״")}</p>
+                        <p className="text-sm text-gray-500">{t("home.testimonials.author3", "דני מ. - ארכיטקט תוכנה")}</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ y: 50, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              {t("home.useCases.title", "שימושים נפוצים")}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {t("home.useCases.description", "גלה כיצד ShareJSON יכול לשפר את תהליכי העבודה בארגון שלך ולהפוך את ניהול הנתונים לפשוט יותר")}
+            </p>
+          </motion.div>
+          
+          <motion.div 
+            className="grid md:grid-cols-3 gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+          >
+            {useCases.map((useCase, index) => (
+              <motion.div 
+                key={index}
+                className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-purple-500"
+                variants={itemVariants}
+              >
+                <h3 className="text-xl font-bold text-gray-900 mb-3">{useCase.title}</h3>
+                <p className="text-gray-600">{useCase.content}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col lg:flex-row items-center gap-12">
+            <motion.div 
+              className="lg:w-1/2"
+              initial={{ x: -50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                {t("home.api.title", "API חזק ופשוט לשימוש")}
+              </h2>
+              <p className="text-lg text-purple-200 mb-8">
+                {t("home.api.description", "גישה מלאה לנתונים שלך דרך ממשק API מתועד היטב. אפשר אינטגרציה פשוטה עם שירותים וכלים אחרים.")}
+              </p>
+              
+              <ul className="space-y-4 mb-8">
+                {apiFeatures.map((feature, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <div className="mt-1 bg-purple-500/20 p-1 rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+              
+              <Link 
+                to="/docs/api" 
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-900 rounded-lg font-semibold hover:bg-purple-100 transition duration-300"
+              >
+                {t("home.api.documentation", "צפה בתיעוד ה-API")} <ArrowRight className="h-5 w-5" />
+              </Link>
+            </motion.div>
+            
+            <motion.div 
+              className="lg:w-1/2"
+              initial={{ x: 50, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <div className="bg-black/30 backdrop-blur-sm border border-white/10 p-6 rounded-xl shadow-xl">
+                <div className="flex items-center gap-2 border-b border-white/10 pb-3 mb-4">
+                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <div className="text-xs text-gray-400 ml-2">Terminal</div>
+                </div>
+                <pre className="text-xs sm:text-sm overflow-x-auto text-green-400">
+{`$ curl -X GET "https://api.sharejson.com/v1/items/12345" \\
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+{
+  "id": "12345",
+  "name": "config.json",
+  "content": {
+    "apiVersion": "v1",
+    "environment": "production",
+    "features": {
+      "darkMode": true,
+      "analytics": true
+    }
+  },
+  "schema": "https://sharejson.com/schemas/config",
+  "created_at": "2023-06-15T10:30:00Z",
+  "updated_at": "2023-06-18T14:22:33Z"
+}`}
+                </pre>
               </div>
             </motion.div>
           </div>
@@ -374,7 +527,7 @@ const Home: React.FC = () => {
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("home.cta.title", "מוכנים להתחיל?")}</h2>
             <p className="text-lg md:text-xl text-purple-200 max-w-2xl mx-auto mb-8">
-              {t("home.cta.description", "הצטרפו למהפכת ה-JSON ושפרו את ניהול הנתונים שלכם כבר היום.")}
+              {t("home.cta.description", "הצטרפו למהפכת ה-JSON ושפרו את ניהול הנתונים שלכם כבר היום. התחילו בחינם ושדרגו בהתאם לצרכים שלכם.")}
             </p>
             
             {!isAuthenticated ? (
