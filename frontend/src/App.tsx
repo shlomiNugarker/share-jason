@@ -9,15 +9,11 @@ import { useTranslation } from "react-i18next";
 import { useEffect } from "react";
 import AdminUsers from "./pages/AdminUsers";
 import Home from "./pages/Home";
-import Items from "./pages/Items";
-import ItemForm from "./pages/ItemForm";
-import ItemDetails from "./pages/ItemDetails";
 import Schemas from "./pages/Schemas";
 import SchemaForm from "./pages/SchemaForm";
 import DynamicItems from "./pages/DynamicItems";
 import DynamicItemForm from "./pages/DynamicItemForm";
 import DynamicItemDetail from "./pages/DynamicItemDetail";
-import ButterflyHosts from "./pages/ButterflyHosts";
 
 const AppRoutes = () => {
   const { i18n } = useTranslation();
@@ -31,37 +27,21 @@ const AppRoutes = () => {
   
   return (
     <Routes>
-      {/* ציבורי - דפים נגישים ללא התחברות */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/unauthorized" element={<Unauthorized />} />
-
-      {/* כל העמודים עם Layout משותף */}
       <Route element={<Layout />}>
-        {/* דף הבית - נגיש לכולם */}
         <Route path="/" element={<Home />} />
         
-        {/* משתמשים מחוברים - תוכן כללי */}
-        <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>
-          {/* תצוגת נתונים ופריטים רגילים */}
-          <Route path="/items" element={<Items />} />
-          <Route path="/items/new" element={<ItemForm />} />
-          <Route path="/items/edit/:id" element={<ItemForm />} />
-          <Route path="/items/view/:id" element={<ItemDetails />} />
-          <Route path="/items/:id" element={<ItemDetails />} />
-          
-          {/* סכמות ופריטים דינמיים */}
+
+         <Route element={<ProtectedRoute allowedRoles={["user", "admin"]} />}>          
           <Route path="/schemas" element={<Schemas />} />
           <Route path="/dynamic-items/schema/:schemaId" element={<DynamicItems />} />
           <Route path="/dynamic-items/new/:schemaId" element={<DynamicItemForm />} />
           <Route path="/dynamic-items/edit/:id" element={<DynamicItemForm />} />
           <Route path="/dynamic-items/:id" element={<DynamicItemDetail />} />
-          
-          {/* פרפרים מארחים */}
-          <Route path="/butterfly-hosts" element={<ButterflyHosts />} />
         </Route>
 
-        {/* עמודי מנהל בלבד */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/admin/users" element={<AdminUsers />} />

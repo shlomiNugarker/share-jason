@@ -8,12 +8,9 @@ import { connectDB } from "./src/database/db";
 import { config } from "./src/config";
 import userRoutes from "./src/routes/user.routes";
 import authRoutes from "./src/routes/auth.routes";
-import itemRoutes from "./src/routes/item.routes";
 import dynamicSchemaRoutes from "./src/routes/dynamicSchema.routes";
 import dynamicItemRoutes from "./src/routes/dynamicItem.routes";
 import uploadRoutes from "./src/routes/upload.routes";
-import butterflyHostRoutes from "./src/routes/butterflyHost.routes";
-import { addNewHosts, runAddNewHosts } from "./create-new-hosts";
 
 dotenv.config();
 
@@ -43,11 +40,9 @@ app.use(cors(corsOptions));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/items", itemRoutes);
 app.use("/api/schemas", dynamicSchemaRoutes);
 app.use("/api/dynamic-items", dynamicItemRoutes);
 app.use("/api/upload", uploadRoutes);
-app.use("/api/butterfly-hosts", butterflyHostRoutes);
 
 app.use(express.static(path.join(__dirname, "public")));
 

@@ -5,7 +5,7 @@ import {
   NavigationMenuList,
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
-import { Menu, X, LogOut, User, Home, Database, Globe, Layers } from "lucide-react";
+import { Menu, X, LogOut, User, Home, Database, Layers } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageToggle } from "./LanguageToggle";
 import { useAuth } from "@/context/AuthContext";
@@ -37,12 +37,6 @@ const Header = () => {
       path: "/schemas",
       roles: ["user", "admin"],
       icon: <Database className="w-4 h-4" />
-    },
-    {
-      label: "פרפרים מארחים",
-      path: "/butterfly-hosts",
-      roles: ["user", "admin"],
-      icon: <Globe className="w-4 h-4" />
     },
     {
       label: "ניהול מערכת",
