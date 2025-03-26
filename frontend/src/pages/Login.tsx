@@ -6,7 +6,7 @@ import { authService } from "@/services/auth.service";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("test@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
