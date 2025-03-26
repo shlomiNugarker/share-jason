@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { useTheme } from "@/context/ThemeContext";
+import { Label } from "@/components/ui/label";
 
 interface SchemaFormData {
   name: string;
@@ -16,6 +18,8 @@ const SchemaForm = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = Boolean(id);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   const [formData, setFormData] = useState<SchemaFormData>({
     name: "",
@@ -115,21 +119,25 @@ const SchemaForm = () => {
   };
 
   if (fetchLoading) {
-    return <div className="flex justify-center p-8">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-[60vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
     <div className="container mx-auto p-4 max-w-3xl">
-      <Card>
+      <Card className="border-border bg-card text-card-foreground">
         <CardHeader>
           <CardTitle>{isEditMode ? "Edit Schema" : "Create New Schema"}</CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium mb-1">
+              <Label htmlFor="name" className="mb-1">
                 Schema Name *
-              </label>
+              </Label>
               <Input
                 id="name"
                 name="name"
@@ -138,13 +146,14 @@ const SchemaForm = () => {
                 required
                 disabled={loading}
                 placeholder="e.g. Product, Customer, Project"
+                className="bg-background border-input"
               />
             </div>
 
             <div>
-              <label htmlFor="description" className="block text-sm font-medium mb-1">
+              <Label htmlFor="description" className="mb-1">
                 Description *
-              </label>
+              </Label>
               <textarea
                 id="description"
                 name="description"
@@ -152,7 +161,7 @@ const SchemaForm = () => {
                 onChange={handleChange}
                 required
                 disabled={loading}
-                className="w-full min-h-[100px] p-2 border rounded-md"
+                className="w-full min-h-[100px] p-2 border rounded-md bg-background border-input text-foreground"
                 placeholder="Describe what this schema will be used for"
               />
             </div>
@@ -172,7 +181,12 @@ const SchemaForm = () => {
               </div>
               
               {formData.fields.map((field, index) => (
-                <div key={index} className="p-4 border rounded-md mb-4 bg-gray-50">
+                <div 
+                  key={index} 
+                  className={`p-4 border border-border rounded-md mb-4 ${
+                    isDark ? 'bg-muted/30' : 'bg-gray-50'
+                  }`}
+                >
                   <div className="flex justify-between items-center mb-2">
                     <h4 className="font-medium">Field #{index + 1}</h4>
                     <Button
@@ -187,9 +201,9 @@ const SchemaForm = () => {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label htmlFor={`field-name-${index}`} className="block text-sm font-medium mb-1">
+                      <Label htmlFor={`field-name-${index}`} className="mb-1">
                         Field Name *
-                      </label>
+                      </Label>
                       <Input
                         id={`field-name-${index}`}
                         value={field.name}
@@ -197,18 +211,21 @@ const SchemaForm = () => {
                         required
                         disabled={loading}
                         placeholder="e.g. title, price, date"
+                        className="bg-background border-input"
                       />
                     </div>
                     <div>
-                      <label htmlFor={`field-type-${index}`} className="block text-sm font-medium mb-1">
+                      <Label htmlFor={`field-type-${index}`} className="mb-1">
                         Field Type *
-                      </label>
+                      </Label>
                       <select
                         id={`field-type-${index}`}
                         value={field.type}
                         onChange={(e) => handleFieldChange(index, "type", e.target.value)}
                         disabled={loading}
-                        className="w-full p-2 border rounded-md"
+                        className={`w-full p-2 border border-input rounded-md ${
+                          isDark ? 'bg-background text-foreground' : 'bg-white text-gray-900'
+                        }`}
                       >
                         <option value="string">String</option>
                         <option value="number">Number</option>
@@ -218,16 +235,25 @@ const SchemaForm = () => {
                       </select>
                     </div>
                   </div>
-                  <div className="mt-2">
-                    <label className="flex items-center space-x-2">
+                  <div className="mt-2 flex items-center space-x-2">
+                    <div className="relative flex items-center">
                       <input
+                        id={`required-field-${index}`}
                         type="checkbox"
                         checked={field.required}
                         onChange={(e) => handleFieldChange(index, "required", e.target.checked)}
                         disabled={loading}
+                        className={`h-4 w-4 rounded border-input ${
+                          isDark ? 'accent-primary' : 'accent-primary'
+                        }`}
                       />
-                      <span className="text-sm">Required field</span>
-                    </label>
+                    </div>
+                    <Label 
+                      htmlFor={`required-field-${index}`}
+                      className="text-sm font-normal cursor-pointer"
+                    >
+                      Required field
+                    </Label>
                   </div>
                 </div>
               ))}
