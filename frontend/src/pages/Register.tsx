@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslation } from "react-i18next";
-
 import { User, Mail, Key, Lock } from "lucide-react";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { useTheme } from "@/context/ThemeContext";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
@@ -15,6 +16,8 @@ const Register: React.FC = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
   const { t } = useTranslation();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,7 +48,7 @@ const Register: React.FC = () => {
       value: name,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value),
       placeholder: t("auth.name"),
-      icon: <User className="h-5 w-5 text-gray-400" />,
+      icon: <User className={`h-5 w-5 ${isDark ? 'text-[#8b949e]' : 'text-gray-400'}`} />,
       required: true
     },
     {
@@ -53,7 +56,7 @@ const Register: React.FC = () => {
       value: email,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value),
       placeholder: t("auth.email"),
-      icon: <Mail className="h-5 w-5 text-gray-400" />,
+      icon: <Mail className={`h-5 w-5 ${isDark ? 'text-[#8b949e]' : 'text-gray-400'}`} />,
       required: true
     },
     {
@@ -61,7 +64,7 @@ const Register: React.FC = () => {
       value: password,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value),
       placeholder: t("auth.password"),
-      icon: <Key className="h-5 w-5 text-gray-400" />,
+      icon: <Key className={`h-5 w-5 ${isDark ? 'text-[#8b949e]' : 'text-gray-400'}`} />,
       required: true
     },
     {
@@ -69,25 +72,38 @@ const Register: React.FC = () => {
       value: confirmPassword,
       onChange: (e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value),
       placeholder: t("auth.confirm_password"),
-      icon: <Lock className="h-5 w-5 text-gray-400" />,
+      icon: <Lock className={`h-5 w-5 ${isDark ? 'text-[#8b949e]' : 'text-gray-400'}`} />,
       required: true
     }
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-indigo-800 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-2xl">
+    <div className={`min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 ${
+      isDark ? 'bg-[#0d1117] text-[#c9d1d9]' : 'bg-gradient-to-br from-purple-600 to-indigo-800'
+    }`}>
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      <div className={`max-w-md w-full space-y-8 p-8 rounded-xl shadow-md ${
+        isDark ? 'bg-[#161b22] border border-[#30363d]' : 'bg-white'
+      }`}>
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className={`mt-6 text-center text-3xl font-extrabold ${
+            isDark ? 'text-[#c9d1d9]' : 'text-gray-900'
+          }`}>
             {t("auth.register")}
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className={`mt-2 text-center text-sm ${
+            isDark ? 'text-[#8b949e]' : 'text-gray-600'
+          }`}>
             {t("auth.create_account")}
           </p>
         </div>
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative">
+            <div className={`rounded-md p-4 ${
+              isDark ? 'bg-[#b62324]/20 border border-[#f85149]/40 text-[#f85149]' : 'bg-red-50 border border-red-200 text-red-700'
+            }`}>
               {error}
             </div>
           )}
@@ -106,10 +122,17 @@ const Register: React.FC = () => {
                     name={field.placeholder}
                     type={field.type}
                     required={field.required}
-                    className="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    className={`appearance-none rounded-none relative block w-full px-3 py-3 border ${
+                      isDark 
+                        ? 'bg-[#0d1117] border-[#30363d] text-[#c9d1d9] placeholder-[#8b949e] focus:ring-[#2188ff] focus:border-[#2188ff]' 
+                        : 'border-gray-300 placeholder-gray-500 text-gray-900 focus:ring-indigo-500 focus:border-indigo-500'
+                    } focus:outline-none focus:z-10 ${
+                      index === 0 ? 'rounded-t-md' : index === inputFields.length - 1 ? 'rounded-b-md' : ''
+                    }`}
                     placeholder={field.placeholder}
                     value={field.value}
                     onChange={field.onChange}
+                    dir="ltr"
                   />
                 </div>
               </div>
@@ -120,7 +143,13 @@ const Register: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-150 disabled:opacity-70"
+              className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white ${
+                isDark 
+                  ? 'bg-[#238636] hover:bg-[#2ea043] focus:ring-[#238636]' 
+                  : 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500'
+              } focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-150 ${
+                loading ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
               {loading ? (
                 <>
@@ -156,7 +185,9 @@ const Register: React.FC = () => {
             <div className="text-sm">
               <Link
                 to="/login"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
+                className={`font-medium ${
+                  isDark ? 'text-[#58a6ff] hover:text-[#58a6ff]/90' : 'text-indigo-600 hover:text-indigo-500'
+                }`}
               >
                 {t("auth.already_have_account")}
               </Link>

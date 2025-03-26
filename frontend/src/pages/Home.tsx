@@ -4,13 +4,17 @@ import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
 import { ArrowRight, Database, Share2, Users, Shield, Globe, Menu, X, LogOut } from "lucide-react";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/context/ThemeContext";
 
 const Home: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const { t } = useTranslation();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -37,22 +41,22 @@ const Home: React.FC = () => {
     {
       title: t("home.features.sharing.title", "שיתוף קל ונוח"),
       description: t("home.features.sharing.description", "שתף את הקבצים שלך בקלות עם כל העולם, פשוט וללא מאמץ. שיתוף באמצעות לינק, הרשאות מתקדמות וגישות שונות"),
-      icon: <Share2 className="h-12 w-12 text-purple-600" />
+      icon: <Share2 className="h-12 w-12 text-primary" />
     },
     {
       title: t("home.features.schemas.title", "ניהול סכמות"),
       description: t("home.features.schemas.description", "צור וערוך סכמות JSON מובנות לנתונים שלך, שמור על מבנה אחיד, וודא תקינות הנתונים באופן אוטומטי"),
-      icon: <Database className="h-12 w-12 text-teal-600" />
+      icon: <Database className="h-12 w-12 text-secondary" />
     },
     {
       title: t("home.features.security.title", "אבטחה ופרטיות"),
       description: t("home.features.security.description", "מערכת אבטחה חזקה המגינה על הנתונים שלך בכל עת, הצפנה מתקדמת ובקרת גישה מפורטת"),
-      icon: <Shield className="h-12 w-12 text-green-600" />
+      icon: <Shield className="h-12 w-12 text-success" />
     },
     {
       title: t("home.features.api.title", "API מתקדם"),
       description: t("home.features.api.description", "גישה מלאה לנתונים דרך ממשק API מתקדם, אינטגרציה פשוטה למערכות קיימות וניהול מרחוק"),
-      icon: <Globe className="h-12 w-12 text-blue-600" />
+      icon: <Globe className="h-12 w-12 text-primary-400" />
     }
   ];
 
@@ -96,17 +100,18 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
       <header className="absolute top-0 left-0 right-0 z-50">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <LanguageToggle />
+            <ThemeToggle />
           </div>
           
           <div className="md:hidden relative">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors text-white"
+              className="p-2 rounded-full bg-accent hover:bg-accent/80 transition-colors"
               aria-label={t("common.menu", "תפריט")}
             >
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -116,20 +121,20 @@ const Home: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="absolute top-12 right-0 bg-white shadow-lg rounded-lg py-2 w-48"
+                className="absolute top-12 right-0 bg-card border border-border text-card-foreground shadow-lg rounded-lg py-2 w-48"
               >
                 {isAuthenticated ? (
                   <>
                     <Link
                       to="/dashboard"
-                      className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                      className="block px-4 py-2 hover:bg-accent/10 transition-colors"
                       onClick={() => setMenuOpen(false)}
                     >
                       {t("common.dashboard", "אזור אישי")}
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="block w-full text-right px-4 py-2 hover:bg-gray-100 transition-colors text-red-600"
+                      className="block w-full text-right px-4 py-2 hover:bg-accent/10 text-destructive transition-colors"
                     >
                       {t("auth.logout", "התנתקות")}
                     </button>
@@ -138,14 +143,14 @@ const Home: React.FC = () => {
                   <>
                     <Link
                       to="/login"
-                      className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                      className="block px-4 py-2 hover:bg-accent/10 transition-colors"
                       onClick={() => setMenuOpen(false)}
                     >
                       {t("auth.login", "התחברות")}
                     </Link>
                     <Link
                       to="/register"
-                      className="block px-4 py-2 hover:bg-gray-100 transition-colors"
+                      className="block px-4 py-2 hover:bg-accent/10 transition-colors"
                       onClick={() => setMenuOpen(false)}
                     >
                       {t("auth.register", "הרשמה")}
@@ -161,13 +166,13 @@ const Home: React.FC = () => {
               <>
                 <Link
                   to="/dashboard"
-                  className="px-4 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
                 >
                   {t("common.dashboard", "אזור אישי")}
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors flex items-center gap-2"
+                  className="px-4 py-2 rounded-lg bg-accent text-accent-foreground hover:bg-accent/80 transition-colors flex items-center gap-2"
                 >
                   <LogOut size={16} />
                   {t("auth.logout", "התנתקות")}
@@ -177,13 +182,13 @@ const Home: React.FC = () => {
               <>
                 <Link
                   to="/login"
-                  className="px-4 py-2 rounded-lg text-white hover:bg-white/10 transition-colors"
+                  className="px-4 py-2 rounded-lg hover:bg-accent/10 transition-colors"
                 >
                   {t("auth.login", "התחברות")}
                 </Link>
                 <Link
                   to="/register"
-                  className="px-4 py-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-colors"
+                  className="px-4 py-2 rounded-lg bg-accent text-accent-foreground hover:bg-accent/80 transition-colors"
                 >
                   {t("auth.register", "הרשמה")}
                 </Link>
@@ -193,10 +198,11 @@ const Home: React.FC = () => {
         </nav>
       </header>
 
-      <section className="relative overflow-hidden bg-gradient-to-br from-purple-900 via-indigo-800 to-teal-700 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-primary-900 via-primary-800 to-secondary-800 text-white">
+        {/* Decorative elements */}
         <div className="absolute inset-0 bg-grid-white/[0.05] bg-[length:20px_20px]"></div>
-        <div className="absolute h-48 w-48 top-10 left-10 bg-purple-500 rounded-full filter blur-3xl opacity-20"></div>
-        <div className="absolute h-72 w-72 bottom-10 right-10 bg-teal-500 rounded-full filter blur-3xl opacity-20"></div>
+        <div className="absolute h-48 w-48 top-10 left-10 bg-primary-500 rounded-full filter blur-3xl opacity-20"></div>
+        <div className="absolute h-72 w-72 bottom-10 right-10 bg-secondary-500 rounded-full filter blur-3xl opacity-20"></div>
         
         <div className="container mx-auto px-6 pt-32 pb-24 relative z-10">
           <motion.div 
@@ -213,7 +219,7 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
               >
                 {t("app.name", "ShareJSON")}
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-teal-400 mt-2">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-300 to-secondary-300 mt-2">
                   {t("home.hero.subtitle", "פלטפורמה חכמה לניהול ושיתוף קבצי JSON")}
                 </span>
               </motion.h1>
@@ -234,12 +240,12 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.8, delay: 0.6 }}
               >
                 {isAuthenticated ? (
-                  <Link to="/dashboard" className="px-8 py-3 bg-gradient-to-r from-purple-600 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:from-purple-700 hover:to-teal-600 transition duration-300 flex items-center gap-2">
+                  <Link to="/dashboard" className="px-8 py-3 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-lg font-semibold hover:shadow-lg hover:from-primary-700 hover:to-secondary-600 transition duration-300 flex items-center gap-2">
                     {t("home.hero.dashboard_btn", "לאזור האישי")} <ArrowRight className="h-5 w-5" />
                   </Link>
                 ) : (
                   <>
-                    <Link to="/login" className="px-8 py-3 bg-gradient-to-r from-purple-600 to-teal-500 rounded-lg font-semibold hover:shadow-lg hover:from-purple-700 hover:to-teal-600 transition duration-300">
+                    <Link to="/login" className="px-8 py-3 bg-gradient-to-r from-primary-600 to-secondary-500 rounded-lg font-semibold hover:shadow-lg hover:from-primary-700 hover:to-secondary-600 transition duration-300">
                       {t("auth.login", "התחברות")}
                     </Link>
                     <Link to="/register" className="px-8 py-3 border-2 border-white/20 rounded-lg font-semibold hover:bg-white/10 transition duration-300">
@@ -257,9 +263,9 @@ const Home: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.4 }}
             >
               <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-teal-500/20 rounded-2xl transform rotate-3"></div>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary-600/20 to-secondary-500/20 rounded-2xl transform rotate-3"></div>
                 <div className="bg-black/80 backdrop-blur-sm border border-white/10 p-6 rounded-2xl shadow-2xl relative z-10">
-                  <pre className="text-xs sm:text-sm md:text-base overflow-x-auto text-teal-400">
+                  <pre className="text-xs sm:text-sm md:text-base overflow-x-auto text-secondary-400">
 {`{
   "name": "${t("app.name", "ShareJSON")}",
   "version": "1.0.0",
@@ -282,7 +288,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
+      <section className={`py-20 ${isDark ? 'bg-background' : 'bg-gray-50'}`}>
         <div className="container mx-auto px-6">
           <motion.div 
             className="text-center mb-16"
@@ -290,10 +296,10 @@ const Home: React.FC = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.6 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
               {t("home.features.title", "הפיצ'רים שלנו")}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {t("home.features.description", "עם ShareJSON, ניהול ושיתוף קבצי JSON הופך לפשוט ואינטואיטיבי. האפליקציה מציעה מגוון תכונות פורצות דרך לניהול נתונים יעיל ובטוח.")}
             </p>
           </motion.div>
@@ -308,19 +314,19 @@ const Home: React.FC = () => {
             {features.map((feature, index) => (
               <motion.div 
                 key={index}
-                className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300"
+                className="bg-card rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-border"
                 variants={itemVariants}
               >
                 <div className="mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      <section className="py-20 bg-white">
+      <section className={`py-20 ${isDark ? 'bg-muted/30' : 'bg-white'}`}>
         <div className="container mx-auto px-6">
           <div className="flex flex-col lg:flex-row gap-12">
             <motion.div 
@@ -332,8 +338,8 @@ const Home: React.FC = () => {
             >
               {infoSection.map((item, index) => (
                 <div key={index}>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{item.content}</p>
+                  <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{item.content}</p>
                 </div>
               ))}
               
@@ -341,7 +347,7 @@ const Home: React.FC = () => {
                 {!isAuthenticated && (
                   <Link 
                     to="/register" 
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-teal-500 text-white rounded-lg font-semibold hover:from-purple-700 hover:to-teal-600 transition duration-300"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-secondary-500 text-white rounded-lg font-semibold hover:from-primary-700 hover:to-secondary-600 transition duration-300"
                   >
                     {t("home.info.join_now", "הצטרף היום")} <ArrowRight className="h-5 w-5" />
                   </Link>
@@ -356,41 +362,41 @@ const Home: React.FC = () => {
               transition={{ duration: 0.6 }}
               viewport={{ once: true }}
             >
-              <div className="bg-gradient-to-br from-purple-100 to-teal-100 p-8 rounded-2xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-teal-500"></div>
+              <div className="bg-gradient-to-br from-primary-100/20 to-secondary-100/20 p-8 rounded-2xl relative overflow-hidden border border-border">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-500 to-secondary-500"></div>
                 <div className="mb-6 flex items-center justify-center">
-                  <Users className="h-16 w-16 text-purple-700" />
+                  <Users className="h-16 w-16 text-primary-600" />
                 </div>
-                <h3 className="text-2xl font-bold text-center text-gray-900 mb-6">
+                <h3 className="text-2xl font-bold text-center mb-6">
                   {t("home.testimonials.title", "הצטרפו למאות המשתמשים")}
                 </h3>
-                <div className="bg-white/70 backdrop-blur-sm p-6 rounded-xl">
+                <div className={`${isDark ? 'bg-card/70' : 'bg-white/70'} backdrop-blur-sm p-6 rounded-xl border border-border`}>
                   <div className="space-y-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center">
-                        <span className="font-bold text-purple-700">א</span>
+                      <div className="w-10 h-10 rounded-full bg-primary-200 flex items-center justify-center">
+                        <span className="font-bold text-primary-700">א</span>
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{t("home.testimonials.quote1", "״שיפר את העבודה שלי באופן דרמטי״")}</p>
-                        <p className="text-sm text-gray-500">{t("home.testimonials.author1", "אמיר כ. - מפתח Full Stack")}</p>
+                        <p className="font-medium">{t("home.testimonials.quote1", "״שיפר את העבודה שלי באופן דרמטי״")}</p>
+                        <p className="text-sm text-muted-foreground">{t("home.testimonials.author1", "אמיר כ. - מפתח Full Stack")}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-teal-200 flex items-center justify-center">
-                        <span className="font-bold text-teal-700">ר</span>
+                      <div className="w-10 h-10 rounded-full bg-secondary-200 flex items-center justify-center">
+                        <span className="font-bold text-secondary-700">ר</span>
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{t("home.testimonials.quote2", "״ניהול הסכמות חסך לנו המון זמן״")}</p>
-                        <p className="text-sm text-gray-500">{t("home.testimonials.author2", "רונית ל. - מנהלת מוצר")}</p>
+                        <p className="font-medium">{t("home.testimonials.quote2", "״ניהול הסכמות חסך לנו המון זמן״")}</p>
+                        <p className="text-sm text-muted-foreground">{t("home.testimonials.author2", "רונית ל. - מנהלת מוצר")}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center">
-                        <span className="font-bold text-blue-700">ד</span>
+                      <div className="w-10 h-10 rounded-full bg-primary-200 flex items-center justify-center">
+                        <span className="font-bold text-primary-700">ד</span>
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900">{t("home.testimonials.quote3", "״ה-API פשוט לשימוש ומאפשר לנו גמישות רבה״")}</p>
-                        <p className="text-sm text-gray-500">{t("home.testimonials.author3", "דני מ. - ארכיטקט תוכנה")}</p>
+                        <p className="font-medium">{t("home.testimonials.quote3", "״ה-API פשוט לשימוש ומאפשר לנו גמישות רבה״")}</p>
+                        <p className="text-sm text-muted-foreground">{t("home.testimonials.author3", "דני מ. - ארכיטקט תוכנה")}</p>
                       </div>
                     </div>
                   </div>
@@ -401,7 +407,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
+      <section className={`py-20 ${isDark ? 'bg-background' : 'bg-gray-50'}`}>
         <div className="container mx-auto px-6">
           <motion.div 
             className="text-center mb-16"
@@ -410,10 +416,10 @@ const Home: React.FC = () => {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
               {t("home.useCases.title", "שימושים נפוצים")}
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               {t("home.useCases.description", "גלה כיצד ShareJSON יכול לשפר את תהליכי העבודה בארגון שלך ולהפוך את ניהול הנתונים לפשוט יותר")}
             </p>
           </motion.div>
@@ -428,18 +434,18 @@ const Home: React.FC = () => {
             {useCases.map((useCase, index) => (
               <motion.div 
                 key={index}
-                className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-purple-500"
+                className="bg-card rounded-xl p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-primary"
                 variants={itemVariants}
               >
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{useCase.title}</h3>
-                <p className="text-gray-600">{useCase.content}</p>
+                <h3 className="text-xl font-bold mb-3">{useCase.title}</h3>
+                <p className="text-muted-foreground">{useCase.content}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      <section className="py-20 bg-gradient-to-br from-indigo-900 to-purple-900 text-white">
+      <section className="py-20 bg-gradient-to-br from-primary-900 to-primary-800 text-white">
         <div className="container mx-auto px-6">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <motion.div 
@@ -452,15 +458,15 @@ const Home: React.FC = () => {
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
                 {t("home.api.title", "API חזק ופשוט לשימוש")}
               </h2>
-              <p className="text-lg text-purple-200 mb-8">
+              <p className="text-lg text-primary-200 mb-8">
                 {t("home.api.description", "גישה מלאה לנתונים שלך דרך ממשק API מתועד היטב. אפשר אינטגרציה פשוטה עם שירותים וכלים אחרים.")}
               </p>
               
               <ul className="space-y-4 mb-8">
                 {apiFeatures.map((feature, index) => (
                   <li key={index} className="flex items-start gap-3">
-                    <div className="mt-1 bg-purple-500/20 p-1 rounded-full">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-purple-300" viewBox="0 0 20 20" fill="currentColor">
+                    <div className="mt-1 bg-primary-500/20 p-1 rounded-full">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary-300" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                       </svg>
                     </div>
@@ -471,7 +477,7 @@ const Home: React.FC = () => {
               
               <Link 
                 to="/docs/api" 
-                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-purple-900 rounded-lg font-semibold hover:bg-purple-100 transition duration-300"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-primary-900 rounded-lg font-semibold hover:bg-primary-100 transition duration-300"
               >
                 {t("home.api.documentation", "צפה בתיעוד ה-API")} <ArrowRight className="h-5 w-5" />
               </Link>
@@ -517,7 +523,7 @@ const Home: React.FC = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-gradient-to-r from-purple-900 to-teal-800 text-white">
+      <section className="py-16 bg-gradient-to-r from-primary-900 to-secondary-800 text-white">
         <div className="container mx-auto px-6 text-center">
           <motion.div
             initial={{ y: 50, opacity: 0 }}
@@ -526,13 +532,13 @@ const Home: React.FC = () => {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("home.cta.title", "מוכנים להתחיל?")}</h2>
-            <p className="text-lg md:text-xl text-purple-200 max-w-2xl mx-auto mb-8">
+            <p className="text-lg md:text-xl text-primary-200 max-w-2xl mx-auto mb-8">
               {t("home.cta.description", "הצטרפו למהפכת ה-JSON ושפרו את ניהול הנתונים שלכם כבר היום. התחילו בחינם ושדרגו בהתאם לצרכים שלכם.")}
             </p>
             
             {!isAuthenticated ? (
               <div className="flex flex-wrap justify-center gap-4">
-                <Link to="/register" className="px-8 py-3 bg-white text-purple-900 rounded-lg font-semibold hover:bg-purple-100 transition duration-300">
+                <Link to="/register" className="px-8 py-3 bg-white text-primary-900 rounded-lg font-semibold hover:bg-primary-100 transition duration-300">
                   {t("home.cta.register_now", "הרשמה עכשיו")}
                 </Link>
                 <Link to="/login" className="px-8 py-3 border-2 border-white/30 rounded-lg font-semibold hover:bg-white/10 transition duration-300">
@@ -540,7 +546,7 @@ const Home: React.FC = () => {
                 </Link>
               </div>
             ) : (
-              <Link to="/dashboard" className="px-8 py-3 bg-white text-purple-900 rounded-lg font-semibold hover:bg-purple-100 transition duration-300 inline-flex items-center gap-2">
+              <Link to="/dashboard" className="px-8 py-3 bg-white text-primary-900 rounded-lg font-semibold hover:bg-primary-100 transition duration-300 inline-flex items-center gap-2">
                 {t("home.hero.dashboard_btn", "לאזור האישי")} <ArrowRight className="h-5 w-5" />
               </Link>
             )}

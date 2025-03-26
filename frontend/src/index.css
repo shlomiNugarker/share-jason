@@ -19,91 +19,225 @@ html[dir="ltr"] {
   text-align: left;
 }
 
-/* Define CSS variables for light and dark themes */
+/* ============================================================
+   CSS VARIABLES FOR DESIGN SYSTEM
+   Main control center for all design tokens
+   ============================================================ */
 @layer base {
+  /* LIGHT THEME */
   :root {
+    /* Base colors */
     --background: 250 100% 99%;
     --foreground: 240 10% 3.9%;
 
+    /* UI Element Containers */
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
- 
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
- 
+    
+    /* Primary Color - Purple */
     --primary: 271 91% 65%;
     --primary-foreground: 0 0% 100%;
- 
+    --primary-50: 270 100% 98%;
+    --primary-100: 268 100% 95.5%;
+    --primary-200: 268 100% 91.8%;
+    --primary-300: 269 97% 85.1%;
+    --primary-400: 270 95% 75.3%;
+    --primary-500: 271 91% 65.1%;
+    --primary-600: 273 91% 58.8%;
+    --primary-700: 274 87% 43.1%;
+    --primary-800: 273 80% 36.1%;
+    --primary-900: 272 71% 30.2%;
+    
+    /* Secondary Color - Teal */
     --secondary: 172 76% 32%;
     --secondary-foreground: 0 0% 100%;
- 
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
- 
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
- 
+    --secondary-50: 166 100% 97.1%;
+    --secondary-100: 167 86% 89.4%;
+    --secondary-200: 168 83% 78.2%;
+    --secondary-300: 171 77% 64.5%;
+    --secondary-400: 172 66% 50.4%;
+    --secondary-500: 173 80% 40%;
+    --secondary-600: 174 84% 32.2%;
+    --secondary-700: 175 84% 27.1%;
+    --secondary-800: 176 88% 20%;
+    --secondary-900: 178 100% 13.3%;
+    
+    /* Success Color - Green */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-50: 138 76% 97%;
+    --success-100: 141 84% 93.1%;
+    --success-200: 141 79% 85.1%;
+    --success-300: 142 77% 73.3%;
+    --success-400: 142 69% 58%;
+    --success-500: 142 71% 45.1%;
+    --success-600: 142 76% 36.1%;
+    --success-700: 142 72% 29%;
+    --success-800: 143 64% 24.1%;
+    --success-900: 144 61% 20.2%;
+    
+    /* Warning Color - Amber */
+    --warning: 45 93% 47%;
+    --warning-foreground: 24 10% 10%;
+    --warning-50: 48 100% 96.1%;
+    --warning-100: 48 96% 88.8%;
+    --warning-500: 43 96% 56.3%;
+    --warning-900: 26 83% 32%;
+    
+    /* Destructive Color - Red */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
+    --destructive-50: 0 86% 97.3%;
+    --destructive-100: 0 93% 94.1%;
+    --destructive-200: 0 96% 89%;
+    --destructive-300: 0 94% 82.2%;
+    --destructive-400: 0 91% 71.4%;
+    --destructive-500: 0 84% 60.2%;
+    --destructive-600: 0 72% 51%;
+    --destructive-700: 0 74% 42%;
+    --destructive-800: 0 70% 35.3%;
+    --destructive-900: 0 63% 31%;
+    
+    /* UI Element Colors */
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    
+    /* Border & Input */
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 271 91% 65%;
- 
-    --radius: 1rem;
+    --ring: 271 91% 65.1%;
+    
+    /* Chart Colors */
+    --chart-1: 271 91% 65.1%; /* Primary */
+    --chart-2: 172 76% 32.2%; /* Secondary */
+    --chart-3: 12 83% 65%;  /* Orange */
+    --chart-4: 262 83% 58%; /* Indigo */
+    --chart-5: 217 91% 60%; /* Blue */
+    
+    /* Border Radius */
+    --radius: 0.75rem;
   }
 
+  /* DARK THEME - GitHub Style */
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
- 
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
- 
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
- 
-    --primary: 271 91% 65%;
-    --primary-foreground: 240 5.9% 10%;
- 
-    --secondary: 172 76% 32%;
-    --secondary-foreground: 0 0% 98%;
- 
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
- 
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
- 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
- 
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 271 91% 65%;
+    /* Base colors - GitHub dark mode uses dark blue background */
+    --background: 215 21% 11%; /* GitHub dark background #0d1117 */
+    --foreground: 210 18% 85%; /* GitHub dark text #c9d1d9 */
+
+    /* UI Element Containers */
+    --card: 215 21% 16%; /* GitHub dark cards #161b22 */
+    --card-foreground: 210 18% 85%; /* GitHub dark text #c9d1d9 */
+    --popover: 215 21% 16%; /* GitHub dark popover #161b22 */
+    --popover-foreground: 210 18% 85%; /* GitHub dark text #c9d1d9 */
+    
+    /* Primary Color - Blue for GitHub style */
+    --primary: 212 100% 45%; /* GitHub blue #0969da */
+    --primary-foreground: 0 0% 100%;
+    --primary-50: 212 100% 97%;
+    --primary-100: 212 100% 95%;
+    --primary-200: 212 100% 90%;
+    --primary-300: 212 100% 80%;
+    --primary-400: 212 100% 65%;
+    --primary-500: 212 100% 50%;
+    --primary-600: 212 100% 45%;
+    --primary-700: 212 100% 40%;
+    --primary-800: 212 100% 35%;
+    --primary-900: 212 100% 30%;
+    
+    /* Secondary Color - Green for GitHub style */
+    --secondary: 140 62% 35%; /* GitHub green #238636 */
+    --secondary-foreground: 0 0% 100%;
+    --secondary-50: 140 62% 97%;
+    --secondary-100: 140 62% 94%;
+    --secondary-200: 140 62% 85%;
+    --secondary-300: 140 62% 70%;
+    --secondary-400: 140 62% 50%;
+    --secondary-500: 140 62% 45%;
+    --secondary-600: 140 62% 40%;
+    --secondary-700: 140 62% 35%;
+    --secondary-800: 140 62% 30%;
+    --secondary-900: 140 62% 25%;
+    
+    /* Success Color - Green */
+    --success: 140 62% 35%; /* GitHub green #238636 */
+    --success-foreground: 0 0% 100%;
+    --success-50: 140 62% 97%;
+    --success-100: 140 62% 94%;
+    --success-200: 140 62% 85%;
+    --success-300: 140 62% 70%;
+    --success-400: 140 62% 50%;
+    --success-500: 140 62% 45%;
+    --success-600: 140 62% 40%;
+    --success-700: 140 62% 35%;
+    --success-800: 140 62% 30%;
+    --success-900: 140 62% 25%;
+    
+    /* Warning Color - GitHub yellow */
+    --warning: 42 100% 50%; /* GitHub yellow #d29922 */
+    --warning-foreground: 0 0% 0%;
+    --warning-50: 42 100% 97%;
+    --warning-100: 42 100% 94%;
+    --warning-500: 42 100% 50%;
+    --warning-900: 42 100% 30%;
+    
+    /* Destructive Color - GitHub red */
+    --destructive: 355 90% 48%; /* GitHub red #f85149 */
+    --destructive-foreground: 0 0% 100%;
+    --destructive-50: 355 90% 97%;
+    --destructive-100: 355 90% 94%;
+    --destructive-200: 355 90% 90%;
+    --destructive-300: 355 90% 80%;
+    --destructive-400: 355 90% 65%;
+    --destructive-500: 355 90% 55%;
+    --destructive-600: 355 90% 48%;
+    --destructive-700: 355 90% 42%;
+    --destructive-800: 355 90% 35%;
+    --destructive-900: 355 90% 30%;
+    
+    /* UI Element Colors */
+    --muted: 215 21% 16%; /* GitHub dark muted #161b22 */
+    --muted-foreground: 210 18% 60%; /* GitHub dark muted text #8b949e */
+    --accent: 215 25% 25%; /* GitHub dark accent #21262d */
+    --accent-foreground: 210 18% 85%; /* GitHub dark text #c9d1d9 */
+    
+    /* Border & Input */
+    --border: 212 12% 25%; /* GitHub dark border #30363d */
+    --input: 212 12% 25%; /* GitHub dark input #30363d */
+    --ring: 212 100% 45%; /* GitHub blue for focus rings */
+    
+    /* Chart Colors - GitHub palette */
+    --chart-1: 212 100% 45%; /* GitHub blue */
+    --chart-2: 140 62% 35%; /* GitHub green */
+    --chart-3: 22 100% 52%; /* GitHub orange */
+    --chart-4: 270 70% 60%; /* GitHub purple */
+    --chart-5: 355 90% 48%; /* GitHub red */
   }
 
-  /* Scrollbar styling */
+  /* Scrollbar styling - GitHub style for dark mode */
   ::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-gray-100;
+    @apply bg-gray-100 dark:bg-[#0d1117];
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gradient-to-b from-purple-400 to-teal-400 rounded-full border-4 border-solid border-gray-100;
+    @apply bg-gray-300 dark:bg-[#30363d] rounded-full;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply from-purple-500 to-teal-500;
+    @apply bg-gray-400 dark:bg-[#3c444f];
   }
 
   /* Improved Focus Styles */
   *:focus-visible {
-    @apply outline-none ring-2 ring-purple-400 ring-offset-2 ring-offset-white transition-all duration-200;
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background transition-all duration-200;
   }
 }
 
@@ -116,30 +250,136 @@ html[dir="ltr"] {
     @apply bg-background text-foreground; /* Background and text color based on theme */
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  h1 {
+    @apply text-4xl font-bold tracking-tight;
+  }
+  h2 {
+    @apply text-3xl font-semibold tracking-tight;
+  }
+  h3 {
+    @apply text-2xl font-semibold tracking-tight;
+  }
+  h4 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+  h5 {
+    @apply text-lg font-semibold tracking-tight;
+  }
+  h6 {
+    @apply text-base font-semibold tracking-tight;
+  }
+  p {
+    @apply leading-7;
+  }
+  small {
+    @apply text-sm font-medium leading-none;
+  }
 }
 
 @layer components {
+  /* Gradient Utilities */
   .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-teal-500;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-600 to-secondary-500;
   }
 
   .gradient-bg {
-    @apply bg-gradient-to-r from-purple-600 to-teal-500;
+    @apply bg-gradient-to-r from-primary-600 to-secondary-500;
+  }
+
+  .gradient-bg-hover {
+    @apply bg-gradient-to-r from-primary-700 to-secondary-600 transition-all duration-300;
   }
 
   .gradient-border {
-    @apply border-transparent bg-gradient-to-r from-purple-400 to-teal-400 border-2 bg-clip-border;
+    @apply border-transparent bg-gradient-to-r from-primary-400 to-secondary-400 border-2 bg-clip-border;
   }
 
+  /* Form Components */
   .input-enhanced {
-    @apply px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition-all duration-200 bg-gray-50;
+    @apply px-4 py-3 border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200 bg-muted/30;
   }
 
+  .checkbox-enhanced {
+    @apply h-5 w-5 rounded border-input text-primary focus:ring-1 focus:ring-primary/30;
+  }
+
+  .select-enhanced {
+    @apply rounded-lg border border-input bg-muted/30 py-3 px-4 text-foreground focus:ring-2 focus:ring-primary;
+  }
+
+  /* Card Components */
   .card-enhanced {
-    @apply overflow-hidden border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-purple-200 bg-white;
+    @apply overflow-hidden border border-border rounded-xl shadow-sm hover:shadow-md transition-all duration-300 hover:border-primary-200 bg-card;
   }
 
+  .card-interactive {
+    @apply overflow-hidden border border-border rounded-xl shadow-sm hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1 hover:border-primary-200 bg-card cursor-pointer;
+  }
+
+  /* Button Variations */
   .button-icon {
-    @apply inline-flex items-center justify-center h-10 w-10 rounded-full bg-white border border-gray-200 text-gray-700 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200 transition-all duration-200;
+    @apply inline-flex items-center justify-center h-10 w-10 rounded-full bg-background border border-input text-foreground hover:bg-primary/10 hover:text-primary hover:border-primary-200 transition-all duration-200;
+  }
+
+  .button-primary {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg gradient-bg text-white font-medium hover:gradient-bg-hover shadow-button hover:shadow-button-hover transition-all duration-200;
+  }
+
+  .button-secondary {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg bg-secondary text-white font-medium hover:bg-secondary-600 shadow-button hover:shadow-button-hover transition-all duration-200;
+  }
+
+  .button-outline {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-lg border border-input bg-background text-foreground font-medium hover:bg-muted/30 hover:border-primary-200 transition-all duration-200;
+  }
+
+  /* GitHub-style dark mode button */
+  .dark .button-github {
+    @apply bg-[#21262d] border border-[#30363d] text-[#c9d1d9] hover:bg-[#30363d] hover:border-[#8b949e];
+  }
+
+  /* Layout Components */
+  .section-container {
+    @apply container mx-auto px-4 py-8 md:py-12 lg:py-16;
+  }
+
+  .page-header {
+    @apply mb-8 space-y-2;
+  }
+
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .flex-between {
+    @apply flex items-center justify-between;
+  }
+}
+
+/* Utility Classes */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .gradient-mask-r {
+    mask-image: linear-gradient(to right, black 70%, transparent 100%);
+  }
+  
+  .gradient-mask-l {
+    mask-image: linear-gradient(to left, black 70%, transparent 100%);
+  }
+  
+  .gradient-mask-b {
+    mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  }
+  
+  /* GitHub style utilities */
+  .dark .github-border {
+    @apply border-[#30363d];
+  }
+  
+  .dark .github-bg-hover {
+    @apply hover:bg-[#30363d];
   }
 }
