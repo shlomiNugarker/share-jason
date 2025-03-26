@@ -17,6 +17,7 @@ import {
   FileJson, 
   Filter, 
   Share2,
+  List
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -39,6 +40,8 @@ const DynamicItems = () => {
   const [previewItem, setPreviewItem] = useState<DynamicItem | null>(null);
   const [previewLoading, setPreviewLoading] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [previewAllData, setPreviewAllData] = useState<DynamicItem[] | null>(null);
+  const [isPreviewAllOpen, setIsPreviewAllOpen] = useState(false);
   const [compareItems, setCompareItems] = useState<DynamicItem[]>([]);
   const [isCompareOpen, setIsCompareOpen] = useState(false);
   const [advancedFilters, setAdvancedFilters] = useState<Record<string, string>>({});
@@ -125,6 +128,14 @@ const DynamicItems = () => {
     setPreviewItem(item);
     setPreviewLoading(true);
     setIsPreviewOpen(true);
+    // Simulate loading for better UX
+    setTimeout(() => setPreviewLoading(false), 500);
+  };
+
+  const handlePreviewAll = () => {
+    setPreviewAllData(filteredItems);
+    setPreviewLoading(true);
+    setIsPreviewAllOpen(true);
     // Simulate loading for better UX
     setTimeout(() => setPreviewLoading(false), 500);
   };
@@ -306,6 +317,15 @@ const DynamicItems = () => {
           </Button>
           <Button 
             variant="outline"
+            onClick={handlePreviewAll}
+            disabled={filteredItems.length === 0}
+            className="flex items-center gap-1 h-10"
+          >
+            <List size={16} className="mr-1" />
+            צפה ברשימה כ-JSON
+          </Button>
+          <Button 
+            variant="outline"
             onClick={() => setShowApiInfo(!showApiInfo)}
             className="h-10"
           >
@@ -472,6 +492,56 @@ const DynamicItems = () => {
               </div>
               <JsonView 
                 src={previewItem} 
+                collapsed={1}
+                enableClipboard
+                style={{ 
+                  backgroundColor: 'transparent',
+                  fontSize: '14px',
+                  fontFamily: 'monospace',
+                  direction: 'ltr'
+                }}
+              />
+            </div>
+          ) : null}
+        </DialogContent>
+      </Dialog>
+
+      {/* Preview All Dialog */}
+      <Dialog open={isPreviewAllOpen} onOpenChange={setIsPreviewAllOpen}>
+        <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>תצוגת כל הפריטים - {filteredItems.length} פריטים</DialogTitle>
+          </DialogHeader>
+          {previewLoading ? (
+            <div className="flex justify-center items-center py-8">
+              <div className="animate-pulse text-gray-500">Loading preview...</div>
+            </div>
+          ) : previewAllData ? (
+            <div className="mt-4">
+              <div className="bg-gray-50 p-2 mb-4 rounded text-xs">
+                <code className="font-mono">GET /api/dynamic-items/schema/{schemaId}</code>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => copyToClipboard(`GET /api/dynamic-items/schema/${schemaId}`, `preview-all-${schemaId}`)}
+                  className="ml-2 h-6 text-gray-600 hover:text-gray-900"
+                >
+                  {copiedStates[`preview-all-${schemaId}`] ? <Check size={12} className="text-green-600" /> : <Copy size={12} />}
+                </Button>
+              </div>
+              <div className="flex justify-end mb-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleDownloadJson}
+                  className="text-xs h-8"
+                >
+                  <Download size={14} className="mr-1" />
+                  הורד כקובץ JSON
+                </Button>
+              </div>
+              <JsonView 
+                src={previewAllData} 
                 collapsed={1}
                 enableClipboard
                 style={{ 
